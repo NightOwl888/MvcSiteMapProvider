@@ -196,6 +196,15 @@ namespace MvcSiteMapProvider.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The dynamic title provider instance named &apos;{0}&apos; was not found. Check your DI configuration to ensure a dynamic title provider instance with this name exists and is configured correctly..
+        /// </summary>
+        internal static string NamedSiteMapNodeDynamicTitleProviderNotFound {
+            get {
+                return ResourceManager.GetString("NamedSiteMapNodeDynamicTitleProviderNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The visibility provider instance named &apos;{0}&apos; was not found. Check your DI configuration to ensure a visibility provider instance with this name exists and is configured correctly..
         /// </summary>
         internal static string NamedSiteMapNodeVisibilityProviderNotFound {

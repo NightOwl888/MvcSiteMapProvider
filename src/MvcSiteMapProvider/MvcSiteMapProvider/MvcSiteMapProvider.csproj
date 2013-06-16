@@ -134,11 +134,15 @@
     <Compile Include="DI\ConfigurationSettings.cs" />
     <Compile Include="DI\ControllerFactoryDecorator.cs" />
     <Compile Include="DI\DependencyResolverDecorator.cs" />
+    <Compile Include="ISiteMapNodeDynamicTitleProvider.cs" />
+    <Compile Include="ISiteMapNodeDynamicTitleProviderStrategy.cs" />
     <Compile Include="Reflection\ObjectExtensions.cs" />
     <Compile Include="Reflection\PluginInstantiator.cs" />
     <Compile Include="DI\SiteMapFactoryContainer.cs" />
     <Compile Include="DI\SiteMapNodeFactoryContainer.cs" />
     <Compile Include="Security\IAuthorizeAttributeBuilder.cs" />
+    <Compile Include="SiteMapNodeDynamicTitleProviderBase.cs" />
+    <Compile Include="SiteMapNodeDynamicTitleProviderStrategy.cs" />
     <Compile Include="Web\Mvc\ControllerExtensions.cs" />
     <Compile Include="Web\SiteMapNodeExtensions.cs" />
     <Compile Include="Xml\ISiteMapXmlReservedAttributeNameProvider.cs" />
