@@ -15,7 +15,7 @@ namespace MvcSiteMapProvider.Web.Html.Models
         /// <param name="node">The node.</param>
         /// <param name="sourceMetadata">The source metadata provided by the HtmlHelper.</param>
         public SiteMapNodeModel(ISiteMapNode node, IDictionary<string, object> sourceMetadata)
-            : this(node, sourceMetadata, Int32.MaxValue, true)
+            : this(node, sourceMetadata, Int32.MaxValue, true, false)
         {
         }
 
@@ -26,7 +26,8 @@ namespace MvcSiteMapProvider.Web.Html.Models
         /// <param name="sourceMetadata">The source metadata provided by the HtmlHelper.</param>
         /// <param name="maxDepth">The max depth.</param>
         /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node</param>
-        public SiteMapNodeModel(ISiteMapNode node, IDictionary<string, object> sourceMetadata, int maxDepth, bool drillDownToCurrent)
+        /// <param name="startingNodeInChildLevel">Renders startingNode in child level if set to <c>true</c>.</param>
+        public SiteMapNodeModel(ISiteMapNode node, IDictionary<string, object> sourceMetadata, int maxDepth, bool drillDownToCurrent, bool startingNodeInChildLevel)
         {
             if (node == null)
                 throw new ArgumentNullException("node");
@@ -37,6 +38,7 @@ namespace MvcSiteMapProvider.Web.Html.Models
 
             this.node = node;
             this.maxDepth = maxDepth;
+            this.startingNodeInChildLevel = startingNodeInChildLevel;
             this.drillDownToCurrent = drillDownToCurrent;
             this.SourceMetadata = sourceMetadata;
 
@@ -59,7 +61,8 @@ namespace MvcSiteMapProvider.Web.Html.Models
         }
 
         protected readonly ISiteMapNode node;
-        protected readonly int maxDepth;
+        protected int maxDepth;
+        protected readonly bool startingNodeInChildLevel;
         protected readonly bool drillDownToCurrent;
         protected SiteMapNodeModelList descendants;
         protected SiteMapNodeModelList ancestors;
@@ -189,12 +192,19 @@ namespace MvcSiteMapProvider.Web.Html.Models
                     {
                         foreach (SiteMapNode child in node.ChildNodes)
                         {
-                            if (child.IsAccessibleToUser() && child.IsVisible(SourceMetadata))
-                                children.Add(new SiteMapNodeModel(child, SourceMetadata, maxDepth - 1, drillDownToCurrent));
+                            if (child.IsAccessibleToUser() && child.IsVisible(SourceMetadata) && maxDepth > 0)
+                                children.Add(new SiteMapNodeModel(child, SourceMetadata, maxDepth - 1, drillDownToCurrent, false));
                         }
                     }
                 }
-                return children;
+                if (startingNodeInChildLevel)
+                {
+                    var children_res = children;
+                    children = new SiteMapNodeModelList();
+                    maxDepth = 0;
+                    return children_res;
+                }
+                else return children;
             }
         }
 
@@ -207,7 +217,7 @@ namespace MvcSiteMapProvider.Web.Html.Models
             {
                 return node.ParentNode == null
                     ? null
-                    : new SiteMapNodeModel(node.ParentNode, SourceMetadata, maxDepth == Int32.MaxValue ? Int32.MaxValue : maxDepth + 1, drillDownToCurrent);
+                    : new SiteMapNodeModel(node.ParentNode, SourceMetadata, maxDepth == Int32.MaxValue ? Int32.MaxValue : maxDepth + 1, drillDownToCurrent, startingNodeInChildLevel);
             }
         }
 
