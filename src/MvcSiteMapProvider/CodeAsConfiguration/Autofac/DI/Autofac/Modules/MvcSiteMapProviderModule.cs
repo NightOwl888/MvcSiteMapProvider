@@ -31,6 +31,7 @@ namespace DI.Autofac.Modules
             bool enableLocalization = true;
             string absoluteFileName = HostingEnvironment.MapPath("~/Mvc.sitemap");
             TimeSpan absoluteCacheExpiration = TimeSpan.FromMinutes(5);
+            TimeSpan sessionCacheExpiration = TimeSpan.FromMinutes(20);
             string[] includeAssembliesForScan = new string[] { "$AssemblyName$" };
 
             var currentAssembly = this.GetType().Assembly;
@@ -39,7 +40,8 @@ namespace DI.Autofac.Modules
             var excludeTypes = new Type[] { 
                 typeof(SiteMapNodeVisibilityProviderStrategy),
                 typeof(SiteMapXmlReservedAttributeNameProvider),
-                typeof(SiteMapBuilderSetStrategy)
+                typeof(SiteMapBuilderSetStrategy),
+                typeof(SessionCache)
             };
             var multipleImplementationTypes = new Type[]  { 
                 typeof(ISiteMapNodeUrlResolver), 
@@ -105,9 +107,10 @@ namespace DI.Autofac.Modules
                             c.ResolveNamed<IAclModule>("xmlRolesAclModule")
                         });
 
+            // Setup cache
 #if NET35
-            builder.RegisterType<AspNetCacheProvider<ISiteMap>>()
-                   .As<ICacheProvider<ISiteMap>>();
+            builder.RegisterGeneric(typeof(AspNetCacheProvider<>))
+                .As(typeof(ICacheProvider<>));
 
             builder.RegisterType<AspNetFileCacheDependency>()
                 .Named<ICacheDependency>("cacheDependency1")
@@ -116,8 +119,8 @@ namespace DI.Autofac.Modules
             builder.RegisterInstance(System.Runtime.Caching.MemoryCache.Default)
                    .As<System.Runtime.Caching.ObjectCache>();
 
-            builder.RegisterType<RuntimeCacheProvider<ISiteMap>>()
-                   .As<ICacheProvider<ISiteMap>>();
+            builder.RegisterGeneric(typeof(RuntimeCacheProvider<>))
+                .As(typeof(ICacheProvider<>));
 
             builder.RegisterType<RuntimeFileCacheDependency>()
                 .Named<ICacheDependency>("cacheDependency1")
@@ -130,6 +133,21 @@ namespace DI.Autofac.Modules
                 .WithParameter(
                     (p, c) => p.Name == "cacheDependency",
                     (p, c) => c.ResolveNamed<ICacheDependency>("cacheDependency1"));
+
+            // Setup session cache
+            builder.RegisterType<NullCacheDependency>().Named<ICacheDependency>("sessionCacheDependency");
+
+            builder.RegisterType<CacheDetails>().Named<ICacheDetails>("sessionCacheDetails")
+                .WithParameter("absoluteCacheExpiration", TimeSpan.MinValue)
+                .WithParameter("slidingCacheExpiration", sessionCacheExpiration)
+                .WithParameter(
+                    (p, c) => p.Name == "cacheDependency",
+                    (p, c) => c.ResolveNamed<ICacheDependency>("sessionCacheDependency"));
+
+            builder.RegisterType<SessionCache>().As<ISessionCache>()
+                .WithParameter(
+                    (p, c) => p.Name == "cacheDetails",
+                    (p, c) => c.ResolveNamed<ICacheDetails>("sessionCacheDetails"));
 
             // Configure the visitors
             builder.RegisterType<UrlResolvingSiteMapNodeVisitor>()

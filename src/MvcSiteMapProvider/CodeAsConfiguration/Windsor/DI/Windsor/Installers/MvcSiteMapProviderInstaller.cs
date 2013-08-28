@@ -33,6 +33,7 @@ namespace DI.Windsor.Installers
             bool enableLocalization = true;
             string absoluteFileName = HostingEnvironment.MapPath("~/Mvc.sitemap");
             TimeSpan absoluteCacheExpiration = TimeSpan.FromMinutes(5);
+            TimeSpan sessionCacheExpiration = TimeSpan.FromMinutes(20);
             string[] includeAssembliesForScan = new string[] { "$AssemblyName$" };
 
             // Configure Windsor to resolve arrays in constructors
@@ -46,7 +47,8 @@ namespace DI.Windsor.Installers
                 typeof(SiteMapXmlReservedAttributeNameProvider),
                 typeof(SiteMapBuilderSetStrategy),
                 typeof(ControllerTypeResolverFactory),
-                typeof(SiteMapNodeUrlResolver)
+                typeof(SiteMapNodeUrlResolver),
+                typeof(SessionCache)
             };
             var multipleImplementationTypes = new Type[]  { 
                 typeof(ISiteMapNodeUrlResolver), 
@@ -101,12 +103,12 @@ namespace DI.Windsor.Installers
 
             // Setup cache
 #if NET35
-            container.Register(Component.For<ICacheProvider<ISiteMap>>().ImplementedBy<AspNetCacheProvider<ISiteMap>>());
+            container.Register(Component.For(typeof(ICacheProvider<>)).ImplementedBy(typeof(AspNetCacheProvider<>)));
             container.Register(Component.For<ICacheDependency>().ImplementedBy<AspNetFileCacheDependency>().Named("cacheDependency1")
                 .DependsOn(Dependency.OnValue("fileName", absoluteFileName)));
 #else
             container.Register(Component.For<System.Runtime.Caching.ObjectCache>().Instance(System.Runtime.Caching.MemoryCache.Default));
-            container.Register(Component.For<ICacheProvider<ISiteMap>>().ImplementedBy<RuntimeCacheProvider<ISiteMap>>());
+            container.Register(Component.For(typeof(ICacheProvider<>)).ImplementedBy(typeof(RuntimeCacheProvider<>)));
             container.Register(Component.For<ICacheDependency>().ImplementedBy<RuntimeFileCacheDependency>().Named("cacheDependency1")
                 .DependsOn(Dependency.OnValue("fileName", absoluteFileName)));
 #endif
@@ -115,6 +117,15 @@ namespace DI.Windsor.Installers
                 .DependsOn(Dependency.OnValue("slidingCacheExpiration", TimeSpan.MinValue))
                 .DependsOn(ServiceOverride.ForKey<ICacheDependency>().Eq("cacheDependency1"))
                 );
+
+            // Setup session cache
+            container.Register(Component.For<ICacheDependency>().ImplementedBy<NullCacheDependency>().Named("sessionCacheDependency"));
+            container.Register(Component.For<ICacheDetails>().ImplementedBy<CacheDetails>().Named("sessionCacheDetails")
+                .DependsOn(Dependency.OnValue("absoluteCacheExpiration", TimeSpan.MinValue))
+                .DependsOn(Dependency.OnValue("slidingCacheExpiration", sessionCacheExpiration))
+                .DependsOn(ServiceOverride.ForKey<ICacheDependency>().Eq("sessionCacheDependency")));
+            container.Register(Component.For<ISessionCache>().ImplementedBy<SessionCache>()
+                .DependsOn(ServiceOverride.ForKey<ICacheDetails>().Eq("sessionCacheDetails")));
 
             // Configure the visitors
             container.Register(Component.For<ISiteMapNodeVisitor>().ImplementedBy<UrlResolvingSiteMapNodeVisitor>());

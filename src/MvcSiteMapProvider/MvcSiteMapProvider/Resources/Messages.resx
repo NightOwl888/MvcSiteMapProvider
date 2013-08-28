@@ -216,4 +216,9 @@
   <data name="ReflectionSiteMapBuilderRootKeyAmbiguous" xml:space="preserve">
     <value>There is more than one MvcSiteMapNodeAttribute declared without a parent key. The ParentKey property must be set for all (or all but 1) MvcSiteMapNodeAttribute in the application.</value>
   </data>
+  <data name="SessionStateRequired" xml:space="preserve">
+    <value>ASP.NET session state is required to use the default SessionCacheKeyGenerator. You can enable it by setting &lt;sessionState mode="InProc"/&gt; or use one of the out-of-process modes. We recommend using a machine key when using session state whether you are using an in process or out of process session state provider (see MSDN for documentation on setting up a machine key).
+
+Alternatively, you may implement ISessionCacheKeyGenerator yourself and use a cookie to track your user session key rather than using ASP.NET session state. The only condition is you need to return a unique session key per user and ensure it is the same key from one user request to the next.</value>
+  </data>
 </root>

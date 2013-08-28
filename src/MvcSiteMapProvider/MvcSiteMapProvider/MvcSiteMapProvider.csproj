@@ -106,10 +106,14 @@
     <Compile Include="Caching\AspNetCompositeCacheDependency.cs" />
     <Compile Include="Caching\AspNetFileCacheDependency.cs" />
     <Compile Include="Caching\CacheDetails.cs" />
+    <Compile Include="Caching\ICache.cs" />
     <Compile Include="Caching\ICacheDetails.cs" />
     <Compile Include="Caching\ICacheDependency.cs" />
     <Compile Include="Caching\ICacheProvider.cs" />
     <Compile Include="Caching\IMicroCache.cs" />
+    <Compile Include="Caching\ISessionCache.cs" />
+    <Compile Include="Caching\ISessionCacheKeyGenerator.cs" />
+    <Compile Include="Caching\ISessionMicroCache.cs" />
     <Compile Include="Caching\ISiteMapCache.cs" />
     <Compile Include="Caching\ISiteMapCacheKeyGenerator.cs" />
     <Compile Include="Caching\ISiteMapCacheKeyToBuilderSetMapper.cs" />
@@ -120,10 +124,14 @@
     <Compile Include="Caching\RuntimeCacheProvider.cs" />
     <Compile Include="Caching\RuntimeCompositeCacheDependency.cs" />
     <Compile Include="Caching\RuntimeFileCacheDependency.cs" />
+    <Compile Include="Caching\SessionCache.cs" />
+    <Compile Include="Caching\SessionCacheKeyGenerator.cs" />
+    <Compile Include="Caching\SessionMicroCache.cs" />
     <Compile Include="Caching\SiteMapCache.cs" />
     <Compile Include="Caching\SiteMapCacheKeyGenerator.cs" />
     <Compile Include="Caching\SiteMapCacheKeyToBuilderSetMapper.cs" />
     <Compile Include="ChangeFrequency.cs" />
+    <Compile Include="Collections\CacheableDictionary.cs" />
     <Compile Include="Collections\GenericDictionaryFactory.cs" />
     <Compile Include="Collections\IGenericDictionaryFactory.cs" />
     <Compile Include="Collections\IThreadSafeDictionary.cs" />
@@ -131,6 +139,7 @@
     <Compile Include="Collections\LockableList.cs" />
     <Compile Include="Collections\RequestCacheableDictionary.cs" />
     <Compile Include="Collections\RequestCacheableList.cs" />
+    <Compile Include="Collections\Specialized\SessionCacheableRouteValueDictionaryFactory.cs" />
     <Compile Include="Collections\Specialized\SourceMetadataDictionary.cs" />
     <Compile Include="CompositeSiteMapNodeVisibilityProvider.cs" />
     <Compile Include="DI\Composer.cs" />

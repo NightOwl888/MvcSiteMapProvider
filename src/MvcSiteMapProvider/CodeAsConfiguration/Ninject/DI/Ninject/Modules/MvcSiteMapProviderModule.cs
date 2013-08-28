@@ -31,6 +31,7 @@ namespace DI.Ninject.Modules
             bool enableLocalization = true;
             string absoluteFileName = HostingEnvironment.MapPath("~/Mvc.sitemap");
             TimeSpan absoluteCacheExpiration = TimeSpan.FromMinutes(5);
+            TimeSpan sessionCacheExpiration = TimeSpan.FromMinutes(20);
             string[] includeAssembliesForScan = new string[] { "$AssemblyName$" };
 
             var currentAssembly = this.GetType().Assembly;
@@ -39,7 +40,8 @@ namespace DI.Ninject.Modules
             var excludeTypes = new Type[] { 
                 typeof(SiteMapNodeVisibilityProviderStrategy),
                 typeof(SiteMapXmlReservedAttributeNameProvider),
-                typeof(SiteMapBuilderSetStrategy)
+                typeof(SiteMapBuilderSetStrategy),
+                typeof(SessionCache)
             };
             var multipleImplementationTypes = new Type[]  { 
                 typeof(ISiteMapNodeUrlResolver), 
@@ -83,13 +85,13 @@ namespace DI.Ninject.Modules
 
             // Setup cache
 #if NET35
-            this.Kernel.Bind<ICacheProvider<ISiteMap>>().To<AspNetCacheProvider<ISiteMap>>();
+            this.Kernel.Bind(typeof(ICacheProvider<>)).To(typeof(AspNetCacheProvider<>));
             this.Kernel.Bind<ICacheDependency>().To<AspNetFileCacheDependency>().Named("cacheDependency1")
                 .WithConstructorArgument("fileName", absoluteFileName);
 #else
             this.Kernel.Bind<System.Runtime.Caching.ObjectCache>()
                 .ToConstant<System.Runtime.Caching.ObjectCache>(System.Runtime.Caching.MemoryCache.Default);
-            this.Kernel.Bind<ICacheProvider<ISiteMap>>().To<RuntimeCacheProvider<ISiteMap>>();
+            this.Kernel.Bind(typeof(ICacheProvider<>)).To(typeof(RuntimeCacheProvider<>));
             this.Kernel.Bind<ICacheDependency>().To<RuntimeFileCacheDependency>().Named("cacheDependency1")
                 .WithConstructorArgument("fileName", absoluteFileName);
 #endif
@@ -98,6 +100,14 @@ namespace DI.Ninject.Modules
                 .WithConstructorArgument("slidingCacheExpiration", TimeSpan.MinValue)
                 .WithConstructorArgument("cacheDependency", this.Kernel.Get<ICacheDependency>("cacheDependency1"));
 
+            // Setup session cache
+            this.Kernel.Bind<ICacheDependency>().To<NullCacheDependency>().Named("sessionCacheDependency");
+            this.Kernel.Bind<ICacheDetails>().To<CacheDetails>().Named("sessionCacheDetails")
+                .WithConstructorArgument("absoluteCacheExpiration", TimeSpan.MinValue)
+                .WithConstructorArgument("slidingCacheExpiration", sessionCacheExpiration)
+                .WithConstructorArgument("cacheDependency", this.Kernel.Get<ICacheDependency>("sessionCacheDependency"));
+            this.Kernel.Bind<ISessionCache>().To<SessionCache>()
+                .WithConstructorArgument("cacheDetails", this.Kernel.Get<ICacheDetails>("sessionCacheDetails"));
 
             // Configure the visitors
             this.Kernel.Bind<ISiteMapNodeVisitor>().To<UrlResolvingSiteMapNodeVisitor>();

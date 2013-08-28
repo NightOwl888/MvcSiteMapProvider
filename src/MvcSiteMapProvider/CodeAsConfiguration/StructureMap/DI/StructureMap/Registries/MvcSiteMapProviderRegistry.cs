@@ -30,6 +30,7 @@ namespace DI.StructureMap.Registries
             bool enableLocalization = true;
             string absoluteFileName = HostingEnvironment.MapPath("~/Mvc.sitemap");
             TimeSpan absoluteCacheExpiration = TimeSpan.FromMinutes(5);
+            TimeSpan sessionCacheExpiration = TimeSpan.FromMinutes(20);
             string[] includeAssembliesForScan = new string[] { "$AssemblyName$" };
 
             var currentAssembly = this.GetType().Assembly;
@@ -39,7 +40,8 @@ namespace DI.StructureMap.Registries
                 typeof(SiteMapNodeVisibilityProviderStrategy),
                 typeof(SiteMapXmlReservedAttributeNameProvider),
                 typeof(SiteMapBuilderSetStrategy),
-                typeof(ControllerTypeResolverFactory)
+                typeof(ControllerTypeResolverFactory),
+                typeof(SessionCache)
             };
             var multipleImplementationTypes = new Type[]  { 
                 typeof(ISiteMapNodeUrlResolver), 
@@ -92,7 +94,7 @@ namespace DI.StructureMap.Registries
             SmartInstance<CacheDetails> cacheDetails;
 
 #if NET35
-        this.For<ICacheProvider<ISiteMap>>().Use<AspNetCacheProvider<ISiteMap>>();
+        this.For(typeof(ICacheProvider<>)).Use(typeof(AspNetCacheProvider<>));
 
         var cacheDependency =
             this.For<ICacheDependency>().Use<AspNetFileCacheDependency>()
@@ -107,7 +109,7 @@ namespace DI.StructureMap.Registries
             this.For<System.Runtime.Caching.ObjectCache>()
                 .Use(s => System.Runtime.Caching.MemoryCache.Default);
 
-            this.For<ICacheProvider<ISiteMap>>().Use<RuntimeCacheProvider<ISiteMap>>();
+            this.For(typeof(ICacheProvider<>)).Use(typeof(RuntimeCacheProvider<>));
 
             var cacheDependency =
                 this.For<ICacheDependency>().Use<RuntimeFileCacheDependency>()
@@ -119,6 +121,18 @@ namespace DI.StructureMap.Registries
                     .Ctor<TimeSpan>("slidingCacheExpiration").Is(TimeSpan.MinValue)
                     .Ctor<ICacheDependency>().Is(cacheDependency);
 #endif
+
+            // Setup session cache
+            var sessionCacheDetails =
+                this.For<ICacheDetails>().Use<CacheDetails>()
+                    .Ctor<TimeSpan>("absoluteCacheExpiration").Is(TimeSpan.MinValue)
+                    .Ctor<TimeSpan>("slidingCacheExpiration").Is(sessionCacheExpiration)
+                    .Ctor<ICacheDependency>().Is<NullCacheDependency>();
+
+            this.For<ISessionCache>().Use<SessionCache>()
+                .Ctor<ICacheDetails>("cacheDetails").Is(sessionCacheDetails);
+
+
             // Configure the visitors
             this.For<ISiteMapNodeVisitor>()
                 .Use<UrlResolvingSiteMapNodeVisitor>();

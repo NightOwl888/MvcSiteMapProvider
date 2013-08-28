@@ -32,6 +32,7 @@ namespace DI.Unity.ContainerExtensions
             bool enableLocalization = true;
             string absoluteFileName = HostingEnvironment.MapPath("~/Mvc.sitemap");
             TimeSpan absoluteCacheExpiration = TimeSpan.FromMinutes(5);
+            TimeSpan sessionCacheExpiration = TimeSpan.FromMinutes(20);
             string[] includeAssembliesForScan = new string[] { "$AssemblyName$" };
 
             var currentAssembly = this.GetType().Assembly;
@@ -42,7 +43,8 @@ namespace DI.Unity.ContainerExtensions
                 typeof(SiteMapXmlReservedAttributeNameProvider),
                 typeof(SiteMapBuilderSetStrategy),
                 typeof(SiteMapNodeUrlResolverStrategy),
-                typeof(DynamicNodeProviderStrategy)
+                typeof(DynamicNodeProviderStrategy),
+                typeof(SessionCache)
             };
             var multipleImplementationTypes = new Type[]  { 
                 typeof(ISiteMapNodeUrlResolver), 
@@ -106,17 +108,23 @@ namespace DI.Unity.ContainerExtensions
                 new ResolvedParameter<IAclModule>("xmlRoles"))));
 
 #if NET35
-            this.Container.RegisterType<ICacheProvider<ISiteMap>, AspNetCacheProvider<ISiteMap>>();
+            this.Container.RegisterType(typeof(ICacheProvider<>), typeof(AspNetCacheProvider<>));
             this.Container.RegisterType<ICacheDependency, AspNetFileCacheDependency>(
                 "cacheDependency", new InjectionConstructor(absoluteFileName));
 #else
             this.Container.RegisterInstance<System.Runtime.Caching.ObjectCache>(System.Runtime.Caching.MemoryCache.Default);
-            this.Container.RegisterType<ICacheProvider<ISiteMap>, RuntimeCacheProvider<ISiteMap>>();
+            this.Container.RegisterType(typeof(ICacheProvider<>), typeof(RuntimeCacheProvider<>));
             this.Container.RegisterType<ICacheDependency, RuntimeFileCacheDependency>(
                 "cacheDependency", new InjectionConstructor(absoluteFileName));
 #endif
             this.Container.RegisterType<ICacheDetails, CacheDetails>("cacheDetails",
                 new InjectionConstructor(absoluteCacheExpiration, TimeSpan.MinValue, new ResolvedParameter<ICacheDependency>("cacheDependency")));
+
+            // Setup session cache
+            this.Container.RegisterType<ICacheDetails, CacheDetails>("sessionCacheDetails",
+                new InjectionConstructor(TimeSpan.MinValue, sessionCacheExpiration, typeof(NullCacheDependency)));
+            this.Container.RegisterType<ISessionCache, SessionCache>(
+                new InjectionConstructor(typeof(ISessionMicroCache), new ResolvedParameter<ICacheDetails>("sessionCacheDetails"), typeof(ISessionCacheKeyGenerator)));
 
             // Configure the visitors
             this.Container.RegisterType<ISiteMapNodeVisitor, UrlResolvingSiteMapNodeVisitor>();
