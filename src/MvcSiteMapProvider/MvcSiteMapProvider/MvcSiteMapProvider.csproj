@@ -159,10 +159,14 @@
     <Compile Include="Collections\Specialized\SourceMetadataDictionary.cs" />
     <Compile Include="CompositeSiteMapNodeProvider.cs" />
     <Compile Include="CompositeSiteMapNodeVisibilityProvider.cs" />
+    <Compile Include="DisposableContextManager.cs" />
+    <Compile Include="DisposableContextManagerFactory.cs" />
     <Compile Include="DI\Composer.cs" />
     <Compile Include="DI\ConfigurationSettings.cs" />
     <Compile Include="DI\ControllerFactoryDecorator.cs" />
     <Compile Include="DI\DependencyResolverDecorator.cs" />
+    <Compile Include="IDisposableContextManager.cs" />
+    <Compile Include="IDisposableContextManagerFactory.cs" />
     <Compile Include="ISiteMapNodeProvider.cs" />
     <Compile Include="ISiteMapSettings.cs" />
     <Compile Include="Reflection\AttributeAssemblyProvider.cs" />
