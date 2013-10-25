@@ -7,6 +7,7 @@ using System.Web.Routing;
 using MvcSiteMapProvider.Web;
 using MvcSiteMapProvider.Web.Mvc;
 using MvcSiteMapProvider.Collections.Specialized;
+using MvcSiteMapProvider.Threading;
 
 namespace MvcSiteMapProvider
 {
@@ -26,6 +27,7 @@ namespace MvcSiteMapProvider
             IMvcContextFactory mvcContextFactory,
             ISiteMapChildStateFactory siteMapChildStateFactory,
             IUrlPath urlPath,
+            IReferenceCounterFactory referenceCounterFactory,
             ISiteMapSettings siteMapSettings
             )
         {
@@ -37,15 +39,18 @@ namespace MvcSiteMapProvider
                 throw new ArgumentNullException("siteMapChildStateFactory");
             if (urlPath == null)
                 throw new ArgumentNullException("urlPath");
+            if (referenceCounterFactory == null)
+                throw new ArgumentNullException("referenceCounterFactory");
             if (siteMapSettings == null)
                 throw new ArgumentNullException("siteMapSettings");
-
+            
             this.pluginProvider = pluginProvider;
             this.mvcContextFactory = mvcContextFactory;
             this.siteMapChildStateFactory = siteMapChildStateFactory;
             this.urlPath = urlPath;
+            this.referenceCounter = referenceCounterFactory.Create(() => this.Cleanup());
             this.siteMapSettings = siteMapSettings;
-
+            
             // Initialize dictionaries
             this.childNodeCollectionTable = siteMapChildStateFactory.CreateGenericDictionary<ISiteMapNode, ISiteMapNodeCollection>();
             this.keyTable = siteMapChildStateFactory.CreateGenericDictionary<string, ISiteMapNode>();
@@ -58,6 +63,7 @@ namespace MvcSiteMapProvider
         protected readonly IMvcContextFactory mvcContextFactory;
         protected readonly ISiteMapChildStateFactory siteMapChildStateFactory;
         protected readonly IUrlPath urlPath;
+        protected readonly IReferenceCounter referenceCounter;
         private readonly ISiteMapSettings siteMapSettings;
 
         // Child collections
@@ -69,6 +75,7 @@ namespace MvcSiteMapProvider
         // Object state
         protected readonly object synclock = new object();
         protected ISiteMapNode root;
+        private bool isMarkedForDestruction = false;
 
         #region ISiteMap Members
 
@@ -599,9 +606,40 @@ namespace MvcSiteMapProvider
             return pluginProvider.MvcResolver.ResolveActionMethodParameters(areaName, controllerName, actionMethodName);
         }
 
+        public IReferenceCounter ReferenceCounter 
+        { 
+            get { return this.referenceCounter; } 
+        }
+
+        public void MarkForDestruction()
+        {
+            lock (this.synclock)
+            {
+                if (!this.isMarkedForDestruction)
+                {
+                    this.isMarkedForDestruction = true;
+                    if (this.referenceCounter.Count == 0)
+                    {
+                        this.Clear();
+                    }
+                }
+            }
+        }
+
         #endregion
 
         #region Protected Members
+
+        protected virtual void Cleanup()
+        {
+            lock (this.synclock)
+            {
+                if (this.isMarkedForDestruction)
+                {
+                    this.Clear();
+                }
+            }
+        }
 
         protected virtual ISiteMapNode GetParentNodesInternal(ISiteMapNode node, int walkupLevels)
         {

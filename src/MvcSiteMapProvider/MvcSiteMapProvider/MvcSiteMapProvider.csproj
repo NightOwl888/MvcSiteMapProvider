@@ -167,6 +167,8 @@
     <Compile Include="EnumHelper.cs" />
     <Compile Include="ISiteMapNodeProvider.cs" />
     <Compile Include="ISiteMapSettings.cs" />
+    <Compile Include="Loader\ISiteMapSpooler.cs" />
+    <Compile Include="Loader\SiteMapSpooler.cs" />
     <Compile Include="Reflection\AttributeAssemblyProvider.cs" />
     <Compile Include="Reflection\AttributeAssemblyProviderFactory.cs" />
     <Compile Include="Reflection\IAttributeAssemblyProvider.cs" />
@@ -177,6 +179,10 @@
     <Compile Include="Reflection\PluginInstantiator.cs" />
     <Compile Include="DI\SiteMapFactoryContainer.cs" />
     <Compile Include="DI\SiteMapNodeFactoryContainer.cs" />
+    <Compile Include="Threading\IReferenceCounter.cs" />
+    <Compile Include="Threading\IReferenceCounterFactory.cs" />
+    <Compile Include="Threading\ReferenceCounter.cs" />
+    <Compile Include="Threading\ReferenceCounterFactory.cs" />
     <Compile Include="TrimEmptyGroupingNodesVisibilityProvider.cs" />
     <Compile Include="Visitor\NullSiteMapNodeVisitor.cs" />
     <Compile Include="Web\Mvc\ControllerExtensions.cs" />
@@ -184,6 +190,7 @@
     <Compile Include="Web\Mvc\Filters\GlobalFilterProvider.cs" />
     <Compile Include="Web\Mvc\Filters\IGlobalFilterProvider.cs" />
     <Compile Include="Web\Mvc\Filters\SiteMapCacheReleaseAttribute.cs" />
+    <Compile Include="Web\Mvc\Filters\SiteMapDereferenceAttribute.cs" />
     <Compile Include="Web\Mvc\SiteMapHttpResponse.cs" />
     <Compile Include="Web\Mvc\SiteMapHttpResponseCache.cs" />
     <Compile Include="Web\SiteMapNodeExtensions.cs" />

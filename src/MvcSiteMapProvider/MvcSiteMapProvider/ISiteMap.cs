@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using System.Collections.Generic;
 using MvcSiteMapProvider.Collections.Specialized;
+using MvcSiteMapProvider.Threading;
 
 namespace MvcSiteMapProvider
 {
@@ -41,5 +42,7 @@ namespace MvcSiteMapProvider
         bool SecurityTrimmingEnabled { get; }
         Type ResolveControllerType(string areaName, string controllerName);
         IEnumerable<string> ResolveActionMethodParameters(string areaName, string controllerName, string actionMethodName);
+        IReferenceCounter ReferenceCounter { get; }
+        void MarkForDestruction();
     }
 }
