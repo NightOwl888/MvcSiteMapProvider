@@ -52,9 +52,11 @@ namespace MvcSiteMapProvider.DI
             this.mvcSiteMapNodeAttributeDefinitionProvider = new MvcSiteMapNodeAttributeDefinitionProvider();
             this.siteMapNodeProvider = this.ResolveSiteMapNodeProvider(settings);
             this.siteMapBuiderSetStrategy = this.ResolveSiteMapBuilderSetStrategy(settings);
-            var siteMapFactoryContainer = new SiteMapFactoryContainer(settings, this.mvcContextFactory, this.urlPath);
+            this.referenceCounterFactory = new ReferenceCounterFactory();
+            var siteMapFactoryContainer = new SiteMapFactoryContainer(settings, this.mvcContextFactory, this.urlPath, this.referenceCounterFactory);
             this.siteMapFactory = siteMapFactoryContainer.ResolveSiteMapFactory();
             this.siteMapCreator = new SiteMapCreator(this.siteMapCacheKeyToBuilderSetMapper, this.siteMapBuiderSetStrategy, this.siteMapFactory);
+            this.siteMapSpooler = new SiteMapSpooler(this.mvcContextFactory);
         }
 
         private readonly string absoluteFileName;
@@ -79,15 +81,18 @@ namespace MvcSiteMapProvider.DI
         private readonly ISiteMapXmlNameProvider siteMapXmlNameProvider;
         private readonly IReservedAttributeNameProvider reservedAttributeNameProvider;
         private readonly IDynamicSiteMapNodeBuilderFactory dynamicSiteMapNodeBuilderFactory;
+        private readonly IReferenceCounterFactory referenceCounterFactory;
         private readonly ISiteMapFactory siteMapFactory;
         private readonly ISiteMapCreator siteMapCreator;
+        private readonly ISiteMapSpooler siteMapSpooler;
         
         public ISiteMapLoader ResolveSiteMapLoader()
         {
             return new SiteMapLoader(
                 this.siteMapCache,
                 this.siteMapCacheKeyGenerator,
-                this.siteMapCreator);
+                this.siteMapCreator,
+                this.siteMapSpooler);
         }
 
         private ISiteMapBuilderSetStrategy ResolveSiteMapBuilderSetStrategy(ConfigurationSettings settings)

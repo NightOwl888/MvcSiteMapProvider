@@ -2,6 +2,7 @@
 using MvcSiteMapProvider.Builder;
 using MvcSiteMapProvider.Web.Mvc;
 using MvcSiteMapProvider.Web;
+using MvcSiteMapProvider.Threading;
 
 namespace MvcSiteMapProvider
 {
@@ -18,6 +19,7 @@ namespace MvcSiteMapProvider
             IMvcContextFactory mvcContextFactory,
             ISiteMapChildStateFactory siteMapChildStateFactory,
             IUrlPath urlPath,
+            IReferenceCounterFactory referenceCounterFactory,
             IControllerTypeResolverFactory controllerTypeResolverFactory,
             IActionMethodParameterResolverFactory actionMethodParameterResolverFactory
             )
@@ -32,16 +34,20 @@ namespace MvcSiteMapProvider
                 throw new ArgumentNullException("siteMapChildStateFactory");
             if (urlPath == null)
                 throw new ArgumentNullException("urlPath");
+            if (referenceCounterFactory == null)
+                throw new ArgumentNullException("referenceCounterFactory");
             if (controllerTypeResolverFactory == null)
                 throw new ArgumentNullException("controllerTypeResolverFactory");
             if (actionMethodParameterResolverFactory == null)
                 throw new ArgumentNullException("actionMethodParameterResolverFactory");
+            
 
             this.pluginProviderFactory = pluginProviderFactory;
             this.mvcResolverFactory = mvcResolverFactory;
             this.mvcContextFactory = mvcContextFactory;
             this.siteMapChildStateFactory = siteMapChildStateFactory;
             this.urlPath = urlPath;
+            this.referenceCounterFactory = referenceCounterFactory;
             this.controllerTypeResolverFactory = controllerTypeResolverFactory;
             this.actionMethodParameterResolverFactory = actionMethodParameterResolverFactory;
         }
@@ -53,6 +59,7 @@ namespace MvcSiteMapProvider
         protected readonly IUrlPath urlPath;
         protected readonly IControllerTypeResolverFactory controllerTypeResolverFactory;
         protected readonly IActionMethodParameterResolverFactory actionMethodParameterResolverFactory;
+        protected readonly IReferenceCounterFactory referenceCounterFactory;
         
 
         #region ISiteMapFactory Members
@@ -75,6 +82,7 @@ namespace MvcSiteMapProvider
                 mvcContextFactory,
                 siteMapChildStateFactory,
                 urlPath,
+                referenceCounterFactory,
                 siteMapSettings,
                 requestCache);
         }

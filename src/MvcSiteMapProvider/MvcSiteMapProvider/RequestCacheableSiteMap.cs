@@ -6,6 +6,7 @@ using System.Text;
 using MvcSiteMapProvider.Caching;
 using MvcSiteMapProvider.Web;
 using MvcSiteMapProvider.Web.Mvc;
+using MvcSiteMapProvider.Threading;
 
 namespace MvcSiteMapProvider
 {
@@ -21,10 +22,11 @@ namespace MvcSiteMapProvider
             IMvcContextFactory mvcContextFactory,
             ISiteMapChildStateFactory siteMapChildStateFactory,
             IUrlPath urlPath,
+            IReferenceCounterFactory referenceCounterFactory,
             ISiteMapSettings siteMapSettings,
             IRequestCache requestCache
             )
-            : base(pluginProvider, mvcContextFactory, siteMapChildStateFactory, urlPath, siteMapSettings)
+            : base(pluginProvider, mvcContextFactory, siteMapChildStateFactory, urlPath, referenceCounterFactory, siteMapSettings)
         {
             if (requestCache == null)
                 throw new ArgumentNullException("requestCache");

@@ -1,6 +1,7 @@
 ﻿using System;
 using MvcSiteMapProvider.Web;
 using MvcSiteMapProvider.Web.Mvc;
+using MvcSiteMapProvider.Threading;
 
 namespace MvcSiteMapProvider
 {
@@ -16,9 +17,10 @@ namespace MvcSiteMapProvider
             IMvcContextFactory mvcContextFactory,
             ISiteMapChildStateFactory siteMapChildStateFactory,
             IUrlPath urlPath,
+            IReferenceCounterFactory referenceCounterFactory,
             ISiteMapSettings siteMapSettings
             )
-            : base(pluginProvider, mvcContextFactory, siteMapChildStateFactory, urlPath, siteMapSettings)
+            : base(pluginProvider, mvcContextFactory, siteMapChildStateFactory, urlPath, referenceCounterFactory, siteMapSettings)
         {
         }
 

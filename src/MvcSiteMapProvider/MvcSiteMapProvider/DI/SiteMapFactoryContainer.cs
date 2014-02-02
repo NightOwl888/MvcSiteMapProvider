@@ -11,6 +11,7 @@ using MvcSiteMapProvider.Security;
 using MvcSiteMapProvider.Reflection;
 using MvcSiteMapProvider.Collections;
 using MvcSiteMapProvider.Collections.Specialized;
+using MvcSiteMapProvider.Threading;
 
 namespace MvcSiteMapProvider.DI
 {
@@ -22,18 +23,21 @@ namespace MvcSiteMapProvider.DI
         public SiteMapFactoryContainer(
             ConfigurationSettings settings,
             IMvcContextFactory mvcContextFactory,
-            IUrlPath urlPath)
+            IUrlPath urlPath,
+            IReferenceCounterFactory referenceCounterFactory)
         {
             this.settings = settings;
             this.mvcContextFactory = mvcContextFactory;
             this.requestCache = this.mvcContextFactory.GetRequestCache();
             this.urlPath = urlPath;
+            this.referenceCounterFactory = referenceCounterFactory;
         }
 
         private readonly ConfigurationSettings settings;
         private readonly IMvcContextFactory mvcContextFactory;
         private readonly IRequestCache requestCache;
         private readonly IUrlPath urlPath;
+        private readonly IReferenceCounterFactory referenceCounterFactory;
 
         public ISiteMapFactory ResolveSiteMapFactory()
         {
@@ -43,6 +47,7 @@ namespace MvcSiteMapProvider.DI
                 this.mvcContextFactory,
                 this.ResolveSiteMapChildStateFactory(),
                 this.urlPath,
+                this.referenceCounterFactory,
                 this.ResolveControllerTypeResolverFactory(),
                 new ActionMethodParameterResolverFactory(new ControllerDescriptorFactory())
                 );
