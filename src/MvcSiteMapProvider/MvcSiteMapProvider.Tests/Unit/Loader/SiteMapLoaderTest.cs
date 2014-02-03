@@ -17,6 +17,7 @@ namespace MvcSiteMapProvider.Tests.Unit
         private Mock<ISiteMapCache> siteMapCache = null;
         private Mock<ISiteMapCacheKeyGenerator> siteMapCacheKeyGenerator = null;
         private Mock<ISiteMapCreator> siteMapCreator = null;
+        //private Mock<ISiteMapSpooler> siteMapSpooler = null;
 
         [SetUp]
         public void Setup()
@@ -24,12 +25,16 @@ namespace MvcSiteMapProvider.Tests.Unit
             siteMapCache = new Mock<ISiteMapCache>();
             siteMapCacheKeyGenerator = new Mock<ISiteMapCacheKeyGenerator>();
             siteMapCreator = new Mock<ISiteMapCreator>();
+            //siteMapSpooler = new Mock<ISiteMapSpooler>();
         }
 
         [TearDown]
         public void TearDown()
         {
-
+            siteMapCache = null;
+            siteMapCacheKeyGenerator = null;
+            siteMapCreator = null;
+            //siteMapSpooler = null;
         }
 
         private ISiteMapLoader NewSiteMapLoader()
@@ -38,6 +43,12 @@ namespace MvcSiteMapProvider.Tests.Unit
                 siteMapCache.Object,
                 siteMapCacheKeyGenerator.Object,
                 siteMapCreator.Object);
+
+            //return new SiteMapLoader(
+            //    siteMapCache.Object,
+            //    siteMapCacheKeyGenerator.Object,
+            //    siteMapCreator.Object,
+            //    siteMapSpooler.Object);
         }
 
         #endregion
@@ -58,6 +69,9 @@ namespace MvcSiteMapProvider.Tests.Unit
             siteMapCacheKeyGenerator
                 .Verify(x => x.GenerateKey(),
                 Times.Once());
+            //siteMapSpooler
+            //    .Verify(x => x.GetOrAdd("theKey", It.IsAny<Func<ISiteMap>>()),
+            //    Times.Once());
             siteMapCache
                 .Verify(x => x.GetOrAdd("theKey", It.IsAny<Func<ISiteMap>>(), It.IsAny<Func<ICacheDetails>>()),
                 Times.Once());
@@ -80,6 +94,9 @@ namespace MvcSiteMapProvider.Tests.Unit
             siteMapCacheKeyGenerator
                 .Verify(x => x.GenerateKey(), 
                 Times.Once());
+            //siteMapSpooler
+            //    .Verify(x => x.GetOrAdd("theKey", It.IsAny<Func<ISiteMap>>()),
+            //    Times.Once());
             siteMapCache
                 .Verify(x => x.GetOrAdd("theKey", It.IsAny<Func<ISiteMap>>(), It.IsAny<Func<ICacheDetails>>()),
                 Times.Once());
@@ -102,6 +119,9 @@ namespace MvcSiteMapProvider.Tests.Unit
             siteMapCacheKeyGenerator
                 .Verify(x => x.GenerateKey(),
                 Times.Once());
+            //siteMapSpooler
+            //    .Verify(x => x.GetOrAdd("theKey", It.IsAny<Func<ISiteMap>>()),
+            //    Times.Once());
             siteMapCache
                 .Verify(x => x.GetOrAdd("theKey", It.IsAny<Func<ISiteMap>>(), It.IsAny<Func<ICacheDetails>>()),
                 Times.Once());
@@ -118,8 +138,11 @@ namespace MvcSiteMapProvider.Tests.Unit
             var result = target.GetSiteMap(siteMapCacheKey);
 
             // assert
+            //siteMapSpooler
+            //    .Verify(x => x.GetOrAdd(siteMapCacheKey, It.IsAny<Func<ISiteMap>>()),
+            //    Times.Once());
             siteMapCache
-                .Verify(x => x.GetOrAdd(siteMapCacheKey, It.IsAny<Func<ISiteMap>>(), It.IsAny<Func<ICacheDetails>>()), 
+                .Verify(x => x.GetOrAdd(siteMapCacheKey, It.IsAny<Func<ISiteMap>>(), It.IsAny<Func<ICacheDetails>>()),
                 Times.Once());
         }
 

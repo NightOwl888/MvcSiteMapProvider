@@ -661,6 +661,15 @@ namespace MvcSiteMapProvider
 
         #endregion
 
+        #region IDisposable Members
+
+        public void Dispose()
+        {
+            this.referenceCounter.Decrement();
+        }
+
+        #endregion
+
         #region Protected Members
 
         protected virtual void Cleanup()
@@ -914,5 +923,7 @@ namespace MvcSiteMapProvider
         }
 
         #endregion
+
+
     }
 }

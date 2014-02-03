@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using MvcSiteMapProvider.Web;
 using MvcSiteMapProvider.Collections.Specialized;
+using MvcSiteMapProvider.Web;
+using MvcSiteMapProvider.Threading;
 
 namespace MvcSiteMapProvider.Tests.Unit.Web.Html
 {
@@ -352,6 +353,25 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
         public bool VisibilityAffectsDescendants
         {
             get { return this.visibilityAffectsDescendants; }
+        }
+
+        public IReferenceCounter ReferenceCounter
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public void MarkForDestruction()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #region IDisposable Members
+
+        public void Dispose()
+        {
+            // Do nothing
         }
 
         #endregion

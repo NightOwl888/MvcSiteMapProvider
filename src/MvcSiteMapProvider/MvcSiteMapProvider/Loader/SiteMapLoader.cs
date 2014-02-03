@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using MvcSiteMapProvider.Caching;
 using MvcSiteMapProvider.Builder;
 using MvcSiteMapProvider.Web.Mvc;
@@ -15,8 +16,8 @@ namespace MvcSiteMapProvider.Loader
         public SiteMapLoader(
             ISiteMapCache siteMapCache,
             ISiteMapCacheKeyGenerator siteMapCacheKeyGenerator,
-            ISiteMapCreator siteMapCreator,
-            ISiteMapSpooler siteMapSpooler
+            ISiteMapCreator siteMapCreator //,
+            //ISiteMapSpooler siteMapSpooler
             )
         {
             if (siteMapCache == null)
@@ -25,13 +26,13 @@ namespace MvcSiteMapProvider.Loader
                 throw new ArgumentNullException("siteMapCacheKeyGenerator");
             if (siteMapCreator == null)
                 throw new ArgumentNullException("siteMapCreator");
-            if (siteMapSpooler == null)
-                throw new ArgumentNullException("siteMapSpooler");
+            //if (siteMapSpooler == null)
+            //    throw new ArgumentNullException("siteMapSpooler");
 
             this.siteMapCache = siteMapCache;
             this.siteMapCacheKeyGenerator = siteMapCacheKeyGenerator;
             this.siteMapCreator = siteMapCreator;
-            this.siteMapSpooler = siteMapSpooler;
+            //this.siteMapSpooler = siteMapSpooler;
 
             // Attach an event to the cache so when the SiteMap is removed, the Clear() method can be called on it to ensure
             // we don't have any circular references that aren't GC'd.
@@ -42,7 +43,8 @@ namespace MvcSiteMapProvider.Loader
         protected readonly ISiteMapCache siteMapCache;
         protected readonly ISiteMapCacheKeyGenerator siteMapCacheKeyGenerator;
         protected readonly ISiteMapCreator siteMapCreator;
-        protected readonly ISiteMapSpooler siteMapSpooler;
+        //protected readonly ISiteMapSpooler siteMapSpooler;
+        private ReaderWriterLockSlim synclock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
         #region ISiteMapLoader Members
 
@@ -53,20 +55,40 @@ namespace MvcSiteMapProvider.Loader
 
         public virtual ISiteMap GetSiteMap(string siteMapCacheKey)
         {
+            ISiteMap result = null;
+
             if (String.IsNullOrEmpty(siteMapCacheKey))
             {
                 siteMapCacheKey = siteMapCacheKeyGenerator.GenerateKey();
             }
-            // Request cache the siteMap object so we always get the same
-            // reference within the scope of the request
-            return this.siteMapSpooler.GetOrAdd(
-                siteMapCacheKey,
-                // Get or add the SiteMap to/from the shared cache
-                () => this.siteMapCache.GetOrAdd(
-                        siteMapCacheKey,
-                        () => siteMapCreator.CreateSiteMap(siteMapCacheKey),
-                        () => siteMapCreator.GetCacheDetails(siteMapCacheKey))
-                );
+
+            synclock.EnterWriteLock();
+            try
+            {
+                result = this.siteMapCache.GetOrAdd(
+                    siteMapCacheKey,
+                    () => siteMapCreator.CreateSiteMap(siteMapCacheKey),
+                    () => siteMapCreator.GetCacheDetails(siteMapCacheKey));
+
+                result.ReferenceCounter.Increment();
+            }
+            finally
+            {
+                synclock.ExitWriteLock();
+            }
+
+            return result;
+
+            //// Request cache the siteMap object so we always get the same
+            //// reference within the scope of the request
+            //return this.siteMapSpooler.GetOrAdd(
+            //    siteMapCacheKey,
+            //    // Get or add the SiteMap to/from the shared cache
+            //    () => this.siteMapCache.GetOrAdd(
+            //            siteMapCacheKey,
+            //            () => siteMapCreator.CreateSiteMap(siteMapCacheKey),
+            //            () => siteMapCreator.GetCacheDetails(siteMapCacheKey))
+            //    );
                 
 
             //// Request cache the siteMap object so we always get the same

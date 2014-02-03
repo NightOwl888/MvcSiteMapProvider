@@ -72,8 +72,8 @@ namespace MvcSiteMapProvider.DI
                     XmlSiteMapController.RegisterRoutes(RouteTable.Routes);
                 }
 
-                // register the global filter to cleanup 
-                GlobalFilters.Filters.Add(new MvcSiteMapProvider.Web.Mvc.Filters.SiteMapDereferenceAttribute(new MvcSiteMapProvider.Loader.SiteMapSpooler(new MvcSiteMapProvider.Web.Mvc.MvcContextFactory())));
+                //// register the global filter to cleanup 
+                //GlobalFilters.Filters.Add(new MvcSiteMapProvider.Web.Mvc.Filters.SiteMapDereferenceAttribute(new MvcSiteMapProvider.Loader.SiteMapSpooler(new MvcSiteMapProvider.Web.Mvc.MvcContextFactory())));
             }
         }
     }

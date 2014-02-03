@@ -6,6 +6,7 @@ using MvcSiteMapProvider.Caching;
 using MvcSiteMapProvider.Collections.Specialized;
 using MvcSiteMapProvider.Loader;
 using MvcSiteMapProvider.Reflection;
+using MvcSiteMapProvider.Threading;
 using MvcSiteMapProvider.Visitor;
 using MvcSiteMapProvider.Web;
 using MvcSiteMapProvider.Web.Mvc;
@@ -56,7 +57,7 @@ namespace MvcSiteMapProvider.DI
             var siteMapFactoryContainer = new SiteMapFactoryContainer(settings, this.mvcContextFactory, this.urlPath, this.referenceCounterFactory);
             this.siteMapFactory = siteMapFactoryContainer.ResolveSiteMapFactory();
             this.siteMapCreator = new SiteMapCreator(this.siteMapCacheKeyToBuilderSetMapper, this.siteMapBuiderSetStrategy, this.siteMapFactory);
-            this.siteMapSpooler = new SiteMapSpooler(this.mvcContextFactory);
+            //this.siteMapSpooler = new SiteMapSpooler(this.mvcContextFactory);
         }
 
         private readonly string absoluteFileName;
@@ -84,15 +85,20 @@ namespace MvcSiteMapProvider.DI
         private readonly IReferenceCounterFactory referenceCounterFactory;
         private readonly ISiteMapFactory siteMapFactory;
         private readonly ISiteMapCreator siteMapCreator;
-        private readonly ISiteMapSpooler siteMapSpooler;
+        //private readonly ISiteMapSpooler siteMapSpooler;
         
         public ISiteMapLoader ResolveSiteMapLoader()
         {
             return new SiteMapLoader(
                 this.siteMapCache,
                 this.siteMapCacheKeyGenerator,
-                this.siteMapCreator,
-                this.siteMapSpooler);
+                this.siteMapCreator);
+
+            //return new SiteMapLoader(
+            //    this.siteMapCache,
+            //    this.siteMapCacheKeyGenerator,
+            //    this.siteMapCreator,
+            //    this.siteMapSpooler);
         }
 
         private ISiteMapBuilderSetStrategy ResolveSiteMapBuilderSetStrategy(ConfigurationSettings settings)

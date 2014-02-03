@@ -11,6 +11,7 @@ namespace MvcSiteMapProvider
     /// <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> instances.
     /// </summary>
     public interface ISiteMap
+        : IDisposable
     {
         // Data structure management
         bool IsReadOnly { get; }
