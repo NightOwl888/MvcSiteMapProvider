@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using MvcSiteMapProvider.Xml;
+using MvcSiteMapProvider.Builder.Fluent;
 
 namespace MvcSiteMapProvider.Builder
 {
@@ -9,6 +10,7 @@ namespace MvcSiteMapProvider.Builder
     /// Contract for a set of services for creating SiteMap nodes, including dynamic nodes.
     /// </summary>
     public interface ISiteMapNodeHelper
+        : IFluentInterface
     {
         /// <summary>
         /// Generates a key based on the properties that are passed. The combination of values should be unique.
@@ -74,5 +76,8 @@ namespace MvcSiteMapProvider.Builder
         /// The SiteMapCacheKey for the current SiteMap instance.
         /// </summary>
         string SiteMapCacheKey { get; }
+
+
+        INodeTypeStarter RegisterNode();
     }
 }

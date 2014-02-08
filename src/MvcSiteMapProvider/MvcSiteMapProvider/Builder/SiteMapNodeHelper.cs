@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using MvcSiteMapProvider.Xml;
+using MvcSiteMapProvider.Builder.Fluent;
 
 namespace MvcSiteMapProvider.Builder
 {
@@ -80,6 +81,16 @@ namespace MvcSiteMapProvider.Builder
         public string SiteMapCacheKey
         {
             get { return this.siteMapCacheKey; }
+        }
+
+        #endregion
+
+        #region ISiteMapNodeHelper Members
+
+
+        public INodeTypeStarter RegisterNode()
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

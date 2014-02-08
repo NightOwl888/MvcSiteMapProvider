@@ -1,78 +1,96 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web.Mvc;
+﻿//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Text;
+//using System.Web.Mvc;
 
-namespace MvcSiteMapProvider.Builder
-{
-    /// <summary>
-    /// Contract for the fluent interface that builds a SiteMapNode fluently
-    /// </summary>
-    public interface IFluentSiteMapNodeBuilder
-    {
-        IFluentSiteMapNodeBuilder Items(Action<IFluentSiteMapNodeFactory> children);
+//namespace MvcSiteMapProvider.Builder
+//{
+//    /// <summary>
+//    /// Contract for the fluent interface that builds a SiteMapNode fluently
+//    /// </summary>
+//    public interface IFluentSiteMapNodeBuilder
+//    {
+//        IFluentSiteMapNodeBuilder ChildNodes(Action<IFluentSiteMapNodeFactory> expression);
 
-        IList<IFluentSiteMapNodeBuilder> Children { get; }
+//        //IList<IFluentSiteMapNodeBuilder> Children { get; }
 
-        IFluentSiteMapNodeBuilder Attribute(string key, object value);
+//        IFluentSiteMapNodeBuilder Attribute(string key, object value);
 
-        IFluentSiteMapNodeBuilder Area(string value);
+//        // May need this for inherited attributes
+//        IFluentSiteMapNodeBuilder ClearAttributes();
 
-        IFluentSiteMapNodeBuilder Controller(string value);
+//        IFluentSiteMapNodeBuilder RemoveAttribute(string key);
 
-        IFluentSiteMapNodeBuilder Action(string value);
+//        IFluentSiteMapNodeBuilder Area(string value);
 
-        IFluentSiteMapNodeBuilder HttpMethod(HttpVerbs? method);
+//        IFluentSiteMapNodeBuilder Controller(string value);
 
-        IFluentSiteMapNodeBuilder Title(string value);
+//        IFluentSiteMapNodeBuilder Action(string value);
 
-        IFluentSiteMapNodeBuilder Description(string value);
+//        IFluentSiteMapNodeBuilder HttpMethod(HttpVerbs? method);
 
-        IFluentSiteMapNodeBuilder Key(string value);
+//        IFluentSiteMapNodeBuilder Title(string value);
 
-        IFluentSiteMapNodeBuilder Url(string value);
+//        IFluentSiteMapNodeBuilder Description(string value);
 
-        IFluentSiteMapNodeBuilder Clickable(bool? clickable);
+//        IFluentSiteMapNodeBuilder Key(string value);
 
-        IFluentSiteMapNodeBuilder Roles(string[] values);
+//        IFluentSiteMapNodeBuilder Url(string value);
 
-        IFluentSiteMapNodeBuilder ResourceKey(string value);
+//        IFluentSiteMapNodeBuilder Clickable(bool? clickable);
 
-        IFluentSiteMapNodeBuilder VisibilityProvider(string value);
+//        IFluentSiteMapNodeBuilder Roles(string[] values);
 
-        IFluentSiteMapNodeBuilder DynamicNodeProvider(string value);
+//        IFluentSiteMapNodeBuilder ResourceKey(string value);
 
-        IFluentSiteMapNodeBuilder ImageUrl(string value);
+//        IFluentSiteMapNodeBuilder VisibilityProvider(string value);
 
-        IFluentSiteMapNodeBuilder TargetFrame(string value);
+//        IFluentSiteMapNodeBuilder DynamicNodeProvider(string value);
 
-        IFluentSiteMapNodeBuilder CachedResolvedUrl(bool? cacheResolvedUrl);
+//        IFluentSiteMapNodeBuilder ImageUrl(string value);
 
-        IFluentSiteMapNodeBuilder CanonicalUrl(string value);
+//        IFluentSiteMapNodeBuilder TargetFrame(string value);
 
-        IFluentSiteMapNodeBuilder CanonicalKey(string value);
+//        IFluentSiteMapNodeBuilder CachedResolvedUrl(bool? cacheResolvedUrl);
 
-        IFluentSiteMapNodeBuilder MetaRobotsValues(string[] values);
+//        IFluentSiteMapNodeBuilder CanonicalUrl(string value);
 
-        IFluentSiteMapNodeBuilder ChangeFrequency(ChangeFrequency? value);
+//        IFluentSiteMapNodeBuilder CanonicalKey(string value);
 
-        IFluentSiteMapNodeBuilder UpdatePriority(UpdatePriority? value);
+//        IFluentSiteMapNodeBuilder MetaRobotsValues(string[] values);
 
-        IFluentSiteMapNodeBuilder LastModifiedDate(DateTime? value);
+//        IFluentSiteMapNodeBuilder MetaRobots(string value);
 
-        IFluentSiteMapNodeBuilder Order(int order);
+//        IFluentSiteMapNodeBuilder ChangeFrequency(ChangeFrequency? value);
 
-        IFluentSiteMapNodeBuilder Route(string value);
+//        IFluentSiteMapNodeBuilder UpdatePriority(UpdatePriority? value);
 
-        IFluentSiteMapNodeBuilder RouteValues(object routeValues);
+//        IFluentSiteMapNodeBuilder LastModifiedDate(DateTime? value);
 
-        IFluentSiteMapNodeBuilder PreservedRouteValues(string[] values);
+//        IFluentSiteMapNodeBuilder Order(int order);
 
-        IFluentSiteMapNodeBuilder UrlResolver(string value);
+//        IFluentSiteMapNodeBuilder Route(string value);
 
-        IFluentSiteMapNodeBuilder InheritedRouteParameters(string[] values);
+//        IFluentSiteMapNodeBuilder RouteValue(string key, object value);
 
-        ISiteMapNodeToParentRelation CreateNode(ISiteMapNodeHelper helper, ISiteMapNode parentNode);
-    }
-}
+//        // May need this for inherited route values
+//        IFluentSiteMapNodeBuilder ClearRouteValues();
+
+//        IFluentSiteMapNodeBuilder RemoveRouteValue(string key);
+
+//        //IFluentSiteMapNodeBuilder RouteValues(object routeValues);
+
+//        IFluentSiteMapNodeBuilder PreservedRouteParameters(string[] values);
+
+//        IFluentSiteMapNodeBuilder PreservedRouteParameter(string value);
+
+//        IFluentSiteMapNodeBuilder UrlResolver(string value);
+
+//        IFluentSiteMapNodeBuilder InheritedRouteParameters(string[] values);
+
+//        IFluentSiteMapNodeBuilder InheritedRouteParameter(string value);
+
+//        //ISiteMapNodeToParentRelation CreateNode(ISiteMapNodeHelper helper, ISiteMapNode parentNode);
+//    }
+//}
