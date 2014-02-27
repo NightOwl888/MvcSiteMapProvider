@@ -301,6 +301,12 @@ if ([string](InferPreferredViewEngine) -eq 'aspx') {
 	(Get-Project).ProjectItems | ?{ $_.Name -eq "Views" } | %{ $_.ProjectItems | ?{ $_.Name -eq "Shared" } } | %{ $_.ProjectItems | ?{ $_.Name -eq "DisplayTemplates" } } | %{ $_.ProjectItems | ?{ $_.Name -eq "MenuHelperModel.ascx" -or  $_.Name -eq "SiteMapHelperModel.ascx" -or  $_.Name -eq "SiteMapNodeModel.ascx" -or  $_.Name -eq "SiteMapNodeModelList.ascx" -or  $_.Name -eq "SiteMapPathHelperModel.ascx" -or  $_.Name -eq "SiteMapTitleHelperModel.ascx" -or  $_.Name -eq "CanonicalHelperModel.ascx" -or  $_.Name -eq "MetaRobotsHelperModel.ascx" } } | %{ $_.Delete() }
 }
 
+
+$mvc_version = $project.Object.References.Find("System.Web.Mvc").Version
+
+Write-Host "MVC Version: "
+Write-Host $mvc_version
+
 # If MVC 4 or higher, install web.config section to fix 404 not found on sitemap.xml (#124)
 if ($project.Object.References.Find("System.Web.Mvc").Version -eq "4.0.0.0")
 {
