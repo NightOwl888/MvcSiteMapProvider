@@ -176,6 +176,15 @@
 			</xs:annotation>
 		</xs:attribute>
 
+    <xs:attribute name="includeAmbientRequestValues" type="xs:boolean" use="optional">
+      <xs:annotation>
+        <xs:documentation>
+          Optional. Whether or not to include request route values and/or query string values when resolving the 
+          URL (for route/action URLs only). Default is false.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+
 		<xs:attribute name="canonicalUrl" type="xs:string" use="optional">
 			<xs:annotation>
 				<xs:documentation>

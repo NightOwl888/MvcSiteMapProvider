@@ -81,6 +81,7 @@ namespace MvcSiteMapProvider
         public abstract IPreservedRouteParameterCollection PreservedRouteParameters { get; }
         public abstract RouteData GetRouteData(HttpContextBase httpContext);
         public abstract bool MatchesRoute(IDictionary<string, object> routeValues);
+        public abstract bool IncludeAmbientRequestValues { get; set; }
         public abstract string Area { get; set; }
         public abstract string Controller { get; set; }
         public abstract string Action { get; set; }

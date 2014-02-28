@@ -261,6 +261,7 @@ namespace MvcSiteMapProvider.Builder
             node.RouteValues.AddRange(attribute.Attributes, false);
             node.PreservedRouteParameters.AddRange(attribute.PreservedRouteParameters, new[] { ',', ';' });
             node.UrlResolver = attribute.UrlResolver;
+            node.IncludeAmbientRequestValues = attribute.IncludeAmbientRequestValues;
 
             // Specified area, controller and action properties will override any 
             // provided in the attributes collection.
