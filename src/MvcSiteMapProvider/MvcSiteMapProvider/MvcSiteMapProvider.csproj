@@ -12,7 +12,8 @@
     <AssemblyName>MvcSiteMapProvider</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
@@ -201,6 +202,8 @@
     <Compile Include="ISiteMapNodeProvider.cs" />
     <Compile Include="ISiteMapSettings.cs" />
     <Compile Include="ISortable.cs" />
+    <Compile Include="Loader\ISiteMapSpooler.cs" />
+    <Compile Include="Loader\SiteMapSpooler.cs" />
     <Compile Include="Matching\IUrlKey.cs" />
     <Compile Include="Matching\IUrlKeyFactory.cs" />
     <Compile Include="Matching\RequestUrlKey.cs" />

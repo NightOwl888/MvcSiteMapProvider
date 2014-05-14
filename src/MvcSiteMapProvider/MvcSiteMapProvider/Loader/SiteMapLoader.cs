@@ -14,7 +14,8 @@ namespace MvcSiteMapProvider.Loader
         public SiteMapLoader(
             ISiteMapCache siteMapCache,
             ISiteMapCacheKeyGenerator siteMapCacheKeyGenerator,
-            ISiteMapCreator siteMapCreator
+            ISiteMapCreator siteMapCreator,
+            ISiteMapSpooler siteMapSpooler
             )
         {
             if (siteMapCache == null)
@@ -23,15 +24,19 @@ namespace MvcSiteMapProvider.Loader
                 throw new ArgumentNullException("siteMapCacheKeyGenerator");
             if (siteMapCreator == null)
                 throw new ArgumentNullException("siteMapCreator");
+            if (siteMapSpooler == null)
+                throw new ArgumentNullException("siteMapSpooler");
 
             this.siteMapCache = siteMapCache;
             this.siteMapCacheKeyGenerator = siteMapCacheKeyGenerator;
             this.siteMapCreator = siteMapCreator;
+            this.siteMapSpooler = siteMapSpooler;
         }
 
         protected readonly ISiteMapCache siteMapCache;
         protected readonly ISiteMapCacheKeyGenerator siteMapCacheKeyGenerator;
         protected readonly ISiteMapCreator siteMapCreator;
+        protected readonly ISiteMapSpooler siteMapSpooler;
 
         #region ISiteMapLoader Members
 
@@ -46,10 +51,18 @@ namespace MvcSiteMapProvider.Loader
             {
                 siteMapCacheKey = siteMapCacheKeyGenerator.GenerateKey();
             }
-            return siteMapCache.GetOrAdd(
+
+            // Request cache the SiteMap object so we always get the same
+            // reference within the scope of the request
+            return this.siteMapSpooler.GetOrAdd(
                 siteMapCacheKey,
-                () => siteMapCreator.CreateSiteMap(siteMapCacheKey),
-                () => siteMapCreator.GetCacheDetails(siteMapCacheKey));
+
+                // Get or add the SiteMap to/from the shared cache
+                () => this.siteMapCache.GetOrAdd(
+                    siteMapCacheKey,
+                    () => siteMapCreator.CreateSiteMap(siteMapCacheKey),
+                    () => siteMapCreator.GetCacheDetails(siteMapCacheKey))
+                );
         }
 
         public virtual void ReleaseSiteMap()
