@@ -2,10 +2,10 @@
 
 namespace MvcSiteMapProvider.Xml.Sitemaps
 {
-    public interface ISitemapsXmlWriter
+    public interface ISitemapsIndexXmlWriter
     {
         void WriteStartDocument();
         void WriteEndDocument();
-        void WriteEntry(IUrlEntry urlEntry);
+        void WriteEntry(IIndexEntry indexEntry);
     }
 }
