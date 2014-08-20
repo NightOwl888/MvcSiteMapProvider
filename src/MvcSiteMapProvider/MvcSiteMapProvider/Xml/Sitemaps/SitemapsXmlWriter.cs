@@ -56,7 +56,7 @@ namespace MvcSiteMapProvider.Xml.Sitemaps
             writer.WriteEndDocument();
         }
 
-        public virtual void WriteUrlEntry(IUrlEntry urlEntry)
+        public virtual void WriteEntry(IUrlEntry urlEntry)
         {
             writer.WriteStartElement("url");
 
@@ -85,22 +85,23 @@ namespace MvcSiteMapProvider.Xml.Sitemaps
             writer.WriteEndElement(); // url
         }
 
-        // NOTE: This implementation does not support using multiple ISpecializedContentType inherited interfaces on the same type.
-        // This limitation should probably be overcome.
-
         protected virtual void WriteSpecializedContents(IEnumerable<ISpecializedContent> specializedContents)
         {
             var contentTypes = this.specializedContentXmlWriterFactoryStrategy.GetRegisteredContentTypes();
 
             // Order and group the content type the same way they are ordered in the SpecializedContentXmlWriterFactoryStrategy
             var groupedContent = from ct in contentTypes
-                                 join sc in specializedContents
-                                    on ct equals sc.GetType().GetInterfaces().Where(x => contentTypes.Contains(x)).FirstOrDefault()
-                                 group sc by sc.GetType().GetInterfaces().Where(x => contentTypes.Contains(x)).FirstOrDefault() into g
+                                 join contents in
+                                     (from sc in specializedContents
+                                      let t = sc.GetType()
+                                      from i in t.GetInterfaces()
+                                      select new { Instance = sc, Type = t, Interface = i })
+                                 on ct equals contents.Interface
+                                 group contents by ct into g
                                  select new
                                  {
                                      ContentType = g.Key,
-                                     Contents = g.Where(x => g.Key.IsAssignableFrom(x.GetType()))
+                                     Contents = g.Where(x => g.Key == x.Interface)
                                  };
 
             foreach (var group in groupedContent)
@@ -116,7 +117,7 @@ namespace MvcSiteMapProvider.Xml.Sitemaps
                     {
                         foreach (var content in group.Contents)
                         {
-                            xmlWriter.WriteContent(content);
+                            xmlWriter.WriteContent(content.Instance);
                         }
                     }
                     finally
