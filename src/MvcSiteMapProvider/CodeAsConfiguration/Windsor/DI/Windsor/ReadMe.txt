@@ -18,10 +18,10 @@ add the following code to your composition root.
     var validator = container.Resolve<ISiteMapXmlValidator>();
     validator.ValidateXml(HostingEnvironment.MapPath("~/Mvc.sitemap"));
 
-    // Register the Sitemaps routes for search engines (optional)
+    // Register the XML sitemap routes for search engines (optional)
     XmlSiteMapController.RegisterRoutes(RouteTable.Routes);
 
-For more help consult the Castle Windsor documantation at
+For more help consult the Castle Windsor documentation at
 http://docs.castleproject.org/Default.aspx?Page=Installers&NS=Windsor&AspxAutoDetectCookieSupport=1
 
 

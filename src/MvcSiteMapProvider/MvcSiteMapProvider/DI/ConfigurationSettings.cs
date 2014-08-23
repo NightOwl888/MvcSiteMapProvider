@@ -31,7 +31,11 @@ namespace MvcSiteMapProvider.DI
             this.EnableLocalization = bool.Parse(GetConfigurationValueOrFallback("MvcSiteMapProvider_EnableLocalization", "true"));
             this.SecurityTrimmingEnabled = bool.Parse(GetConfigurationValueOrFallback("MvcSiteMapProvider_SecurityTrimmingEnabled", "false"));
             this.VisibilityAffectsDescendants = bool.Parse(GetConfigurationValueOrFallback("MvcSiteMapProvider_VisibilityAffectsDescendants", "true"));
-            this.EnableSitemapsXml = bool.Parse(GetConfigurationValueOrFallback("MvcSiteMapProvider_EnableSitemapsXml", "true"));
+
+            // Support the legacy MvcSiteMapProvider_EnableSitemapsXml if it exists, but override if 
+            // MvcSiteMapProvider_EnableXmlSitemap is provided.
+            var enableSitemapsXml = GetConfigurationValueOrFallback("MvcSiteMapProvider_EnableSitemapsXml", "true");
+            this.EnableXmlSitemap = bool.Parse(GetConfigurationValueOrFallback("MvcSiteMapProvider_EnableXmlSitemap", enableSitemapsXml));
             this.EnableResolvedUrlCaching = bool.Parse(GetConfigurationValueOrFallback("MvcSiteMapProvider_EnableResolvedUrlCaching", "true"));
             this.UseTitleIfDescriptionNotProvided = bool.Parse(GetConfigurationValueOrFallback("MvcSiteMapProvider_UseTitleIfDescriptionNotProvided", "true"));
         }
@@ -51,7 +55,7 @@ namespace MvcSiteMapProvider.DI
         public bool EnableLocalization { get; private set; }
         public bool SecurityTrimmingEnabled { get; private set; }
         public bool VisibilityAffectsDescendants { get; private set; }
-        public bool EnableSitemapsXml { get; private set; }
+        public bool EnableXmlSitemap { get; private set; }
         public bool EnableResolvedUrlCaching { get; private set; }
         public bool UseTitleIfDescriptionNotProvided { get; private set; }
 

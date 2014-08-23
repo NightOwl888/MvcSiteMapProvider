@@ -291,22 +291,22 @@
 		<xs:attribute name="lastModifiedDate" type="xs:dateTime" use="optional">
 			<xs:annotation>
 				<xs:documentation>
-					Last modified date for the node. Will be output to sitemaps XML for search engines.
-				</xs:documentation>
+          Last modified date for the node. Will be output to XML sitemap for search engines.
+        </xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="changeFrequency" type="changefrequency_type" use="optional" default="Undefined" >
 			<xs:annotation>
 				<xs:documentation>
-					Change frequency for the node. Will be output to sitemaps XML for search engines.
-				</xs:documentation>
+          Change frequency for the node. Will be output to XML sitemap for search engines.
+        </xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="updatePriority" type="updatepriority_type" default="Undefined" use="optional">
 			<xs:annotation>
 				<xs:documentation>
-					Update priority for the node. Will be output to sitemaps XML for search engines.
-				</xs:documentation>
+          Update priority for the node. Will be output to XML sitemap for search engines.
+        </xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:attributeGroup>

@@ -61,9 +61,9 @@ namespace MvcSiteMapProvider.DI
                 var siteMapLoaderContainer = new SiteMapLoaderContainer(settings);
                 SiteMaps.Loader = siteMapLoaderContainer.ResolveSiteMapLoader();
 
-                if (settings.EnableSitemapsXml)
+                if (settings.EnableXmlSitemap)
                 {
-                    // Register the route for SiteMaps XML
+                    // Register the route for XML sitemap
                     XmlSiteMapController.RegisterRoutes(RouteTable.Routes);
                 }
             }

@@ -6,7 +6,7 @@ using System.Xml.Linq;
 namespace MvcSiteMapProvider.Xml
 {
     /// <summary>
-    /// Contract for class that provides details of the sitemap XML element names.
+    /// Contract for class that provides details of the XML sitemap element names.
     /// </summary>
     public interface ISiteMapXmlNameProvider
     {

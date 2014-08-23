@@ -107,7 +107,7 @@
     <Compile Include="Unit\Web\Html\MenuHelperTest.cs" />
     <Compile Include="Unit\Web\Html\SiteMapHelperTest.cs" />
     <Compile Include="Unit\Web\UrlPathTest.cs" />
-    <Compile Include="Unit\Xml\Sitemaps\AutomaticSitemapsPagingStrategyTest.cs" />
+    <Compile Include="Unit\Xml\Sitemap\AutomaticSitemapPagingStrategyTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shared\MvcSiteMapProvider.snk">
