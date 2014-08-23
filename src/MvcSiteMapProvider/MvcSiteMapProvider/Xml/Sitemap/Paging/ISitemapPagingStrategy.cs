@@ -8,7 +8,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Paging
     public interface ISitemapPagingStrategy
     {
         int MaximumPageSize { get; set; }
-        IEnumerable<int> GetIndexPageNumbers();
+        IEnumerable<int> GetPageNumbers();
         IEnumerable<IPagingInstruction> GetPagingInstructions(int page);
     }
 }

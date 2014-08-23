@@ -8,5 +8,6 @@ namespace MvcSiteMapProvider.Xml.Sitemap
     public interface ISitemapService
     {
         void Execute(int page);
+        void GenerateFiles();
     }
 }

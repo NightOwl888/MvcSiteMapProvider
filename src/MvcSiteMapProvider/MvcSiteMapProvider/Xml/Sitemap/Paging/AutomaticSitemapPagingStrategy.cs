@@ -31,7 +31,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Paging
 
         public int MaximumPageSize { get; set; }
 
-        public IEnumerable<int> GetIndexPageNumbers()
+        public IEnumerable<int> GetPageNumbers()
         {
             int totalRecordCount = 0;
             foreach (var provider in this.urlEntryProviders)

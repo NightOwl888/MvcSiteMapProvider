@@ -243,6 +243,7 @@
     <Compile Include="Web\Script\Serialization\JsonToDictionaryDeserializer.cs" />
     <Compile Include="Web\SiteMapNodeExtensions.cs" />
     <Compile Include="Xml\ISiteMapXmlReservedAttributeNameProvider.cs" />
+    <Compile Include="Xml\Sitemap\ISitemapPageWriter.cs" />
     <Compile Include="Xml\Sitemap\Paging\AutomaticSitemapPagingStrategy.cs" />
     <Compile Include="Xml\Sitemap\IIndexEntry.cs" />
     <Compile Include="Xml\Sitemap\IndexEntry.cs" />
@@ -262,6 +263,7 @@
     <Compile Include="Xml\Sitemap\Paging\ManualPagingInstruction.cs" />
     <Compile Include="Xml\Sitemap\SitemapIndexXmlWriter.cs" />
     <Compile Include="Xml\Sitemap\SitemapIndexXmlWriterFactory.cs" />
+    <Compile Include="Xml\Sitemap\SitemapPageWriter.cs" />
     <Compile Include="Xml\Sitemap\SitemapService.cs" />
     <Compile Include="Xml\Sitemap\SitemapXmlWriterFactory.cs" />
     <Compile Include="Xml\Sitemap\Specialized\ImageContent.cs" />
@@ -532,7 +534,9 @@
   <ItemGroup>
     <None Include="Web\Html\DisplayTemplates\MetaRobotsHelperModel.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Xml\Sitemap\Index\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -26,7 +26,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Paging
 
         public int MaximumPageSize{ get; set; }
 
-        public IEnumerable<int> GetIndexPageNumbers()
+        public IEnumerable<int> GetPageNumbers()
         {
             // Get a distinct list of page numbers and return them as an array
             return this.manualUrlEntryProviderPagingInstructions
