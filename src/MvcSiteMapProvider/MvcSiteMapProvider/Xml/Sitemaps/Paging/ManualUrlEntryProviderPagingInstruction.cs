@@ -6,6 +6,7 @@ using System.Text;
 namespace MvcSiteMapProvider.Xml.Sitemaps.Paging
 {
     public class ManualUrlEntryProviderPagingInstruction
+        : IManualUrlEntryProviderPagingInstruction
     {
         public ManualUrlEntryProviderPagingInstruction(
             int page,

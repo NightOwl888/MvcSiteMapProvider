@@ -258,7 +258,7 @@
     <Compile Include="Xml\Sitemaps\IUrlEntryProvider.cs" />
     <Compile Include="Xml\Sitemaps\Paging\IUrlEntryProviderPagingInstruction.cs" />
     <Compile Include="Xml\Sitemaps\Paging\IUrlEntryProviderPagingInstructionFactory.cs" />
-    <Compile Include="Xml\Sitemaps\Paging\ManualSitemapsPagingStategy.cs" />
+    <Compile Include="Xml\Sitemaps\Paging\ManualSitemapsPagingStrategy.cs" />
     <Compile Include="Xml\Sitemaps\Paging\ManualUrlEntryProviderPagingInstruction.cs" />
     <Compile Include="Xml\Sitemaps\SitemapsIndexXmlWriter.cs" />
     <Compile Include="Xml\Sitemaps\SitemapsIndexXmlWriterFactory.cs" />

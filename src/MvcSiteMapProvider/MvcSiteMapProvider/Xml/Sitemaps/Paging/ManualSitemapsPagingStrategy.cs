@@ -5,10 +5,10 @@ using System.Text;
 
 namespace MvcSiteMapProvider.Xml.Sitemaps.Paging
 {
-    public class ManualSitemapsPagingStategy
+    public class ManualSitemapsPagingStrategy
         : ISitemapsPagingStrategy
     {
-        public ManualSitemapsPagingStategy(
+        public ManualSitemapsPagingStrategy(
             IManualUrlEntryProviderPagingInstruction[] manualUrlEntryProviderPagingInstructions
             )
         {
