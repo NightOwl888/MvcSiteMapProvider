@@ -6,11 +6,18 @@ namespace MvcSiteMapProvider.Xml.Sitemap
 {
     public interface IUrlEntry
     {
-        string Location { get; }
-        string LastModified { get; }
-        string ChangeFrequency { get; }
-        string Priority { get; }
+        string Protocol { get; set; }
+        string HostName { get; set; }
+        string Url { get; set; }
+        DateTime LastModifiedDate { get; set; }
+        ChangeFrequency ChangeFrequency { get; set; }
+        UpdatePriority UpdatePriority { get; set; }
 
-        IEnumerable<ISpecializedContent> SpecializedContents { get; }
+        //string Location { get; }
+        //string LastModified { get; }
+        //string ChangeFrequency { get; }
+        //string Priority { get; }
+
+        IList<ISpecializedContent> SpecializedContents { get; }
     }
 }

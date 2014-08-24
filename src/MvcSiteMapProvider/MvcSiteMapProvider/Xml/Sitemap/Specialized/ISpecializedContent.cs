@@ -7,5 +7,6 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized
     /// </summary>
     public interface ISpecializedContent
     {
+        //IPreparedSpecializedContent Prepare();
     }
 }

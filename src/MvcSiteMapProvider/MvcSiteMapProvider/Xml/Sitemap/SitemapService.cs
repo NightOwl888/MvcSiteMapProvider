@@ -13,20 +13,32 @@ namespace MvcSiteMapProvider.Xml.Sitemap
         : ISitemapService
     {
         public SitemapService(
-            ISitemapPageWriter sitemapPageWriter,
+            ISitemapPageManager sitemapPageManager,
+            ISitemapPageNameProvider sitemapPageNameProvider,
             IStreamFactory streamFactory
             )
         {
-            if (sitemapPageWriter == null)
-                throw new ArgumentNullException("sitemapPageWriter");
+            if (sitemapPageManager == null)
+                throw new ArgumentNullException("sitemapPageManager");
+            if (sitemapPageNameProvider == null)
+                throw new ArgumentNullException("sitemapPageNameProvider");
             if (streamFactory == null)
                 throw new ArgumentNullException("streamFactory");
 
-            this.sitemapPageWriter = sitemapPageWriter;
+            this.sitemapPageManager = sitemapPageManager;
+            this.sitemapPageNameProvider = sitemapPageNameProvider;
             this.streamFactory = streamFactory;
+
+            // TODO: Ensure this works in integrated mode.
+
+            // Set the default base directory to the one in the app domain.
+            this.BaseDirectory = AppDomain.CurrentDomain.BaseDirectory;
         }
-        private readonly ISitemapPageWriter sitemapPageWriter;
+        private readonly ISitemapPageManager sitemapPageManager;
+        private readonly ISitemapPageNameProvider sitemapPageNameProvider;
         private readonly IStreamFactory streamFactory;
+
+        public string BaseDirectory { get; set; }
 
         public void Execute(int page)
         {
@@ -36,7 +48,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap
                 // TODO: make XmlWriterFactory to inject here instead of the static method
                 using (var writer = XmlWriter.Create(stream))
                 {
-                    this.sitemapPageWriter.WritePage(page, writer);
+                    this.sitemapPageManager.WritePage(page, writer);
                     writer.Flush();
                 }
             }
@@ -48,23 +60,16 @@ namespace MvcSiteMapProvider.Xml.Sitemap
 
         public void GenerateFiles()
         {
-            //var firstPageFilePath = @"F:\sitemap.xml";
-            //var pageTemplate = @"F:\sitemap-{page}.xml";
-            var currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            var firstPageTemplate = Path.Combine(currentDirectory, this.sitemapPageWriter.FirstPageNameTemplate);
-            var pageNameTemplate = Path.Combine(currentDirectory, this.sitemapPageWriter.PageNameTemplate);
-            var pageNumbers = this.sitemapPageWriter.GetPageNumbers();
+            var firstPageTemplate = Path.Combine(this.BaseDirectory, this.sitemapPageNameProvider.FirstPageNameTemplate);
+            var pageNameTemplate = Path.Combine(this.BaseDirectory, this.sitemapPageNameProvider.PageNameTemplate);
+            var pageNumbers = this.sitemapPageManager.GetPageNumbers();
 
             if (pageNumbers.Count() > 1)
             {
+                // TODO: Create factory to inject file stream
+
                 // write the index
-                using (var stream = new FileStream(firstPageTemplate.Replace("{page}", "0"), FileMode.Create))
-                {
-                    using (var writer = XmlWriter.Create(stream))
-                    {
-                        this.sitemapPageWriter.WritePage(0, writer);
-                    }
-                }
+                this.GenerateFirstPageFile(firstPageTemplate.Replace("{page}", "0"));
 
                 foreach (var page in pageNumbers)
                 {
@@ -72,23 +77,28 @@ namespace MvcSiteMapProvider.Xml.Sitemap
                     {
                         using (var writer = XmlWriter.Create(stream))
                         {
-                            this.sitemapPageWriter.WritePage(page, writer);
+                            this.sitemapPageManager.WritePage(page, writer);
+                            writer.Flush();
                         }
                     }
                 }
             }
             else
             {
-                using (var stream = new FileStream(firstPageTemplate.Replace("{page}", "0"), FileMode.Create))
+                this.GenerateFirstPageFile(firstPageTemplate.Replace("{page}", "0"));
+            }
+        }
+
+        protected void GenerateFirstPageFile(string fileName)
+        {
+            using (var stream = new FileStream(fileName, FileMode.Create))
+            {
+                using (var writer = XmlWriter.Create(stream))
                 {
-                    using (var writer = XmlWriter.Create(stream))
-                    {
-                        this.sitemapPageWriter.WritePage(0, writer);
-                    }
+                    this.sitemapPageManager.WritePage(0, writer);
+                    writer.Flush();
                 }
             }
-
-            
         }
 
         

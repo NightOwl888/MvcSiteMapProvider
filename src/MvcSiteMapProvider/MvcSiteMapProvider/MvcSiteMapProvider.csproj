@@ -243,12 +243,19 @@
     <Compile Include="Web\Script\Serialization\JsonToDictionaryDeserializer.cs" />
     <Compile Include="Web\SiteMapNodeExtensions.cs" />
     <Compile Include="Xml\ISiteMapXmlReservedAttributeNameProvider.cs" />
+    <Compile Include="Xml\Sitemap\IPreparedUrlEntry.cs" />
+    <Compile Include="Xml\Sitemap\IPreparedUrlEntryFactory.cs" />
+    <Compile Include="Xml\Sitemap\Index\ISitemapIndexPageWriter.cs" />
+    <Compile Include="Xml\Sitemap\Index\SitemapIndexPageWriter.cs" />
+    <Compile Include="Xml\Sitemap\ISitemapPageManager.cs" />
+    <Compile Include="Xml\Sitemap\ISitemapPageNameProvider.cs" />
     <Compile Include="Xml\Sitemap\ISitemapPageWriter.cs" />
+    <Compile Include="Xml\Sitemap\ISitemapUrlResolver.cs" />
     <Compile Include="Xml\Sitemap\Paging\AutomaticSitemapPagingStrategy.cs" />
-    <Compile Include="Xml\Sitemap\IIndexEntry.cs" />
-    <Compile Include="Xml\Sitemap\IndexEntry.cs" />
-    <Compile Include="Xml\Sitemap\ISitemapIndexXmlWriter.cs" />
-    <Compile Include="Xml\Sitemap\ISitemapIndexXmlWriterFactory.cs" />
+    <Compile Include="Xml\Sitemap\Index\ISitemapEntry.cs" />
+    <Compile Include="Xml\Sitemap\Index\SitemapEntry.cs" />
+    <Compile Include="Xml\Sitemap\Index\ISitemapIndexXmlWriter.cs" />
+    <Compile Include="Xml\Sitemap\Index\ISitemapIndexXmlWriterFactory.cs" />
     <Compile Include="Xml\Sitemap\Paging\IManualPagingInstruction.cs" />
     <Compile Include="Xml\Sitemap\Paging\ISitemapPagingStrategy.cs" />
     <Compile Include="Xml\Sitemap\ISitemapService.cs" />
@@ -261,14 +268,24 @@
     <Compile Include="Xml\Sitemap\Paging\IPagingInstructionFactory.cs" />
     <Compile Include="Xml\Sitemap\Paging\ManualSitemapPagingStrategy.cs" />
     <Compile Include="Xml\Sitemap\Paging\ManualPagingInstruction.cs" />
-    <Compile Include="Xml\Sitemap\SitemapIndexXmlWriter.cs" />
-    <Compile Include="Xml\Sitemap\SitemapIndexXmlWriterFactory.cs" />
+    <Compile Include="Xml\Sitemap\Index\SitemapIndexXmlWriter.cs" />
+    <Compile Include="Xml\Sitemap\Index\SitemapIndexXmlWriterFactory.cs" />
+    <Compile Include="Xml\Sitemap\PreparedUrlEntry.cs" />
+    <Compile Include="Xml\Sitemap\PreparedUrlEntryFactory.cs" />
+    <Compile Include="Xml\Sitemap\SitemapPageManager.cs" />
+    <Compile Include="Xml\Sitemap\SitemapPageNameProvider.cs" />
     <Compile Include="Xml\Sitemap\SitemapPageWriter.cs" />
     <Compile Include="Xml\Sitemap\SitemapService.cs" />
+    <Compile Include="Xml\Sitemap\SitemapUrlResolver.cs" />
     <Compile Include="Xml\Sitemap\SitemapXmlWriterFactory.cs" />
     <Compile Include="Xml\Sitemap\Specialized\ImageContent.cs" />
     <Compile Include="Xml\Sitemap\Specialized\ImageContentXmlWriter.cs" />
     <Compile Include="Xml\Sitemap\ISitemapXmlWriter.cs" />
+    <Compile Include="Xml\Sitemap\Specialized\IPreparedImageContent.cs" />
+    <Compile Include="Xml\Sitemap\Specialized\IPreparedSpecializedContent.cs" />
+    <Compile Include="Xml\Sitemap\Specialized\IPreparedSpecializedContentFactory.cs" />
+    <Compile Include="Xml\Sitemap\Specialized\IPreparedSpecializedContentFactoryStrategy.cs" />
+    <Compile Include="Xml\Sitemap\Specialized\IPreparedVideoContent.cs" />
     <Compile Include="Xml\Sitemap\Specialized\ISpecializedContent.cs" />
     <Compile Include="Xml\Sitemap\Specialized\ISpecializedContentXmlWriter.cs" />
     <Compile Include="Xml\Sitemap\Specialized\ISpecializedContentXmlWriterFactory.cs" />
@@ -276,6 +293,11 @@
     <Compile Include="Xml\Sitemap\IUrlEntry.cs" />
     <Compile Include="Xml\Sitemap\SitemapXmlWriter.cs" />
     <Compile Include="Xml\Sitemap\Specialized\ImageContentXmlWriterFactory.cs" />
+    <Compile Include="Xml\Sitemap\Specialized\PreparedImageContent.cs" />
+    <Compile Include="Xml\Sitemap\Specialized\PreparedImageContentFactory.cs" />
+    <Compile Include="Xml\Sitemap\Specialized\PreparedSpecializedContentFactoryStrategy.cs" />
+    <Compile Include="Xml\Sitemap\Specialized\PreparedVideoContent.cs" />
+    <Compile Include="Xml\Sitemap\Specialized\PreparedVideoContentFactory.cs" />
     <Compile Include="Xml\Sitemap\Specialized\SpecializedContentXmlWriterFactoryStrategy.cs" />
     <Compile Include="Xml\Sitemap\Specialized\IImageContent.cs" />
     <Compile Include="Xml\Sitemap\Specialized\IVideoContent.cs" />
@@ -534,9 +556,7 @@
   <ItemGroup>
     <None Include="Web\Html\DisplayTemplates\MetaRobotsHelperModel.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Xml\Sitemap\Index\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -23,16 +23,16 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized
             this.writer.WriteAttributeString("xmlns", "image", null, "http://www.google.com/schemas/sitemap-image/1.1");
         }
 
-        public void WriteContent(ISpecializedContent content)
+        public void WriteContent(IPreparedSpecializedContent content)
         {
-            var imageContent = content as IImageContent;
+            var imageContent = content as IPreparedImageContent;
             if (imageContent != null)
             {
                 this.WriteImage(imageContent);
             }
         }
 
-        private void WriteImage(IImageContent content)
+        private void WriteImage(IPreparedImageContent content)
         {
             string prefix = "image";
             string ns = null;

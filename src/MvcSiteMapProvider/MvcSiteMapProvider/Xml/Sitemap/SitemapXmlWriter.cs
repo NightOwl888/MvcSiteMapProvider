@@ -56,7 +56,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap
             writer.WriteEndDocument();
         }
 
-        public virtual void WriteEntry(IUrlEntry urlEntry)
+        public virtual void WriteEntry(IPreparedUrlEntry urlEntry)
         {
             writer.WriteStartElement("url");
 
@@ -85,7 +85,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap
             writer.WriteEndElement(); // url
         }
 
-        protected virtual void WriteSpecializedContents(IEnumerable<ISpecializedContent> specializedContents)
+        protected virtual void WriteSpecializedContents(IEnumerable<IPreparedSpecializedContent> specializedContents)
         {
             var contentTypes = this.specializedContentXmlWriterFactoryStrategy.GetRegisteredContentTypes();
 

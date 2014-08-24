@@ -20,16 +20,16 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized
             this.writer.WriteAttributeString("xmlns", "video", null, "http://www.google.com/schemas/sitemap-video/1.1");
         }
 
-        public void WriteContent(ISpecializedContent content)
+        public void WriteContent(IPreparedSpecializedContent content)
         {
-            var videoContent = content as IVideoContent;
+            var videoContent = content as IPreparedVideoContent;
             if (videoContent != null)
             {
                 this.WriteVideo(videoContent);
             }
         }
 
-        private void WriteVideo(IVideoContent content)
+        private void WriteVideo(IPreparedVideoContent content)
         {
             string prefix = "video";
             string ns = null;

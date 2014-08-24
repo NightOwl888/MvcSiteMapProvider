@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MvcSiteMapProvider.Xml.Sitemap
+namespace MvcSiteMapProvider.Xml.Sitemap.Index
 {
-    public class IndexEntry
-        : IIndexEntry
+    public class SitemapEntry
+        : ISitemapEntry
     {
-        public IndexEntry(
+        public SitemapEntry(
             string location
             )
         {

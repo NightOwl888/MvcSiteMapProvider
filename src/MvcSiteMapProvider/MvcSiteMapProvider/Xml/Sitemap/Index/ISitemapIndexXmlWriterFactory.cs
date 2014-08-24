@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml;
 
-namespace MvcSiteMapProvider.Xml.Sitemap
+namespace MvcSiteMapProvider.Xml.Sitemap.Index
 {
     public interface ISitemapIndexXmlWriterFactory
     {

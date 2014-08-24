@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml;
 
-namespace MvcSiteMapProvider.Xml.Sitemap
+namespace MvcSiteMapProvider.Xml.Sitemap.Index
 {
     public class SitemapIndexXmlWriter
         : ISitemapIndexXmlWriter
@@ -27,7 +27,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap
             writer.WriteEndDocument();
         }
 
-        public virtual void WriteEntry(IIndexEntry indexEntry)
+        public virtual void WriteEntry(ISitemapEntry indexEntry)
         {
             writer.WriteStartElement("sitemap");
 

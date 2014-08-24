@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace MvcSiteMapProvider.Xml.Sitemap
+namespace MvcSiteMapProvider.Xml.Sitemap.Index
 {
     public interface ISitemapIndexXmlWriter
     {
         void WriteStartDocument();
         void WriteEndDocument();
-        void WriteEntry(IIndexEntry indexEntry);
+        void WriteEntry(ISitemapEntry indexEntry);
     }
 }
