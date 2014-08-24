@@ -12,7 +12,9 @@ namespace MvcSiteMapProvider.Xml.Sitemap
             this.UpdatePriority = UpdatePriority.Undefined;
             this.ChangeFrequency = ChangeFrequency.Undefined;
             this.LastModifiedDate = DateTime.MinValue;
+            this.specializedContent = new List<ISpecializedContent>();
         }
+        private readonly IList<ISpecializedContent> specializedContent;
 
         //public UrlEntry(
         //    string location,
@@ -91,7 +93,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap
 
         public IList<ISpecializedContent> SpecializedContents
         {
-            get { return new List<ISpecializedContent>(); }
+            get { return this.specializedContent; }
         }
     }
 }

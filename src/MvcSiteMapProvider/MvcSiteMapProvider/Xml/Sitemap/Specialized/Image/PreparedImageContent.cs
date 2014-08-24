@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MvcSiteMapProvider.Xml.Sitemap.Specialized
+namespace MvcSiteMapProvider.Xml.Sitemap.Specialized.Image
 {
     public class PreparedImageContent
         : IPreparedImageContent
@@ -17,14 +17,14 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized
         {
             if (string.IsNullOrEmpty(location))
                 throw new ArgumentNullException("location");
-            if (string.IsNullOrEmpty(caption))
-                throw new ArgumentNullException("caption");
-            if (string.IsNullOrEmpty(geoLocation))
-                throw new ArgumentNullException("geoLocation");
-            if (string.IsNullOrEmpty(title))
-                throw new ArgumentNullException("title");
-            if (string.IsNullOrEmpty(license))
-                throw new ArgumentNullException("license");
+            //if (string.IsNullOrEmpty(caption))
+            //    throw new ArgumentNullException("caption");
+            //if (string.IsNullOrEmpty(geoLocation))
+            //    throw new ArgumentNullException("geoLocation");
+            //if (string.IsNullOrEmpty(title))
+            //    throw new ArgumentNullException("title");
+            //if (string.IsNullOrEmpty(license))
+            //    throw new ArgumentNullException("license");
 
             this.location = location;
             this.caption = caption;

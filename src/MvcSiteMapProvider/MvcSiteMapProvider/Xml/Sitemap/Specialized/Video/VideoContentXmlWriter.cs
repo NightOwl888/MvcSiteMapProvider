@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml;
 
-namespace MvcSiteMapProvider.Xml.Sitemap.Specialized
+namespace MvcSiteMapProvider.Xml.Sitemap.Specialized.Video
 {
     public class VideoContentXmlWriter
         : ISpecializedContentXmlWriter

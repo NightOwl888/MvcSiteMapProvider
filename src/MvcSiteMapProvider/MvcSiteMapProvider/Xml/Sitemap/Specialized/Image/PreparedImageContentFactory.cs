@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using MvcSiteMapProvider.Globalization;
 
-namespace MvcSiteMapProvider.Xml.Sitemap.Specialized
+namespace MvcSiteMapProvider.Xml.Sitemap.Specialized.Image
 {
     public class PreparedImageContentFactory
         : IPreparedSpecializedContentFactory

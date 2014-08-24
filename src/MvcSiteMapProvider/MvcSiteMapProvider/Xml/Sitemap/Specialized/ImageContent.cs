@@ -6,145 +6,34 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized
         : IImageContent
     {
         public ImageContent(
-            string location)
+            string url)
         {
-            if (string.IsNullOrEmpty(location))
-                throw new ArgumentNullException("location");
-            this.location = location;
+            if (string.IsNullOrEmpty(url))
+                throw new ArgumentNullException("url");
+            this.url = url;
         }
-        private readonly string location;
+        private string url;
 
-        //public string Location
-        //{
-        //    get { return this.location; }
-        //}
-
-        //public string Caption
-        //{
-        //    get { return string.Empty; }
-        //}
-
-        //public string GeoLocation
-        //{
-        //    get { return string.Empty; }
-        //}
-
-        //public string Title
-        //{
-        //    get { return string.Empty; }
-        //}
-
-        //public string License
-        //{
-        //    get { return string.Empty; }
-        //}
-
-        public string Url
+        public string Url 
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
+            get { return this.url; }
+            set { this.url = value; }
         }
 
-        public string HostName
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public string HostName { get; set; }
 
-        public string Protocol
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public string Protocol { get; set; }
 
-        public string Caption
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public string Caption { get; set; }
 
-        public string GeoLocation
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public string GeoLocation { get; set; }
 
-        public string Title
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public string Title { get; set; }
 
-        public string LicenseUrl
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public string LicenseUrl { get; set; }
 
-        public string LicenseHostName
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public string LicenseHostName { get; set; }
 
-        public string LicenseProtocol
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public string LicenseProtocol { get; set; }
     }
 }

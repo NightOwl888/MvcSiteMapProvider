@@ -9,37 +9,34 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized
         : IVideoContent
     {
         public VideoContent(
-            string location)
+            string url)
         {
-            if (string.IsNullOrEmpty(location))
-                throw new ArgumentNullException("location");
-            this.location = location;
+            if (string.IsNullOrEmpty(url))
+                throw new ArgumentNullException("url");
+            this.url = url;
         }
-        private readonly string location;
+        private string url;
 
-        public string Location
+        public string Url 
         {
-            get { return this.location; }
-        }
-
-        public string Video
-        {
-            get { return string.Empty; }
+            get { return this.url; }
+            set { this.url = value; }
         }
 
-        public string ThumbnailLocation
-        {
-            get { return string.Empty; }
-        }
+        public string HostName { get; set; }
 
-        public string Title
-        {
-            get { return string.Empty; }
-        }
+        public string Protocol { get; set; }
 
-        public string Description
-        {
-            get { return string.Empty; }
-        }
+        public string Video { get; set; }
+
+        public string ThumbnailUrl { get; set; }
+
+        public string ThumbnailHostName { get; set; }
+
+        public string ThumbnailProtocol { get; set; }
+
+        public string Title { get; set; }
+
+        public string Description { get; set; }
     }
 }

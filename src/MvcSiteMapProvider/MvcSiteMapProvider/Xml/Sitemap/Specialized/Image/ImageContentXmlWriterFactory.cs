@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Xml;
 
-namespace MvcSiteMapProvider.Xml.Sitemap.Specialized
+namespace MvcSiteMapProvider.Xml.Sitemap.Specialized.Image
 {
-    public class VideoContentXmlWriterFactory
+    public class ImageContentXmlWriterFactory
         : ISpecializedContentXmlWriterFactory
     {
-        public VideoContentXmlWriterFactory()
+        public ImageContentXmlWriterFactory()
         {
             this.syncRoot = new object();
         }
@@ -14,7 +17,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized
 
         public ISpecializedContentXmlWriter Create(XmlWriter writer)
         {
-            return new VideoContentXmlWriter(writer);
+            return new ImageContentXmlWriter(writer);
         }
 
         public void Release(ISpecializedContentXmlWriter specializedContentXmlWriter)
@@ -29,9 +32,15 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized
             }
         }
 
+        //public bool AppliesTo(ISpecializedContent content)
+        //{
+        //    //return typeof(IImageContent).IsAssignableFrom(content.GetType());
+        //    return content is IImageContent;
+        //}
+
         public Type ContentType
         {
-            get { return typeof(IVideoContent); }
+            get { return typeof(IPreparedImageContent); }
         }
     }
 }
