@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MvcSiteMapProvider.Xml.Sitemap.Specialized.Video
 {
-    public enum PriceType
+    public enum VideoPriceType
     {
         Undefined = 0,
 

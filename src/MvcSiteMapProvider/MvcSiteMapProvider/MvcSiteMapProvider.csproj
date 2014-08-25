@@ -290,10 +290,7 @@
     <Compile Include="Xml\Sitemap\Specialized\IPreparedSpecializedContentFactoryStrategy.cs" />
     <Compile Include="Xml\Sitemap\Specialized\IVideoContentPlatform.cs" />
     <Compile Include="Xml\Sitemap\Specialized\IVideoContentPrice.cs" />
-    <Compile Include="Xml\Sitemap\Specialized\Video\IPreparedVideoContentPlatform.cs" />
     <Compile Include="Xml\Sitemap\Specialized\Video\VideoPlatform.cs" />
-    <Compile Include="Xml\Sitemap\Specialized\Video\PlatformRelationship.cs" />
-    <Compile Include="Xml\Sitemap\Specialized\Video\PreparedVideoContentPlatform.cs" />
     <Compile Include="Xml\Sitemap\Specialized\Video\VideoResolution.cs" />
     <Compile Include="Xml\Sitemap\Specialized\Video\IPreparedVideoContent.cs" />
     <Compile Include="Xml\Sitemap\Specialized\ISpecializedContent.cs" />
@@ -314,7 +311,7 @@
     <Compile Include="Xml\Sitemap\Specialized\IVideoContent.cs" />
     <Compile Include="Xml\Sitemap\Specialized\VideoContent.cs" />
     <Compile Include="Xml\Sitemap\Specialized\Video\PreparedVideoContentPrice.cs" />
-    <Compile Include="Xml\Sitemap\Specialized\Video\PriceType.cs" />
+    <Compile Include="Xml\Sitemap\Specialized\Video\VideoPriceType.cs" />
     <Compile Include="Xml\Sitemap\Specialized\Video\VideoContentXmlWriter.cs" />
     <Compile Include="Xml\Sitemap\Specialized\Video\VideoContentXmlWriterFactory.cs" />
     <Compile Include="Xml\Sitemap\UrlEntry.cs" />

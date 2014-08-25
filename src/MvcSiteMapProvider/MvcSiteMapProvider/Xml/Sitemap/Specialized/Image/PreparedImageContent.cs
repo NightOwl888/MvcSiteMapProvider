@@ -17,14 +17,6 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized.Image
         {
             if (string.IsNullOrEmpty(location))
                 throw new ArgumentNullException("location");
-            //if (string.IsNullOrEmpty(caption))
-            //    throw new ArgumentNullException("caption");
-            //if (string.IsNullOrEmpty(geoLocation))
-            //    throw new ArgumentNullException("geoLocation");
-            //if (string.IsNullOrEmpty(title))
-            //    throw new ArgumentNullException("title");
-            //if (string.IsNullOrEmpty(license))
-            //    throw new ArgumentNullException("license");
 
             this.location = location;
             this.caption = caption;

@@ -10,7 +10,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized
     {
         decimal Price { get; set; }
         string Currency { get; set; }
-        PriceType Type { get; set; }
+        VideoPriceType Type { get; set; }
         VideoResolution Resolution { get; set; }
     }
 }

@@ -573,12 +573,12 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap.Specialized.Video
             videoContentPrice1.Setup(x => x.Price).Returns((decimal)89.9601);
             videoContentPrice1.Setup(x => x.Currency).Returns("USD");
             videoContentPrice1.Setup(x => x.Resolution).Returns(VideoResolution.HD);
-            videoContentPrice1.Setup(x => x.Type).Returns(PriceType.Own);
+            videoContentPrice1.Setup(x => x.Type).Returns(VideoPriceType.Own);
 
             videoContentPrice2.Setup(x => x.Price).Returns((decimal)34.9584);
             videoContentPrice2.Setup(x => x.Currency).Returns("IQD");
             videoContentPrice2.Setup(x => x.Resolution).Returns(VideoResolution.Undefined);
-            videoContentPrice2.Setup(x => x.Type).Returns(PriceType.Undefined);
+            videoContentPrice2.Setup(x => x.Type).Returns(VideoPriceType.Undefined);
 
             // Setup the collections so they won't choke.
             this.videoContent.Setup(x => x.CountriesAllowed).Returns(new List<string>());

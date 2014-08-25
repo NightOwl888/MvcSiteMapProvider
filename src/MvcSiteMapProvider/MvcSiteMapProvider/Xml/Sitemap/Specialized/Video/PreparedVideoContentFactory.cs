@@ -102,7 +102,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized.Video
                     {
                         currency = price.Currency.ToUpper();
                         currencyFormatString = this.GetCurrencyFormatString(currency);
-                        type = (price.Type == PriceType.Undefined) ? string.Empty : price.Type.ToString().ToLower();
+                        type = (price.Type == VideoPriceType.Undefined) ? string.Empty : price.Type.ToString().ToLower();
                         resolution = (price.Resolution == VideoResolution.Undefined) ? string.Empty : price.Resolution.ToString().ToUpper();
 
                         prices.Add(new PreparedVideoContentPrice(price.Price.ToString(currencyFormatString), currency, type, resolution));
