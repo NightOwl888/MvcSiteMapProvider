@@ -31,6 +31,8 @@ namespace MvcSiteMapProvider.Xml.Sitemap
         private readonly ISitemapUrlResolver urlResolver;
         private readonly ICultureContextFactory cultureContextFactory;
 
+        private const string W3CDateFormat = "yyyy-MM-ddTHH:mm:ss.fffffffzzz";
+
         public IPreparedUrlEntry Create(IUrlEntry urlEntry)
         {
             // Prepare the objects (formatting and URLs) in the invariant culture.
@@ -55,7 +57,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap
 
                 if (urlEntry.LastModifiedDate > DateTime.MinValue)
                 {
-                    lastModified = urlEntry.LastModifiedDate.ToUniversalTime().ToString();
+                    lastModified = urlEntry.LastModifiedDate.ToUniversalTime().ToString(W3CDateFormat);
                 }
 
                 if (urlEntry.ChangeFrequency != ChangeFrequency.Undefined)

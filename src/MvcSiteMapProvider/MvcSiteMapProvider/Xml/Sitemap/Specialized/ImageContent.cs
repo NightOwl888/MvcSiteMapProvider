@@ -20,9 +20,9 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized
             set { this.url = value; }
         }
 
-        public string HostName { get; set; }
-
         public string Protocol { get; set; }
+
+        public string HostName { get; set; }
 
         public string Caption { get; set; }
 
@@ -32,8 +32,8 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized
 
         public string LicenseUrl { get; set; }
 
-        public string LicenseHostName { get; set; }
-
         public string LicenseProtocol { get; set; }
+
+        public string LicenseHostName { get; set; }
     }
 }

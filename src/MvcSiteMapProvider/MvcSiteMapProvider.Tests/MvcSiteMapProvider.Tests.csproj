@@ -108,6 +108,7 @@
     <Compile Include="Unit\Web\Html\SiteMapHelperTest.cs" />
     <Compile Include="Unit\Web\UrlPathTest.cs" />
     <Compile Include="Unit\Xml\Sitemap\AutomaticSitemapPagingStrategyTest.cs" />
+    <Compile Include="Unit\Xml\Sitemap\Specialized\Video\PreparedVideoContentFactoryTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shared\MvcSiteMapProvider.snk">

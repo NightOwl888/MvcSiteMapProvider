@@ -2,28 +2,55 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MvcSiteMapProvider.Xml.Sitemap.Specialized.Video;
 
 namespace MvcSiteMapProvider.Xml.Sitemap.Specialized
 {
     public interface IVideoContent
         : ISpecializedContent
     {
-        string Url { get; set; }
-        string HostName { get; set; }
-        string Protocol { get; set; }
-        string Video { get; set; }
-        string ThumbnailUrl { get; set; }
+        string ThumbnailUrl { get; } // Required
         string ThumbnailHostName { get; set; }
         string ThumbnailProtocol { get; set; }
-        string Title { get; set; }
-        string Description { get; set; }
+        string Title { get; } // Required
+        string Description { get; } // Required
 
-        //string Location { get; } // TODO: Work out how to make this resolve (may need extra properties for routing, etc.) // Required
-        //string Video { get; } // Required
-        //string ThumbnailLocation { get; } // TODO: Work out how to make this resolve (may need extra properties for routing, etc.) // Required
-        //string Title { get; } // Required
-        //string Description { get; } // Required
+        string ContentLocation { get; } // Required if PlayerLocation is not supplied
+        string ContentLocationProtocol { get; set; }
+        string ContentLocationHostName { get; set; }
+        string PlayerLocation { get; } // Required if ContentLocation is not supplied
+        string PlayerLocationProtocol { get; set; }
+        string PlayerLocationHostName { get; set; }
+        bool? PlayerLocationAllowEmbed { get; set; }
+        string PlayerLocationAutoPlay { get; set; }
+        int Duration { get; set; } // Optional (recommended)
+        DateTime ExpirationDate { get; set; } // Optional
+        double Rating { get; set; } // Optional
+        int ViewCount { get; set; } // Optional
+        DateTime PublicationDate { get; set; } // Optional
+        bool IsFamilyFriendly { get; set; } // Optional
+        IList<string> Tags { get; } // Optional, maximum 32 permitted
+        IList<string> Categories { get; } // Optional
+        IList<string> CountriesAllowed { get; } // Restriction
+        string CountriesAllowedString { get; set; }
+        IList<string> CountriesNotAllowed{ get; }
+        string CountriesNotAllowedString { get; set; }
+        string GalleryLocation { get; set; } // Optional
+        string GalleryLocationProtocol { get; set; }
+        string GalleryLocationHostName { get; set; }
+        string GalleryLocationTitle { get; set; } // Optional (attribute)
+        IList<IVideoContentPrice> Prices { get; } // Optional
+        bool RequiresSubscription { get; set; } // Optional 
+        string Uploader { get; set; } // Optional
+        string UploaderInfo { get; set; } // Optional attribute
+        string UploaderInfoProtocol { get; set; }
+        string UploaderInfoHostName { get; set; }
+        VideoPlatform PlatformsAllowed { get; set; } // Optional (space delimited list)
+        string PlatformsAllowedString { get; set; }
+        VideoPlatform PlatformsNotAllowed { get; set; }
+        string PlatformsNotAllowedString { get; set; }
+        bool Live { get; set; } // Optional
 
-        // TODO: Add additional properties from https://support.google.com/webmasters/answer/80472?hl=en
+        // Documentation: https://support.google.com/webmasters/answer/80472?hl=en
     }
 }
