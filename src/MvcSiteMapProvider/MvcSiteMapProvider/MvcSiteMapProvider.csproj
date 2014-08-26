@@ -182,6 +182,7 @@
     <Compile Include="Collections\CacheableList.cs" />
     <Compile Include="Collections\Specialized\ReservedKeyException.cs" />
     <Compile Include="Collections\Specialized\SourceMetadataDictionary.cs" />
+    <Compile Include="ComponentModel\IFluentInterface.cs" />
     <Compile Include="CompositeSiteMapNodeProvider.cs" />
     <Compile Include="CompositeSiteMapNodeVisibilityProvider.cs" />
     <Compile Include="DI\Composer.cs" />
@@ -288,8 +289,11 @@
     <Compile Include="Xml\Sitemap\Specialized\IPreparedSpecializedContent.cs" />
     <Compile Include="Xml\Sitemap\Specialized\IPreparedSpecializedContentFactory.cs" />
     <Compile Include="Xml\Sitemap\Specialized\IPreparedSpecializedContentFactoryStrategy.cs" />
+    <Compile Include="Xml\Sitemap\Specialized\ISpecializedContentBuilder.cs" />
+    <Compile Include="Xml\Sitemap\Specialized\ISpecializedContentStarter.cs" />
     <Compile Include="Xml\Sitemap\Specialized\IVideoContentPlatform.cs" />
     <Compile Include="Xml\Sitemap\Specialized\IVideoContentPrice.cs" />
+    <Compile Include="Xml\Sitemap\Specialized\SpecializedContentStarter.cs" />
     <Compile Include="Xml\Sitemap\Specialized\Video\VideoPlatform.cs" />
     <Compile Include="Xml\Sitemap\Specialized\Video\VideoResolution.cs" />
     <Compile Include="Xml\Sitemap\Specialized\Video\IPreparedVideoContent.cs" />

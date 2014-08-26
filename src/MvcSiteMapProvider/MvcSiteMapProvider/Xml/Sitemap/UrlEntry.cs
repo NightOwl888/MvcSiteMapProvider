@@ -8,12 +8,34 @@ namespace MvcSiteMapProvider.Xml.Sitemap
         : IUrlEntry
     {
         public UrlEntry(string url)
+            : this(url, null, null, new List<ISpecializedContent>())
+        {
+        }
+
+        public UrlEntry(string url, string protocol)
+            : this(url, protocol, null, new List<ISpecializedContent>())
+        {
+        }
+
+        public UrlEntry(string url, string protocol, string hostName)
+            : this(url, protocol, hostName, new List<ISpecializedContent>())
+        {
+        }
+
+        internal UrlEntry(string url, IList<ISpecializedContent> specializedContent)
+            : this(url, null, null, specializedContent)
+        {
+        }
+
+        private UrlEntry(string url, string protocol, string hostName, IList<ISpecializedContent> specializedContent)
         {
             this.Url = url;
+            this.specializedContent = specializedContent;
+
+            // Set defaults
             this.UpdatePriority = UpdatePriority.Undefined;
             this.ChangeFrequency = ChangeFrequency.Undefined;
             this.LastModifiedDate = DateTime.MinValue;
-            this.specializedContent = new List<ISpecializedContent>();
         }
         private readonly IList<ISpecializedContent> specializedContent;
 
@@ -30,7 +52,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap
 
         public UpdatePriority UpdatePriority { get; set; }
 
-        public IList<ISpecializedContent> SpecializedContents
+        public IList<ISpecializedContent> SpecializedContent
         {
             get { return this.specializedContent; }
         }

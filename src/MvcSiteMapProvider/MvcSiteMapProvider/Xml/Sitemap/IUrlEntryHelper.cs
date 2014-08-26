@@ -9,6 +9,11 @@ namespace MvcSiteMapProvider.Xml.Sitemap
     {
         int Skip { get; }
         int Take { get; }
-        void AddUrlEntry(IUrlEntry urlEntry);
+        void SubmitUrlEntry(IUrlEntry urlEntry);
+        void SubmitUrlEntry(IUrlEntryBuilder builder);
+
+        IUrlEntryBuilder BuildUrlEntry(string url);
+        IUrlEntryBuilder BuildUrlEntry(string url, string protocol);
+        IUrlEntryBuilder BuildUrlEntry(string url, string protocol, string hostName);
     }
 }

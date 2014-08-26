@@ -22,6 +22,34 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized
         {
         }
 
+        public ImageContentBuilder(string url, string protocol)
+            : this(
+            url: url,
+            protocol: protocol,
+            hostName: string.Empty,
+            caption: string.Empty,
+            geoLocation: string.Empty,
+            title: string.Empty,
+            licenseUrl: string.Empty,
+            licenseProtocol: string.Empty,
+            licenseHostName: string.Empty)
+        {
+        }
+
+        public ImageContentBuilder(string url, string protocol, string hostName)
+            : this(
+            url: url,
+            protocol: protocol,
+            hostName: hostName,
+            caption: string.Empty,
+            geoLocation: string.Empty,
+            title: string.Empty,
+            licenseUrl: string.Empty,
+            licenseProtocol: string.Empty,
+            licenseHostName: string.Empty)
+        {
+        }
+
         private ImageContentBuilder(
             string url, 
             string protocol, 
@@ -56,15 +84,15 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized
         
 
 
-        public IImageContentBuilder WithProtocol(string protocol)
-        {
-            return new ImageContentBuilder(this.url, protocol, this.hostName, this.caption, this.geoLocation, this.title, this.licenseUrl, this.licenseProtocol, this.licenseHostName);
-        }
+        //public IImageContentBuilder WithProtocol(string protocol)
+        //{
+        //    return new ImageContentBuilder(this.url, protocol, this.hostName, this.caption, this.geoLocation, this.title, this.licenseUrl, this.licenseProtocol, this.licenseHostName);
+        //}
 
-        public IImageContentBuilder WithHostName(string hostName)
-        {
-            return new ImageContentBuilder(this.url, this.protocol, hostName, this.caption, this.geoLocation, this.title, this.licenseUrl, this.licenseProtocol, this.licenseHostName);
-        }
+        //public IImageContentBuilder WithHostName(string hostName)
+        //{
+        //    return new ImageContentBuilder(this.url, this.protocol, hostName, this.caption, this.geoLocation, this.title, this.licenseUrl, this.licenseProtocol, this.licenseHostName);
+        //}
 
         public IImageContentBuilder WithCaption(string caption)
         {
@@ -86,17 +114,27 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized
             return new ImageContentBuilder(this.url, this.protocol, this.hostName, this.caption, this.geoLocation, this.title, licenseUrl, this.licenseProtocol, this.licenseHostName);
         }
 
-        public IImageContentBuilder WithLicenseProtocol(string licenseProtocol)
+        public IImageContentBuilder WithLicenseUrl(string licenceUrl, string licenceUrlProtocol)
         {
-            return new ImageContentBuilder(this.url, this.protocol, this.hostName, this.caption, this.geoLocation, this.title, this.licenseUrl, licenseProtocol, this.licenseHostName);
+            return new ImageContentBuilder(this.url, this.protocol, this.hostName, this.caption, this.geoLocation, this.title, licenseUrl, licenseProtocol, this.licenseHostName);
         }
 
-        public IImageContentBuilder WithLicenseHostName(string licenseHostName)
+        public IImageContentBuilder WithLicenseUrl(string licenceUrl, string licenceUrlProtocol, string licenceUrlHostName)
         {
-            return new ImageContentBuilder(this.url, this.protocol, this.hostName, this.caption, this.geoLocation, this.title, this.licenseUrl, this.licenseProtocol, licenseHostName);
+            return new ImageContentBuilder(this.url, this.protocol, this.hostName, this.caption, this.geoLocation, this.title, licenseUrl, licenseProtocol, licenseHostName);
         }
 
-        public IImageContent Create()
+        //public IImageContentBuilder WithLicenseProtocol(string licenseProtocol)
+        //{
+        //    return new ImageContentBuilder(this.url, this.protocol, this.hostName, this.caption, this.geoLocation, this.title, this.licenseUrl, licenseProtocol, this.licenseHostName);
+        //}
+
+        //public IImageContentBuilder WithLicenseHostName(string licenseHostName)
+        //{
+        //    return new ImageContentBuilder(this.url, this.protocol, this.hostName, this.caption, this.geoLocation, this.title, this.licenseUrl, this.licenseProtocol, licenseHostName);
+        //}
+
+        public ISpecializedContent Create()
         {
             return new ImageContent(this.url)
             {
@@ -110,5 +148,8 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized
                 LicenseHostName = this.licenseHostName
             };
         }
+
+
+        
     }
 }

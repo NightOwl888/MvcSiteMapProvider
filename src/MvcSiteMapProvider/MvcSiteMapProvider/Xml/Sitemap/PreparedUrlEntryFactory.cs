@@ -40,7 +40,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap
             {
                 var preparedSpecializedContents = new List<IPreparedSpecializedContent>();
 
-                foreach (var content in urlEntry.SpecializedContents)
+                foreach (var content in urlEntry.SpecializedContent)
                 {
                     var contentFactory = this.preparedSpecializedContentFactoryStrategy.GetFactory(content.GetType());
                     var preparedContent = contentFactory.Create(content, this.urlResolver, cultureContext);
