@@ -42,11 +42,10 @@ namespace MvcSiteMapProvider.Xml.Sitemap
         public bool WritePage(int page, XmlWriter writer)
         {
             IEnumerable<int> pageNumbers = this.GetPageNumbers();
-            bool isPageIndexRequest = page == 0 && pageNumbers.Count() > 1; ;
+            bool isPageIndexRequest = page == 0 && pageNumbers.Count() > 1;
 
             if (isPageIndexRequest)
             {
-                //this.WriteSitemapIndex(writer, pageNumbers);
                 this.sitemapIndexPageWriter.WritePage(writer, pageNumbers);
             }
             else
