@@ -244,6 +244,7 @@
     <Compile Include="Web\Script\Serialization\JsonToDictionaryDeserializer.cs" />
     <Compile Include="Web\SiteMapNodeExtensions.cs" />
     <Compile Include="Xml\ISiteMapXmlReservedAttributeNameProvider.cs" />
+    <Compile Include="Xml\IXmlWriterFactory.cs" />
     <Compile Include="Xml\Sitemap\IPreparedUrlEntry.cs" />
     <Compile Include="Xml\Sitemap\IPreparedUrlEntryFactory.cs" />
     <Compile Include="Xml\Sitemap\Index\ISitemapIndexPageWriter.cs" />
@@ -500,6 +501,7 @@
     <Compile Include="Xml\SiteMapXmlValidator.cs" />
     <Compile Include="Xml\IXmlSource.cs" />
     <Compile Include="Xml\SiteMapXmlNameProvider.cs" />
+    <Compile Include="Xml\XmlWriterFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Xml\MvcSiteMapSchema.xsd">
