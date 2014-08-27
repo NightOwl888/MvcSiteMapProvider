@@ -9,10 +9,10 @@ namespace MvcSiteMapProvider.Xml.Sitemap
 {
     // TODO: Create an offline sitemap URL resolver with fake HTTP context.
 
-    public class SitemapUrlResolver
-        : ISitemapUrlResolver
+    public class XmlSitemapUrlResolver
+        : IXmlSitemapUrlResolver
     {
-        public SitemapUrlResolver(
+        public XmlSitemapUrlResolver(
             IUrlPath urlPath
             )
         {

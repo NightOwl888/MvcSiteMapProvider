@@ -11,7 +11,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized.Video
     {
         private const string W3CDateFormat = "yyyy-MM-ddTHH:mm:ss.fffffffzzz";
 
-        public IPreparedSpecializedContent Create(ISpecializedContent specializedContent, ISitemapUrlResolver urlResolver, ICultureContext cultureContext)
+        public IPreparedSpecializedContent Create(ISpecializedContent specializedContent, IXmlSitemapUrlResolver urlResolver, ICultureContext cultureContext)
         {
             var videoContent = specializedContent as IVideoContent;
             if (videoContent != null)

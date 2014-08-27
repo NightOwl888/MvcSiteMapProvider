@@ -22,7 +22,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap.Specialized.Video
         #region SetUp / TearDown
 
         private Mock<IVideoContent> videoContent = null;
-        private Mock<ISitemapUrlResolver> urlResolver = null;
+        private Mock<IXmlSitemapUrlResolver> urlResolver = null;
         private Mock<ICultureContext> cultureContext = null;
 
         [SetUp]
@@ -33,7 +33,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap.Specialized.Video
             Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
 
             this.videoContent = new Mock<IVideoContent>();
-            this.urlResolver = new Mock<ISitemapUrlResolver>();
+            this.urlResolver = new Mock<IXmlSitemapUrlResolver>();
             this.cultureContext = new Mock<ICultureContext>();
 
             // Setup the required properties

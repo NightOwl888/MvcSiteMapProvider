@@ -5,7 +5,7 @@ using System.Xml;
 
 namespace MvcSiteMapProvider.Xml.Sitemap.Index
 {
-    public interface ISitemapIndexPageWriter
+    public interface IXmlSitemapIndexPageWriter
     {
         void WritePage(XmlWriter writer, IEnumerable<int> pageNumbers);
     }

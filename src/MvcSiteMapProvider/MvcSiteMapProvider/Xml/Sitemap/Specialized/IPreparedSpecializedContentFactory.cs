@@ -8,7 +8,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized
 {
     public interface IPreparedSpecializedContentFactory
     {
-        IPreparedSpecializedContent Create(ISpecializedContent specializedContent, ISitemapUrlResolver urlResolver, ICultureContext cultureContext);
+        IPreparedSpecializedContent Create(ISpecializedContent specializedContent, IXmlSitemapUrlResolver urlResolver, ICultureContext cultureContext);
         void Release(IPreparedSpecializedContent preparedSpecializedContent);
         Type ContentType { get; }
     }

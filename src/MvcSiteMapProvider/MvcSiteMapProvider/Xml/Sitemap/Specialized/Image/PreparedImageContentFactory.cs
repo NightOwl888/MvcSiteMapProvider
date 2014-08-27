@@ -9,7 +9,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized.Image
     public class PreparedImageContentFactory
         : IPreparedSpecializedContentFactory
     {
-        public IPreparedSpecializedContent Create(ISpecializedContent specializedContent, ISitemapUrlResolver urlResolver, ICultureContext cultureContext)
+        public IPreparedSpecializedContent Create(ISpecializedContent specializedContent, IXmlSitemapUrlResolver urlResolver, ICultureContext cultureContext)
         {
             var imageContent = specializedContent as IImageContent;
             if (imageContent != null)

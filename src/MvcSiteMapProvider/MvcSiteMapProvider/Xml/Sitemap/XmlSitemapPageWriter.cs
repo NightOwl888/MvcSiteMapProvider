@@ -8,36 +8,36 @@ using MvcSiteMapProvider.Xml.Sitemap.Paging;
 
 namespace MvcSiteMapProvider.Xml.Sitemap
 {
-    public class SitemapPageWriter
-        : ISitemapPageWriter
+    public class XmlSitemapPageWriter
+        : IXmlSitemapPageWriter
     {
-        public SitemapPageWriter(
+        public XmlSitemapPageWriter(
             IUrlEntryHelperFactory urlEntryHelperFactory,
-            ISitemapXmlWriterFactory sitemapXmlWriterFactory,
+            IXmlSitemapWriterFactory xmlSitemapWriterFactory,
             IPreparedUrlEntryFactory preparedUrlEntryFactory
             )
         {
             if (urlEntryHelperFactory == null)
                 throw new ArgumentNullException("urlEntryHelperFactory");
-            if (sitemapXmlWriterFactory == null)
-                throw new ArgumentNullException("sitemapXmlWriterFactory");
+            if (xmlSitemapWriterFactory == null)
+                throw new ArgumentNullException("xmlSitemapWriterFactory");
             if (preparedUrlEntryFactory == null)
                 throw new ArgumentNullException("preparedUrlEntryFactory");
 
             this.urlEntryHelperFactory = urlEntryHelperFactory;
-            this.sitemapXmlWriterFactory = sitemapXmlWriterFactory;
+            this.xmlSitemapWriterFactory = xmlSitemapWriterFactory;
             this.preparedUrlEntryFactory = preparedUrlEntryFactory;
         }
         private readonly IUrlEntryHelperFactory urlEntryHelperFactory;
-        private readonly ISitemapXmlWriterFactory sitemapXmlWriterFactory;
+        private readonly IXmlSitemapWriterFactory xmlSitemapWriterFactory;
         private readonly IPreparedUrlEntryFactory preparedUrlEntryFactory;
 
         public virtual void WritePage(XmlWriter writer, IEnumerable<IPagingInstruction> pagingInstructions)
         {
-            var sitemapXmlWriter = this.sitemapXmlWriterFactory.Create(writer);
+            var xmlSitemapWriter = this.xmlSitemapWriterFactory.Create(writer);
             try
             {
-                sitemapXmlWriter.WriteStartDocument();
+                xmlSitemapWriter.WriteStartDocument();
 
                 foreach (var instruction in pagingInstructions)
                 {
@@ -48,16 +48,19 @@ namespace MvcSiteMapProvider.Xml.Sitemap
                         // so we can get the entries one by one.
                         (urlEntry) =>
                         {
-                            sitemapXmlWriter.WriteEntry(this.preparedUrlEntryFactory.Create(urlEntry));
+                            // Run any business logic that needs to be executed to prepare
+                            // the data for writing.
+                            var prepared = this.preparedUrlEntryFactory.Create(urlEntry);
+                            xmlSitemapWriter.WriteEntry(prepared);
                         })
                     );
                 }
 
-                sitemapXmlWriter.WriteEndDocument();
+                xmlSitemapWriter.WriteEndDocument();
             }
             finally
             {
-                this.sitemapXmlWriterFactory.Release(sitemapXmlWriter);
+                this.xmlSitemapWriterFactory.Release(xmlSitemapWriter);
             }
         }
     }

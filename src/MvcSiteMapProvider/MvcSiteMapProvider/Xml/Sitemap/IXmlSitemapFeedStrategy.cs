@@ -5,9 +5,8 @@ using System.Text;
 
 namespace MvcSiteMapProvider.Xml.Sitemap
 {
-    public interface ISitemapPageNameProvider
+    public interface IXmlSitemapFeedStrategy
     {
-        string FirstPageNameTemplate { get; set; }
-        string PageNameTemplate { get; set; }
+        IXmlSitemapFeed GetFeed(string name);
     }
 }

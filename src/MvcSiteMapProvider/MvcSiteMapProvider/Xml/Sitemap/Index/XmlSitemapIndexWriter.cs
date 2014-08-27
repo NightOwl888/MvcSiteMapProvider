@@ -3,10 +3,10 @@ using System.Xml;
 
 namespace MvcSiteMapProvider.Xml.Sitemap.Index
 {
-    public class SitemapIndexXmlWriter
-        : ISitemapIndexXmlWriter
+    public class XmlSitemapIndexWriter
+        : IXmlSitemapIndexWriter
     {
-        public SitemapIndexXmlWriter(
+        public XmlSitemapIndexWriter(
             XmlWriter writer)
         {
             if (writer == null)

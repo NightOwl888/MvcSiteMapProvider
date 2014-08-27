@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MvcSiteMapProvider.Xml.Sitemap
 {
-    public interface ISitemapUrlResolver
+    public interface IXmlSitemapUrlResolver
     {
         string DefaultProtocol { get; set; }
         string DefaultHostName { get; set; }

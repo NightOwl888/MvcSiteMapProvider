@@ -6,10 +6,10 @@ using MvcSiteMapProvider.Xml.Sitemap.Specialized;
 
 namespace MvcSiteMapProvider.Xml.Sitemap
 {
-    public class SitemapXmlWriterFactory
-        : ISitemapXmlWriterFactory
+    public class XmlSitemapWriterFactory
+        : IXmlSitemapWriterFactory
     {
-        public SitemapXmlWriterFactory(
+        public XmlSitemapWriterFactory(
             ISpecializedContentXmlWriterFactoryStrategy specializedContentXmlWriterFactoryStrategy)
         {
             if (specializedContentXmlWriterFactoryStrategy == null)
@@ -18,14 +18,14 @@ namespace MvcSiteMapProvider.Xml.Sitemap
         }
         private readonly ISpecializedContentXmlWriterFactoryStrategy specializedContentXmlWriterFactoryStrategy;
 
-        public ISitemapXmlWriter Create(XmlWriter writer)
+        public IXmlSitemapWriter Create(XmlWriter writer)
         {
-            return new SitemapXmlWriter(writer, this.specializedContentXmlWriterFactoryStrategy);
+            return new XmlSitemapWriter(writer, this.specializedContentXmlWriterFactoryStrategy);
         }
 
-        public void Release(ISitemapXmlWriter sitemapXmlWriter)
+        public void Release(IXmlSitemapWriter xmlSitemapWriter)
         {
-            var disposable = sitemapXmlWriter as IDisposable;
+            var disposable = xmlSitemapWriter as IDisposable;
             if (disposable != null)
             {
                 disposable.Dispose();

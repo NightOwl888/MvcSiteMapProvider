@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MvcSiteMapProvider.Xml.Sitemap.Paging
 {
-    public interface ISitemapPagingStrategy
+    public interface IXmlSitemapPagingStrategy
     {
         int MaximumPageSize { get; set; }
         IEnumerable<int> GetPageNumbers();

@@ -2,7 +2,7 @@
 
 namespace MvcSiteMapProvider.Xml.Sitemap
 {
-    public interface ISitemapXmlWriter
+    public interface IXmlSitemapWriter
     {
         void WriteStartDocument();
         void WriteEndDocument();

@@ -6,13 +6,8 @@ using MvcSiteMapProvider.Xml.Sitemap.Paging;
 
 namespace MvcSiteMapProvider.Xml.Sitemap
 {
-    public interface ISitemapPageWriter
+    public interface IXmlSitemapPageWriter
     {
-        //string FirstPageNameTemplate { get; set; }
-        //string PageNameTemplate { get; set; }
-        //string BaseUrl { get; set; }
-        //IEnumerable<int> GetPageNumbers();
-        //bool WritePage(int page, XmlWriter writer);
         void WritePage(XmlWriter writer, IEnumerable<IPagingInstruction> pagingInstructions);
     }
 }

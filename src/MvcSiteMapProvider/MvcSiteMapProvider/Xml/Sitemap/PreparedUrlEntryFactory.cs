@@ -12,7 +12,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap
     {
         public PreparedUrlEntryFactory(
             IPreparedSpecializedContentFactoryStrategy preparedSpecializedContentFactoryStrategy,
-            ISitemapUrlResolver urlResolver,
+            IXmlSitemapUrlResolver urlResolver,
             ICultureContextFactory cultureContextFactory
             )
         {
@@ -28,7 +28,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap
             this.cultureContextFactory = cultureContextFactory;
         }
         private readonly IPreparedSpecializedContentFactoryStrategy preparedSpecializedContentFactoryStrategy;
-        private readonly ISitemapUrlResolver urlResolver;
+        private readonly IXmlSitemapUrlResolver urlResolver;
         private readonly ICultureContextFactory cultureContextFactory;
 
         private const string W3CDateFormat = "yyyy-MM-ddTHH:mm:ss.fffffffzzz";

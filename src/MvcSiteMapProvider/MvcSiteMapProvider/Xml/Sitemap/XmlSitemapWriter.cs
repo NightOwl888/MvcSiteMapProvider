@@ -6,10 +6,10 @@ using MvcSiteMapProvider.Xml.Sitemap.Specialized;
 
 namespace MvcSiteMapProvider.Xml.Sitemap
 {
-    public class SitemapXmlWriter
-        : ISitemapXmlWriter
+    public class XmlSitemapWriter
+        : IXmlSitemapWriter
     {
-        public SitemapXmlWriter(
+        public XmlSitemapWriter(
             XmlWriter writer,
             ISpecializedContentXmlWriterFactoryStrategy specializedContentXmlWriterFactoryStrategy)
         {

@@ -11,7 +11,7 @@ using MvcSiteMapProvider.Xml.Sitemap.Paging;
 namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap
 {
     [TestFixture]
-    public class AutomaticSitemapPagingStrategyTest
+    public class AutomaticXmlSitemapPagingStrategyTest
     {
         #region SetUp / TearDown
 
@@ -58,13 +58,13 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap
 
 
         // 3 providers with 100,000 records each, 35,000 maximum per page
-        private ISitemapPagingStrategy NewAutomaticSitemmapsPagingStrategy_TestCase1()
+        private IXmlSitemapPagingStrategy NewAutomaticXmlSitemmapPagingStrategy_TestCase1()
         {
             urlEntryProvider1.Setup(x => x.GetTotalRecordCount()).Returns(100000);
             urlEntryProvider2.Setup(x => x.GetTotalRecordCount()).Returns(100000);
             urlEntryProvider3.Setup(x => x.GetTotalRecordCount()).Returns(100000);
 
-            return new AutomaticSitemapPagingStrategy(new IUrlEntryProvider[] 
+            return new AutomaticXmlSitemapPagingStrategy(new IUrlEntryProvider[] 
             {
                 urlEntryProvider1.Object,
                 urlEntryProvider2.Object,
@@ -73,7 +73,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap
         }
 
         // 5 providers with 25,000 records each, 35,000 maximum per page
-        private ISitemapPagingStrategy NewAutomaticSitemmapsPagingStrategy_TestCase2()
+        private IXmlSitemapPagingStrategy NewAutomaticXmlSitemmapPagingStrategy_TestCase2()
         {
             urlEntryProvider1.Setup(x => x.GetTotalRecordCount()).Returns(25000);
             urlEntryProvider2.Setup(x => x.GetTotalRecordCount()).Returns(25000);
@@ -81,7 +81,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap
             urlEntryProvider4.Setup(x => x.GetTotalRecordCount()).Returns(25000);
             urlEntryProvider5.Setup(x => x.GetTotalRecordCount()).Returns(25000);
 
-            return new AutomaticSitemapPagingStrategy(new IUrlEntryProvider[] 
+            return new AutomaticXmlSitemapPagingStrategy(new IUrlEntryProvider[] 
             {
                 urlEntryProvider1.Object,
                 urlEntryProvider2.Object,
@@ -99,7 +99,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap
         public void GetPagingInstructions_WithPage3AndTestCase1_ShouldReturn2InstructionWith_Skip70000AndTake30000_Skip0AndTake5000()
         {
             // arrange
-            var target = this.NewAutomaticSitemmapsPagingStrategy_TestCase1();
+            var target = this.NewAutomaticXmlSitemmapPagingStrategy_TestCase1();
 
             // act
             var result = target.GetPagingInstructions(3);
@@ -130,7 +130,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap
         public void GetPagingInstructions_WithPage4AndTestCase1_ShouldReturn1InstructionsWith_Skip5000AndTake35000()
         {
             // arrange
-            var target = this.NewAutomaticSitemmapsPagingStrategy_TestCase1();
+            var target = this.NewAutomaticXmlSitemmapPagingStrategy_TestCase1();
 
             // act
             var result = target.GetPagingInstructions(4);
@@ -153,7 +153,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap
         public void GetPagingInstructions_WithPage2AndTestCase2_ShouldReturn2InstructionsWith_Skip10000AndTake15000_Skip0AndTake20000()
         {
             // arrange
-            var target = this.NewAutomaticSitemmapsPagingStrategy_TestCase2();
+            var target = this.NewAutomaticXmlSitemmapPagingStrategy_TestCase2();
 
             // act
             var result = target.GetPagingInstructions(2);
@@ -184,7 +184,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap
         public void GetPagingInstructions_WithPage3AndTestCase2_ShouldReturn3InstructionsWith_Skip20000AndTake5000_Skip0AndTake25000_Skip0AndTake5000()
         {
             // arrange
-            var target = this.NewAutomaticSitemmapsPagingStrategy_TestCase2();
+            var target = this.NewAutomaticXmlSitemmapPagingStrategy_TestCase2();
 
             // act
             var result = target.GetPagingInstructions(3);
