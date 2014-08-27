@@ -5,20 +5,20 @@ using System.Text;
 
 namespace MvcSiteMapProvider.Xml.Sitemap
 {
-    public class XmlSitemapPageNameProvider
-        : IXmlSitemapPageNameProvider
+    public class XmlSitemapFeedPageNameProvider
+        : IXmlSitemapFeedPageNameProvider
     {
-        public XmlSitemapPageNameProvider()
+        public XmlSitemapFeedPageNameProvider()
             : this(defaultFeedRootPageName: "sitemap.xml", defaultFeedPageName: "sitemap-{page}.xml", namedFeedRootPageName: "{feedName}-sitemap.xml", namedFeedPageName: "{feedName}-sitemap-{page}.xml")
         {
         }
 
-        public XmlSitemapPageNameProvider(string defaultFeedRootPageName, string defaultFeedPageName)
+        public XmlSitemapFeedPageNameProvider(string defaultFeedRootPageName, string defaultFeedPageName)
             : this(defaultFeedRootPageName: defaultFeedRootPageName, defaultFeedPageName: defaultFeedPageName, namedFeedRootPageName: "{feedName}-sitemap.xml", namedFeedPageName: "{feedName}-sitemap-{page}.xml")
         {
         }
 
-        public XmlSitemapPageNameProvider(string defaultFeedRootPageName, string defaultFeedPageName, string namedFeedRootPageName, string namedFeedPageName)
+        public XmlSitemapFeedPageNameProvider(string defaultFeedRootPageName, string defaultFeedPageName, string namedFeedRootPageName, string namedFeedPageName)
         {
             if (string.IsNullOrEmpty(defaultFeedRootPageName))
                 throw new ArgumentNullException("defaultFeedRootPageName");
@@ -60,7 +60,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap
         }
 
         // TODO: Make this into XmlSitemapPageNameResolver service that takes this class and XmlSiteMapUrlResolver as dependencies
-        public string GetPageName(int page, string feedName)
+        public string GetPageName(string feedName, int page)
         {
             string result;
             bool isRootPage = (page == 0);

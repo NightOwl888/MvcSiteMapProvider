@@ -34,12 +34,12 @@ namespace MvcSiteMapProvider.Xml.Sitemap
 
         // TODO: We should request cache the page counts so this doesn't 
         // result in multiple database calls, multiple times per request.
-        public IEnumerable<int> GetPageNumbers()
+        public IEnumerable<int> GetPageNumbers(string feedName)
         {
             return this.xmlSitemapPagingStrategy.GetPageNumbers();
         }
 
-        public bool WritePage(int page, XmlWriter writer)
+        public bool WritePage(XmlWriter writer, string feedName, int page)
         {
             if (writer == null)
             {
@@ -54,12 +54,12 @@ namespace MvcSiteMapProvider.Xml.Sitemap
             // TODO: Need to check total page count for all providers
             // if it is 0, need to return false here (or throw an exception).
 
-            IEnumerable<int> pageNumbers = this.GetPageNumbers();
+            IEnumerable<int> pageNumbers = this.GetPageNumbers(feedName);
             bool isIndexPageRequest = page == 0 && pageNumbers.Count() > 1;
 
             if (isIndexPageRequest)
             {
-                this.xmlSitemapIndexPageWriter.WritePage(writer, pageNumbers);
+                this.xmlSitemapIndexPageWriter.WritePage(writer, feedName, pageNumbers);
             }
             else
             {
@@ -71,6 +71,8 @@ namespace MvcSiteMapProvider.Xml.Sitemap
                     // We return false so it can be processed as a 404 not found as appropriate.
                     return false;
                 }
+
+                // TODO: determine if our paging instructions should include feed name.
                 var pagingInstructions = this.xmlSitemapPagingStrategy.GetPagingInstructions(indexCorrectedPage);
                 this.xmlSitemapPageWriter.WritePage(writer, pagingInstructions);
             }

@@ -7,6 +7,6 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Index
 {
     public interface IXmlSitemapIndexPageWriter
     {
-        void WritePage(XmlWriter writer, IEnumerable<int> pageNumbers);
+        void WritePage(XmlWriter writer, string feedName, IEnumerable<int> pageNumbers);
     }
 }

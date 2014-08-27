@@ -14,7 +14,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap
     {
         public SitemapService(
             IXmlSitemapPageManager xmlSitemapPageManager,
-            IXmlSitemapPageNameProvider xmlSitemapPageNameProvider//,
+            IXmlSitemapFeedPageNameProvider xmlSitemapPageNameProvider//,
             //IStreamFactory streamFactory
             )
         {
@@ -35,7 +35,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap
             this.BaseDirectory = AppDomain.CurrentDomain.BaseDirectory;
         }
         private readonly IXmlSitemapPageManager xmlSitemapPageManager;
-        private readonly IXmlSitemapPageNameProvider xmlSitemapPageNameProvider;
+        private readonly IXmlSitemapFeedPageNameProvider xmlSitemapPageNameProvider;
         //private readonly IStreamFactory streamFactory;
 
         public string BaseDirectory { get; set; }
@@ -60,16 +60,17 @@ namespace MvcSiteMapProvider.Xml.Sitemap
 
         public void GenerateFiles()
         {
+            var feedName = "default";
             var rootPageTemplate = Path.Combine(this.BaseDirectory, this.xmlSitemapPageNameProvider.DefaultFeedRootPageName);
             var pageNameTemplate = Path.Combine(this.BaseDirectory, this.xmlSitemapPageNameProvider.DefaultFeedPageName);
-            var pageNumbers = this.xmlSitemapPageManager.GetPageNumbers();
+            var pageNumbers = this.xmlSitemapPageManager.GetPageNumbers(feedName);
 
             if (pageNumbers.Count() > 1)
             {
                 // TODO: Create factory to inject file stream
 
                 // write the index
-                this.GenerateFirstPageFile(rootPageTemplate.Replace("{page}", "0"));
+                this.GenerateFirstPageFile(rootPageTemplate.Replace("{page}", "0"), feedName);
 
                 foreach (var page in pageNumbers)
                 {
@@ -77,7 +78,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap
                     {
                         using (var writer = XmlWriter.Create(stream))
                         {
-                            this.xmlSitemapPageManager.WritePage(page, writer);
+                            this.xmlSitemapPageManager.WritePage(writer, feedName, page);
                             writer.Flush();
                         }
                     }
@@ -85,17 +86,17 @@ namespace MvcSiteMapProvider.Xml.Sitemap
             }
             else
             {
-                this.GenerateFirstPageFile(rootPageTemplate.Replace("{page}", "0"));
+                this.GenerateFirstPageFile(rootPageTemplate.Replace("{page}", "0"), feedName);
             }
         }
 
-        protected void GenerateFirstPageFile(string fileName)
+        protected void GenerateFirstPageFile(string fileName, string feedName)
         {
             using (var stream = new FileStream(fileName, FileMode.Create))
             {
                 using (var writer = XmlWriter.Create(stream))
                 {
-                    this.xmlSitemapPageManager.WritePage(0, writer);
+                    this.xmlSitemapPageManager.WritePage(writer, feedName, 0);
                     writer.Flush();
                 }
             }

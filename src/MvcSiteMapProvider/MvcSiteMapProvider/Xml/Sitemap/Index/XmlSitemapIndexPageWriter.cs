@@ -11,26 +11,27 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Index
     {
         public XmlSitemapIndexPageWriter(
             IXmlSitemapIndexWriterFactory xmlSitemapIndexWriterFactory,
-            IXmlSitemapPageNameProvider xmlSitemapPageNameProvider,
-            IXmlSitemapUrlResolver xmlSitemapUrlResolver
+            IXmlSitemapFeedUrlResolver xmlSitemapFeedUrlResolver,
+            ISitemapEntryFactory sitemapEntryFactory
             )
         {
             if (xmlSitemapIndexWriterFactory == null)
                 throw new ArgumentNullException("xmlSitemapIndexWriterFactory");
-            if (xmlSitemapPageNameProvider == null)
-                throw new ArgumentNullException("xmlSitemapPageNameProvider");
-            if (xmlSitemapUrlResolver == null)
-                throw new ArgumentNullException("xmlSitemapUrlResolver");
+            if (xmlSitemapFeedUrlResolver == null)
+                throw new ArgumentNullException("xmlSitemapFeedUrlResolver");
+            if (sitemapEntryFactory == null)
+                throw new ArgumentNullException("sitemapEntryFactory");
 
             this.xmlSitemapIndexWriterFactory = xmlSitemapIndexWriterFactory;
-            this.xmlSitemapPageNameProvider = xmlSitemapPageNameProvider;
-            this.xmlSitemapUrlResolver = xmlSitemapUrlResolver;
+            this.xmlSitemapFeedUrlResolver = xmlSitemapFeedUrlResolver;
+            this.sitemapEntryFactory = sitemapEntryFactory;
         }
         private readonly IXmlSitemapIndexWriterFactory xmlSitemapIndexWriterFactory;
-        private readonly IXmlSitemapPageNameProvider xmlSitemapPageNameProvider;
-        private readonly IXmlSitemapUrlResolver xmlSitemapUrlResolver;
+        private readonly IXmlSitemapFeedUrlResolver xmlSitemapFeedUrlResolver;
+        private readonly ISitemapEntryFactory sitemapEntryFactory;
 
-        public virtual void WritePage(XmlWriter writer, IEnumerable<int> pageNumbers)
+        // TODO: instead of an IEnumerable<int>, there should be an interface where the last modified date can be passed through
+        public virtual void WritePage(XmlWriter writer, string feedName, IEnumerable<int> pageNumbers)
         {
             var xmlSitemapIndexWriter = this.xmlSitemapIndexWriterFactory.Create(writer);
             try
@@ -39,14 +40,8 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Index
 
                 foreach (var page in pageNumbers)
                 {
-                    // TODO: make factory to inject this (and a service to handle the formatting).
-                    //var location = this.sitemapUrlResolver.ResolveUrlToAbsolute("~/" + this.sitemapPageNameProvider.DefaultPageNameTemplate.Replace("{page}", page.ToString()));
-
-                    // TODO: Pass the feed name here
-                    var location = this.xmlSitemapUrlResolver.ResolveUrlToAbsolute("~/" + this.xmlSitemapPageNameProvider.GetPageName(page, "default"));
-
-                    // TODO: make factory to inject this
-                    var sitemapEntry = new SitemapEntry(location);
+                    var location = this.xmlSitemapFeedUrlResolver.ResolveFeedUrl(feedName, page);
+                    var sitemapEntry = this.sitemapEntryFactory.Create(location);
 
                     xmlSitemapIndexWriter.WriteEntry(sitemapEntry);
                 }

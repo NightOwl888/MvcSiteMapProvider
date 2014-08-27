@@ -45,7 +45,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap
         {
             using (var writer = this.xmlWriterFactory.Create(output, this.settings))
             {
-                return this.siteMapPageManager.WritePage(page, writer);
+                return this.siteMapPageManager.WritePage(writer, this.Name, page);
             }
         }
     }

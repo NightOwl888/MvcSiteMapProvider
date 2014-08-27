@@ -9,15 +9,18 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Index
         : ISitemapEntry
     {
         public SitemapEntry(
-            string location
+            string location,
+            string lastModified
             )
         {
             if (string.IsNullOrEmpty(location))
                 throw new ArgumentNullException("location");
 
             this.location = location;
+            this.lastModified = lastModified;
         }
         private readonly string location;
+        private readonly string lastModified;
 
         public string Location
         {
@@ -26,7 +29,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Index
 
         public string LastModified
         {
-            get { return string.Empty; }
+            get { return this.lastModified; }
         }
     }
 }

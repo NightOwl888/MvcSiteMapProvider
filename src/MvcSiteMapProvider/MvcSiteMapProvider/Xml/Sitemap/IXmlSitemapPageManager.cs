@@ -6,7 +6,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap
 {
     public interface IXmlSitemapPageManager
     {
-        IEnumerable<int> GetPageNumbers();
-        bool WritePage(int page, XmlWriter writer);
+        IEnumerable<int> GetPageNumbers(string feedName);
+        bool WritePage(XmlWriter writer, string feedName, int page);
     }
 }

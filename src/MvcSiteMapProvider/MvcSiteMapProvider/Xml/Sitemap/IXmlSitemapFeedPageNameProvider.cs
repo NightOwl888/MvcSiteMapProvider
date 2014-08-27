@@ -5,12 +5,12 @@ using System.Text;
 
 namespace MvcSiteMapProvider.Xml.Sitemap
 {
-    public interface IXmlSitemapPageNameProvider
+    public interface IXmlSitemapFeedPageNameProvider
     {
         string DefaultFeedRootPageName { get; }
         string DefaultFeedPageName { get; }
         string NamedFeedRootPageName { get; }
         string NamedFeedPageName { get; }
-        string GetPageName(int page, string feedName);
+        string GetPageName(string feedName, int page);
     }
 }
