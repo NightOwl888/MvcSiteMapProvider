@@ -21,6 +21,9 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap
         private Mock<IUrlEntryProvider> urlEntryProvider3 = null;
         private Mock<IUrlEntryProvider> urlEntryProvider4 = null;
         private Mock<IUrlEntryProvider> urlEntryProvider5 = null;
+        private Mock<IXmlSitemapRecordInfoHelper> xmlSitemapRecordInfoHelper = null;
+        private Mock<IXmlSitemapRecordInfoHelperFactory> xmlSitemapRecordInfoHelperFactory = null;
+        private Mock<IXmlSitemapPageInfoFactory> xmlSitemapPageInfoFactory = null;
 
         [SetUp]
         public void Init()
@@ -31,6 +34,9 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap
             urlEntryProvider3 = new Mock<IUrlEntryProvider>();
             urlEntryProvider4 = new Mock<IUrlEntryProvider>();
             urlEntryProvider5 = new Mock<IUrlEntryProvider>();
+            xmlSitemapRecordInfoHelper = new Mock<IXmlSitemapRecordInfoHelper>();
+            xmlSitemapRecordInfoHelperFactory = new Mock<IXmlSitemapRecordInfoHelperFactory>();
+            xmlSitemapPageInfoFactory = new Mock<IXmlSitemapPageInfoFactory>();
 
             this.pagingInstructionFactory
                 .Setup(x => x.Create(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<IUrlEntryProvider>()))
@@ -54,32 +60,136 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap
             urlEntryProvider3 = null;
             urlEntryProvider4 = null;
             urlEntryProvider5 = null;
+            xmlSitemapRecordInfoHelper = null;
+            xmlSitemapRecordInfoHelperFactory = null;
+            xmlSitemapPageInfoFactory = null;
         }
 
 
         // 3 providers with 100,000 records each, 35,000 maximum per page
         private IXmlSitemapPagingStrategy NewAutomaticXmlSitemmapPagingStrategy_TestCase1()
         {
-            urlEntryProvider1.Setup(x => x.GetTotalRecordCount()).Returns(100000);
-            urlEntryProvider2.Setup(x => x.GetTotalRecordCount()).Returns(100000);
-            urlEntryProvider3.Setup(x => x.GetTotalRecordCount()).Returns(100000);
+            //urlEntryProvider1.Setup(x => x.GetTotalRecordCount()).Returns(100000);
+            //urlEntryProvider2.Setup(x => x.GetTotalRecordCount()).Returns(100000);
+            //urlEntryProvider3.Setup(x => x.GetTotalRecordCount()).Returns(100000);
+
+            //return new AutomaticXmlSitemapPagingStrategy(new IUrlEntryProvider[] 
+            //{
+            //    urlEntryProvider1.Object,
+            //    urlEntryProvider2.Object,
+            //    urlEntryProvider3.Object
+            //}, this.pagingInstructionFactory.Object);
+
+            urlEntryProvider1
+                .Setup(x => x.GetRecordInfo(It.IsAny<IXmlSitemapRecordInfoHelper>()))
+                .Returns(() => 
+                    {
+                        var recordInfo = new Mock<IXmlSitemapRecordInfo>();
+                        recordInfo.Setup(y => y.TotalRecordCount).Returns(100000);
+                        recordInfo.Setup(y => y.LastModifiedDate).Returns(DateTime.MinValue);
+
+                        return recordInfo.Object;
+                    });
+            urlEntryProvider2
+                .Setup(x => x.GetRecordInfo(It.IsAny<IXmlSitemapRecordInfoHelper>()))
+                .Returns(() =>
+                {
+                    var recordInfo = new Mock<IXmlSitemapRecordInfo>();
+                    recordInfo.Setup(y => y.TotalRecordCount).Returns(100000);
+                    recordInfo.Setup(y => y.LastModifiedDate).Returns(DateTime.MinValue);
+
+                    return recordInfo.Object;
+                });
+            urlEntryProvider3
+                .Setup(x => x.GetRecordInfo(It.IsAny<IXmlSitemapRecordInfoHelper>()))
+                .Returns(() =>
+                {
+                    var recordInfo = new Mock<IXmlSitemapRecordInfo>();
+                    recordInfo.Setup(y => y.TotalRecordCount).Returns(100000);
+                    recordInfo.Setup(y => y.LastModifiedDate).Returns(new DateTime(2000, 4, 1));
+
+                    return recordInfo.Object;
+                });
 
             return new AutomaticXmlSitemapPagingStrategy(new IUrlEntryProvider[] 
             {
                 urlEntryProvider1.Object,
                 urlEntryProvider2.Object,
                 urlEntryProvider3.Object
-            }, this.pagingInstructionFactory.Object);
+            }, 
+            this.pagingInstructionFactory.Object,
+            this.xmlSitemapRecordInfoHelperFactory.Object,
+            this.xmlSitemapPageInfoFactory.Object);
         }
 
         // 5 providers with 25,000 records each, 35,000 maximum per page
         private IXmlSitemapPagingStrategy NewAutomaticXmlSitemmapPagingStrategy_TestCase2()
         {
-            urlEntryProvider1.Setup(x => x.GetTotalRecordCount()).Returns(25000);
-            urlEntryProvider2.Setup(x => x.GetTotalRecordCount()).Returns(25000);
-            urlEntryProvider3.Setup(x => x.GetTotalRecordCount()).Returns(25000);
-            urlEntryProvider4.Setup(x => x.GetTotalRecordCount()).Returns(25000);
-            urlEntryProvider5.Setup(x => x.GetTotalRecordCount()).Returns(25000);
+            //urlEntryProvider1.Setup(x => x.GetTotalRecordCount()).Returns(25000);
+            //urlEntryProvider2.Setup(x => x.GetTotalRecordCount()).Returns(25000);
+            //urlEntryProvider3.Setup(x => x.GetTotalRecordCount()).Returns(25000);
+            //urlEntryProvider4.Setup(x => x.GetTotalRecordCount()).Returns(25000);
+            //urlEntryProvider5.Setup(x => x.GetTotalRecordCount()).Returns(25000);
+
+            //return new AutomaticXmlSitemapPagingStrategy(new IUrlEntryProvider[] 
+            //{
+            //    urlEntryProvider1.Object,
+            //    urlEntryProvider2.Object,
+            //    urlEntryProvider3.Object,
+            //    urlEntryProvider4.Object,
+            //    urlEntryProvider5.Object,
+            //}, this.pagingInstructionFactory.Object);
+
+            urlEntryProvider1
+                .Setup(x => x.GetRecordInfo(It.IsAny<IXmlSitemapRecordInfoHelper>()))
+                .Returns(() =>
+                {
+                    var recordInfo = new Mock<IXmlSitemapRecordInfo>();
+                    recordInfo.Setup(y => y.TotalRecordCount).Returns(25000);
+                    recordInfo.Setup(y => y.LastModifiedDate).Returns(DateTime.MinValue);
+
+                    return recordInfo.Object;
+                });
+            urlEntryProvider2
+                .Setup(x => x.GetRecordInfo(It.IsAny<IXmlSitemapRecordInfoHelper>()))
+                .Returns(() =>
+                {
+                    var recordInfo = new Mock<IXmlSitemapRecordInfo>();
+                    recordInfo.Setup(y => y.TotalRecordCount).Returns(25000);
+                    recordInfo.Setup(y => y.LastModifiedDate).Returns(DateTime.MinValue);
+
+                    return recordInfo.Object;
+                });
+            urlEntryProvider3
+                .Setup(x => x.GetRecordInfo(It.IsAny<IXmlSitemapRecordInfoHelper>()))
+                .Returns(() =>
+                {
+                    var recordInfo = new Mock<IXmlSitemapRecordInfo>();
+                    recordInfo.Setup(y => y.TotalRecordCount).Returns(25000);
+                    recordInfo.Setup(y => y.LastModifiedDate).Returns(new DateTime(2000, 4, 1));
+
+                    return recordInfo.Object;
+                });
+            urlEntryProvider4
+                .Setup(x => x.GetRecordInfo(It.IsAny<IXmlSitemapRecordInfoHelper>()))
+                .Returns(() =>
+                {
+                    var recordInfo = new Mock<IXmlSitemapRecordInfo>();
+                    recordInfo.Setup(y => y.TotalRecordCount).Returns(25000);
+                    recordInfo.Setup(y => y.LastModifiedDate).Returns(DateTime.MinValue);
+
+                    return recordInfo.Object;
+                });
+            urlEntryProvider5
+                .Setup(x => x.GetRecordInfo(It.IsAny<IXmlSitemapRecordInfoHelper>()))
+                .Returns(() =>
+                {
+                    var recordInfo = new Mock<IXmlSitemapRecordInfo>();
+                    recordInfo.Setup(y => y.TotalRecordCount).Returns(25000);
+                    recordInfo.Setup(y => y.LastModifiedDate).Returns(new DateTime(2000, 4, 1));
+
+                    return recordInfo.Object;
+                });
 
             return new AutomaticXmlSitemapPagingStrategy(new IUrlEntryProvider[] 
             {
@@ -87,8 +197,12 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap
                 urlEntryProvider2.Object,
                 urlEntryProvider3.Object,
                 urlEntryProvider4.Object,
-                urlEntryProvider5.Object,
-            }, this.pagingInstructionFactory.Object);
+                urlEntryProvider5.Object
+
+            },
+            this.pagingInstructionFactory.Object,
+            this.xmlSitemapRecordInfoHelperFactory.Object,
+            this.xmlSitemapPageInfoFactory.Object);
         }
 
         #endregion
@@ -102,7 +216,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap
             var target = this.NewAutomaticXmlSitemmapPagingStrategy_TestCase1();
 
             // act
-            var result = target.GetPagingInstructions(3);
+            var result = target.GetPagingInstructions("default", 3);
 
             // assert
             var actualCount = result.Count();
@@ -133,7 +247,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap
             var target = this.NewAutomaticXmlSitemmapPagingStrategy_TestCase1();
 
             // act
-            var result = target.GetPagingInstructions(4);
+            var result = target.GetPagingInstructions("default", 4);
 
             // assert
             var actualCount = result.Count();
@@ -156,7 +270,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap
             var target = this.NewAutomaticXmlSitemmapPagingStrategy_TestCase2();
 
             // act
-            var result = target.GetPagingInstructions(2);
+            var result = target.GetPagingInstructions("default", 2);
 
             // assert
             var actualCount = result.Count();
@@ -187,7 +301,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap
             var target = this.NewAutomaticXmlSitemmapPagingStrategy_TestCase2();
 
             // act
-            var result = target.GetPagingInstructions(3);
+            var result = target.GetPagingInstructions("default", 3);
 
             // assert
             var actualCount = result.Count();

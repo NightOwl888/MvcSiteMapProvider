@@ -32,7 +32,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap
         private readonly IXmlSitemapWriterFactory xmlSitemapWriterFactory;
         private readonly IPreparedUrlEntryFactory preparedUrlEntryFactory;
 
-        public virtual void WritePage(XmlWriter writer, IEnumerable<IPagingInstruction> pagingInstructions)
+        public virtual void WritePage(XmlWriter writer, string feedName, IEnumerable<IPagingInstruction> pagingInstructions)
         {
             var xmlSitemapWriter = this.xmlSitemapWriterFactory.Create(writer);
             try
@@ -41,8 +41,8 @@ namespace MvcSiteMapProvider.Xml.Sitemap
 
                 foreach (var instruction in pagingInstructions)
                 {
-                    instruction.UrlEntryProvider.GetEntries(
-                        this.urlEntryHelperFactory.Create(instruction.Skip, instruction.Take,
+                    instruction.UrlEntryProvider.GetUrlEntries(
+                        this.urlEntryHelperFactory.Create(feedName, instruction.Skip, instruction.Take,
 
                         // Wire up an anonymous callback from the helper class to this one
                         // so we can get the entries one by one.

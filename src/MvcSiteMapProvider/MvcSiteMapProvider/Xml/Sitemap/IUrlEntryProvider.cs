@@ -8,8 +8,8 @@ namespace MvcSiteMapProvider.Xml.Sitemap
     public interface IUrlEntryProvider
     {
         // Total record count of all potential pages
-        int GetTotalRecordCount();
-        void GetEntries(IUrlEntryHelper helper); // TODO: Define helper
+        IXmlSitemapRecordInfo GetRecordInfo(IXmlSitemapRecordInfoHelper helper);
+        void GetUrlEntries(IUrlEntryHelper helper);
         // TODO: Do we need to return the feedback to the provider or can some messaging system be implemented?
     }
 }

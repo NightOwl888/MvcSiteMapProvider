@@ -36,7 +36,10 @@ namespace MvcSiteMapProvider.Xml.Sitemap
         // result in multiple database calls, multiple times per request.
         public IEnumerable<int> GetPageNumbers(string feedName)
         {
-            return this.xmlSitemapPagingStrategy.GetPageNumbers();
+            //return this.xmlSitemapPagingStrategy.GetPageNumbers(feedName);
+
+            return this.xmlSitemapPagingStrategy.GetPageInfo(feedName)
+                .Select(x => x.Page);
         }
 
         public bool WritePage(XmlWriter writer, string feedName, int page)
@@ -54,31 +57,71 @@ namespace MvcSiteMapProvider.Xml.Sitemap
             // TODO: Need to check total page count for all providers
             // if it is 0, need to return false here (or throw an exception).
 
-            IEnumerable<int> pageNumbers = this.GetPageNumbers(feedName);
-            bool isIndexPageRequest = page == 0 && pageNumbers.Count() > 1;
+            var pageInfo = this.xmlSitemapPagingStrategy.GetPageInfo(feedName);
+            bool isIndexPageRequest = page == 0 && pageInfo.Count() > 1;
 
             if (isIndexPageRequest)
             {
-                this.xmlSitemapIndexPageWriter.WritePage(writer, feedName, pageNumbers);
+                this.xmlSitemapIndexPageWriter.WritePage(writer, feedName, pageInfo);
             }
             else
             {
                 var indexCorrectedPage = (page == 0) ? 1 : page;
 
-                if (!pageNumbers.Contains(indexCorrectedPage))
+                if (!pageInfo.Select(x => x.Page).Contains(indexCorrectedPage))
                 {
                     // Request was for an invalid page.
                     // We return false so it can be processed as a 404 not found as appropriate.
                     return false;
                 }
 
-                // TODO: determine if our paging instructions should include feed name.
-                var pagingInstructions = this.xmlSitemapPagingStrategy.GetPagingInstructions(indexCorrectedPage);
-                this.xmlSitemapPageWriter.WritePage(writer, pagingInstructions);
+                var pagingInstructions = this.xmlSitemapPagingStrategy.GetPagingInstructions(feedName, indexCorrectedPage);
+                this.xmlSitemapPageWriter.WritePage(writer, feedName, pagingInstructions);
             }
 
             // Request was for a valid page
             return true;
         }
+
+        //public bool WritePage(XmlWriter writer, string feedName, int page)
+        //{
+        //    if (writer == null)
+        //    {
+        //        throw new ArgumentNullException("writer");
+        //    }
+
+        //    if (page < 0)
+        //    {
+        //        return false;
+        //    }
+
+        //    // TODO: Need to check total page count for all providers
+        //    // if it is 0, need to return false here (or throw an exception).
+
+        //    IEnumerable<int> pageNumbers = this.GetPageNumbers(feedName);
+        //    bool isIndexPageRequest = page == 0 && pageNumbers.Count() > 1;
+
+        //    if (isIndexPageRequest)
+        //    {
+        //        this.xmlSitemapIndexPageWriter.WritePage(writer, feedName, pageNumbers);
+        //    }
+        //    else
+        //    {
+        //        var indexCorrectedPage = (page == 0) ? 1 : page;
+
+        //        if (!pageNumbers.Contains(indexCorrectedPage))
+        //        {
+        //            // Request was for an invalid page.
+        //            // We return false so it can be processed as a 404 not found as appropriate.
+        //            return false;
+        //        }
+
+        //        var pagingInstructions = this.xmlSitemapPagingStrategy.GetPagingInstructions(feedName, indexCorrectedPage);
+        //        this.xmlSitemapPageWriter.WritePage(writer, feedName, pagingInstructions);
+        //    }
+
+        //    // Request was for a valid page
+        //    return true;
+        //}
     }
 }

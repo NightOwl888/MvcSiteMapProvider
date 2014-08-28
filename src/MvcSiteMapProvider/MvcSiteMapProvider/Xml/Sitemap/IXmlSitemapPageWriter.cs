@@ -8,6 +8,6 @@ namespace MvcSiteMapProvider.Xml.Sitemap
 {
     public interface IXmlSitemapPageWriter
     {
-        void WritePage(XmlWriter writer, IEnumerable<IPagingInstruction> pagingInstructions);
+        void WritePage(XmlWriter writer, string feedName, IEnumerable<IPagingInstruction> pagingInstructions);
     }
 }

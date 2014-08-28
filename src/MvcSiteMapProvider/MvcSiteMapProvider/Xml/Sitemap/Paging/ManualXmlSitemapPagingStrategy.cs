@@ -23,23 +23,36 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Paging
             this.MaximumPageSize = 35000;
         }
         private readonly IManualPagingInstruction[] manualUrlEntryProviderPagingInstructions;
+        private readonly IXmlSitemapPageInfoFactory xmlSitemapPageInfoFactory;
 
         public int MaximumPageSize{ get; set; }
 
-        public IEnumerable<int> GetPageNumbers()
+        //public IEnumerable<int> GetPageNumbers(string feedName)
+        //{
+        //    // Get a distinct list of page numbers and return them as an array
+        //    return this.manualUrlEntryProviderPagingInstructions
+        //        .Select(x => x.Page)
+        //        .Distinct()
+        //        .ToArray();
+        //}
+
+        public IEnumerable<IXmlSitemapPageInfo> GetPageInfo(string feedName)
         {
             // Get a distinct list of page numbers and return them as an array
             return this.manualUrlEntryProviderPagingInstructions
                 .Select(x => x.Page)
                 .Distinct()
-                .ToArray();
+                .Select(x => this.xmlSitemapPageInfoFactory.Create(x, DateTime.MinValue));
         }
 
-        public IEnumerable<IPagingInstruction> GetPagingInstructions(int page)
+        public IEnumerable<IPagingInstruction> GetPagingInstructions(string feedName, int page)
         {
             return this.manualUrlEntryProviderPagingInstructions
                 .Where(x => x.Page == page)
                 .ToList();
         }
+
+
+        
     }
 }

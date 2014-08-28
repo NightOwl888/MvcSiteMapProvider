@@ -31,17 +31,17 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Index
         private readonly ISitemapEntryFactory sitemapEntryFactory;
 
         // TODO: instead of an IEnumerable<int>, there should be an interface where the last modified date can be passed through
-        public virtual void WritePage(XmlWriter writer, string feedName, IEnumerable<int> pageNumbers)
+        public virtual void WritePage(XmlWriter writer, string feedName, IEnumerable<IXmlSitemapPageInfo> pageInfo)
         {
             var xmlSitemapIndexWriter = this.xmlSitemapIndexWriterFactory.Create(writer);
             try
             {
                 xmlSitemapIndexWriter.WriteStartDocument();
 
-                foreach (var page in pageNumbers)
+                foreach (var info in pageInfo)
                 {
-                    var location = this.xmlSitemapFeedUrlResolver.ResolveFeedUrl(feedName, page);
-                    var sitemapEntry = this.sitemapEntryFactory.Create(location);
+                    var location = this.xmlSitemapFeedUrlResolver.ResolveFeedUrl(feedName, info.Page);
+                    var sitemapEntry = this.sitemapEntryFactory.Create(location, info.LastModifiedDate);
 
                     xmlSitemapIndexWriter.WriteEntry(sitemapEntry);
                 }

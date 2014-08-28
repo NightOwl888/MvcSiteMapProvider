@@ -9,21 +9,31 @@ namespace MvcSiteMapProvider.Xml.Sitemap
         : IUrlEntryHelper
     {
         public UrlEntryHelper(
+            string feedName,
             int skip,
             int take,
-            Action<IUrlEntry> submitUrlEntryMethod
+            Action<IUrlEntry> sendUrlEntryMethod
             )
         {
-            if (submitUrlEntryMethod == null)
-                throw new ArgumentNullException("submitUrlEntryMethod");
+            if (string.IsNullOrEmpty(feedName))
+                throw new ArgumentNullException("feedName");
+            if (sendUrlEntryMethod == null)
+                throw new ArgumentNullException("sendUrlEntryMethod");
 
+            this.feedName = feedName;
             this.skip = skip;
             this.take = take;
-            this.submitUrlEntryMethod = submitUrlEntryMethod;
+            this.sendUrlEntryMethod = sendUrlEntryMethod;
         }
+        private readonly string feedName;
         private readonly int skip;
         private readonly int take;
-        private readonly Action<IUrlEntry> submitUrlEntryMethod;
+        private readonly Action<IUrlEntry> sendUrlEntryMethod;
+
+        public string FeedName
+        {
+            get { return this.feedName; }
+        }
 
         public int Skip
         {
@@ -35,15 +45,37 @@ namespace MvcSiteMapProvider.Xml.Sitemap
             get { return this.take; }
         }
 
-        public void SubmitUrlEntry(IUrlEntry urlEntry)
+        public void SendUrlEntry(string url)
         {
-            this.submitUrlEntryMethod(urlEntry);
+            this.SendUrlEntry(this.BuildUrlEntry(url).Create());
         }
 
-        public void SubmitUrlEntry(IUrlEntryBuilder builder)
+        public void SendUrlEntry(string url, string protocol)
         {
-            this.SubmitUrlEntry(builder.Create());
+            this.SendUrlEntry(this.BuildUrlEntry(url, protocol).Create());
         }
+
+        public void SendUrlEntry(string url, string protocol, string hostName)
+        {
+            this.SendUrlEntry(this.BuildUrlEntry(url, protocol, hostName).Create());
+        }
+
+        public void SendUrlEntry(IUrlEntry urlEntry)
+        {
+            this.sendUrlEntryMethod(urlEntry);
+        }
+
+        public void SendUrlEntry(IUrlEntryBuilder builder)
+        {
+            this.SendUrlEntry(builder.Create());
+        }
+
+        public void SendUrlEntry(Func<IUrlEntry, IUrlEntryBuilder> expression)
+        {
+            //var builder = new UrlEntryBuilder(
+            throw new NotImplementedException();
+        }
+
 
         public IUrlEntryBuilder BuildUrlEntry(string url)
         {
@@ -59,5 +91,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap
         {
             return new UrlEntryBuilder(url, protocol, hostName);
         }
+
+
     }
 }
