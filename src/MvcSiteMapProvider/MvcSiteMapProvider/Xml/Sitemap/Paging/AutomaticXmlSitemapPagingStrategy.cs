@@ -41,25 +41,6 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Paging
 
         public int MaximumPageSize { get; set; }
 
-        //// TODO: Change this to return a list of page numbers + last updated date
-        //public IEnumerable<int> GetPageNumbers(string feedName)
-        //{
-        //    int totalRecordCount = 0;
-        //    foreach (var provider in this.urlEntryProviders)
-        //    {
-        //        totalRecordCount += provider.GetTotalRecordCount(feedName);
-        //    }
-
-        //    int pageCount = (int)Math.Ceiling((double)totalRecordCount / this.MaximumPageSize);
-
-        //    // TODO: Work out how to make the last updated date of the provider correspond to a page.
-
-        //    // Return an array from 1 to x
-        //    return Enumerable.Range(1, pageCount);
-        //}
-
-        
-
         public IEnumerable<IXmlSitemapPageInfo> GetPageInfo(string feedName)
         {
             int totalRecordCount = 0;
@@ -85,42 +66,6 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Paging
 
             return result;
         }
-
-        //public IEnumerable<IXmlSitemapPageInfo> GetPageInfo(string feedName)
-        //{
-        //    int totalRecordCount = 0;
-        //    //var recordInfoList = this.GetRecordInfoList(feedName);
-
-        //    //foreach (var recordInfo in recordInfoList)
-        //    //{
-        //    //    totalRecordCount += recordInfo.TotalRecordCount;
-        //    //}
-
-        //    int pageCount = (int)Math.Ceiling((double)totalRecordCount / this.MaximumPageSize);
-
-        //    // TODO: Work out how to make the last updated date of the provider correspond to a page.
-
-        //    // Create an array from 1 to x
-        //    var pageNumbers = Enumerable.Range(1, pageCount);
-
-        //    var result = new List<IXmlSitemapPageInfo>();
-
-        //    foreach (var page in pageNumbers)
-        //    {
-        //        DateTime lastModifiedDate = DateTime.MinValue;
-        //        var pagingInfo = this.GetPagingInformation(feedName, page, recordInfoList);
-        //        if (pagingInfo.Any())
-        //        {
-        //            lastModifiedDate = this.GetPagingInformation(feedName, page, recordInfoList)
-        //            .Select(x => x.Key)
-        //            .Max();
-        //        }
-
-        //        result.Add(this.xmlSitemapPageInfoFactory.Create(page, lastModifiedDate));
-        //    }
-
-        //    return result;
-        //}
 
         public IEnumerable<IPagingInstruction> GetPagingInstructions(string feedName, int page)
         {
@@ -165,60 +110,6 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Paging
 
             return result;
         }
-
-        //public IEnumerable<IPagingInstruction> GetPagingInstructions(string feedName, int page)
-        //{
-        //    var recordInfoList = this.GetRecordInfoList(feedName);
-
-        //    var result = this.GetPagingInformation(feedName, page, recordInfoList)
-        //        .Select(x => x.Value).ToList();
-
-        //    return result;
-        //}
-
-        //protected virtual IEnumerable<KeyValuePair<DateTime, IPagingInstruction>> GetPagingInformation(string feedName, int page, IEnumerable<IXmlSitemapRecordInfo> recordInfoList)
-        //{
-        //    var result = new List<KeyValuePair<DateTime, IPagingInstruction>>();
-
-        //    int startAfter = this.GetStartAfterCount(page, this.MaximumPageSize);
-
-        //    // Preview what the record counts will be up to and including the current page
-        //    int totalRecordCount = 0;
-        //    int totalTake = 0;
-        //    foreach (var recordInfo in recordInfoList)
-        //    {
-
-        //        int currentRecordCount = recordInfo.TotalRecordCount;
-
-        //        // increment the total record count
-        //        totalRecordCount += currentRecordCount;
-
-        //        if (totalRecordCount > startAfter)
-        //        {
-        //            int skip = this.GetSkipCount(totalRecordCount, currentRecordCount, startAfter);
-        //            int take = this.GetTakeCount(currentRecordCount, this.MaximumPageSize, skip, totalTake);
-
-        //            // increment the total take
-        //            totalTake += take;
-
-        //            // Create an instruction to send to the provider
-        //            var instruction = this.urlEntryProviderPagingInstructionFactory.Create(skip, take, provider);
-
-        //            // Pair it up with the last modified date
-        //            var pair = new KeyValuePair<DateTime, IPagingInstruction>(recordInfo.LastModifiedDate, instruction);
-
-        //            result.Add(pair);
-        //        }
-
-        //        // Break early if we have reached the maximum number of records needed
-        //        if (totalTake >= this.MaximumPageSize)
-        //        {
-        //            break;
-        //        }
-        //    }
-
-        //    return result;
-        //}
 
         protected virtual IEnumerable<IXmlSitemapRecordInfo> GetRecordInfoList(string feedName)
         {
