@@ -9,6 +9,6 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Paging
     {
         int Skip { get; }
         int Take { get; }
-        IXmlSitemapProvider UrlEntryProvider { get; }
+        IXmlSitemapProvider XmlSitemapProvider { get; }
     }
 }

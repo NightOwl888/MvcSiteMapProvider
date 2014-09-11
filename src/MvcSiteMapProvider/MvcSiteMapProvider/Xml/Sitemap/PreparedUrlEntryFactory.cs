@@ -57,7 +57,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap
 
                 if (urlEntry.LastModifiedDate > DateTime.MinValue)
                 {
-                    lastModified = urlEntry.LastModifiedDate.ToUniversalTime().ToString(W3CDateFormat);
+                    lastModified = urlEntry.LastModifiedDate.ToString(W3CDateFormat);
                 }
 
                 if (urlEntry.ChangeFrequency != ChangeFrequency.Undefined)

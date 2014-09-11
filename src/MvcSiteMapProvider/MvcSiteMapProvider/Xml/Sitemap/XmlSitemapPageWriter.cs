@@ -41,7 +41,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap
 
                 foreach (var instruction in pagingInstructions)
                 {
-                    instruction.UrlEntryProvider.GetUrlEntries(
+                    instruction.XmlSitemapProvider.GetUrlEntries(
                         this.urlEntryHelperFactory.Create(feedName, instruction.Skip, instruction.Take,
 
                         // Wire up an anonymous callback from the helper class to this one

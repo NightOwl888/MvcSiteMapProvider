@@ -21,17 +21,30 @@ namespace MvcSiteMapProvider.Xml.Sitemap
                 throw new ArgumentNullException("assemblyProvider");
 
             this.assemblyProvider = assemblyProvider;
+
+            // TODO: Work out how to load the internal providers (including dependencies)
+            // and optionally exclude them. They should always be loaded by the XmlSitemapProviderFactory.
+
+            // Load all of the provider types at startup so 
+            // reflection is not used at runtime.
+            this.providerTypes = assemblyProvider.GetAssemblies()
+                .SelectMany(assembly => assembly.GetTypes())
+                .Where(type => typeof(IXmlSitemapProvider).IsAssignableFrom(type) && !type.IsInterface);
         }
         private readonly IAttributeAssemblyProvider assemblyProvider;
+        private readonly IEnumerable<Type> providerTypes;
 
         public virtual IEnumerable<Type> GetTypes(string feedName)
         {
-            var providerInterfaceType = typeof(IXmlSitemapProvider);
+            //var providerInterfaceType = typeof(IXmlSitemapProvider);
 
-            return this.assemblyProvider.GetAssemblies()
-                .SelectMany(assembly => assembly.GetTypes())
-                .Where(type => providerInterfaceType.IsAssignableFrom(type) && !type.IsInterface)
-                .Where(type => this.IncludeInFeed(type, feedName));
+            //return this.assemblyProvider.GetAssemblies()
+            //    .SelectMany(assembly => assembly.GetTypes())
+            //    .Where(type => providerInterfaceType.IsAssignableFrom(type) && !type.IsInterface)
+            //    .Where(type => this.IncludeInFeed(type, feedName));
+
+            return this.providerTypes
+                .Where(providerType => this.IncludeInFeed(providerType, feedName));
         }
 
         protected virtual bool IncludeInFeed(Type providerType, string feedName)

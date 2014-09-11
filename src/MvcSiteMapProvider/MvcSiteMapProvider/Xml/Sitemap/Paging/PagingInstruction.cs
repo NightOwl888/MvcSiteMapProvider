@@ -32,7 +32,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Paging
             get { return this.take; }
         }
 
-        public IXmlSitemapProvider UrlEntryProvider
+        public IXmlSitemapProvider XmlSitemapProvider
         {
             get { return this.xmlSitemapProvider; }
         }

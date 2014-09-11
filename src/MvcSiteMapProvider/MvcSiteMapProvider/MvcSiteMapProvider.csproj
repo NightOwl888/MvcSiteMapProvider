@@ -284,6 +284,7 @@
     <Compile Include="Xml\Sitemap\Index\IXmlSitemapIndexWriter.cs" />
     <Compile Include="Xml\Sitemap\Index\IXmlSitemapIndexWriterFactory.cs" />
     <Compile Include="Xml\Sitemap\Paging\IManualPagingInstruction.cs" />
+    <Compile Include="Xml\Sitemap\Paging\IXmlSitemapPager.cs" />
     <Compile Include="Xml\Sitemap\Paging\IXmlSitemapPagingStrategy.cs" />
     <Compile Include="Xml\Sitemap\ISitemapService.cs" />
     <Compile Include="Xml\Sitemap\IXmlSitemapWriterFactory.cs" />
@@ -297,6 +298,7 @@
     <Compile Include="Xml\Sitemap\Paging\ManualPagingInstruction.cs" />
     <Compile Include="Xml\Sitemap\Index\XmlSitemapIndexWriter.cs" />
     <Compile Include="Xml\Sitemap\Index\XmlSitemapIndexWriterFactory.cs" />
+    <Compile Include="Xml\Sitemap\Paging\XmlSitemapPager.cs" />
     <Compile Include="Xml\Sitemap\PreparedUrlEntry.cs" />
     <Compile Include="Xml\Sitemap\PreparedUrlEntryFactory.cs" />
     <Compile Include="Xml\Sitemap\XmlSitemapFeedFilterAttribute.cs" />
