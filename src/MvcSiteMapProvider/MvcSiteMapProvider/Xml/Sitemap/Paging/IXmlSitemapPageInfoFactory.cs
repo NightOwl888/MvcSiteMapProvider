@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MvcSiteMapProvider.Xml.Sitemap
+namespace MvcSiteMapProvider.Xml.Sitemap.Paging
 {
     public interface IXmlSitemapPageInfoFactory
     {

@@ -21,8 +21,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap.Paging
         private Mock<IXmlSitemapProvider> xmlSitemapProvider3 = null;
         private Mock<IXmlSitemapProvider> xmlSitemapProvider4 = null;
         private Mock<IXmlSitemapProvider> xmlSitemapProvider5 = null;
-        private Mock<IXmlSitemapRecordInfoHelper> xmlSitemapRecordInfoHelper = null;
-        private Mock<IXmlSitemapRecordInfoHelperFactory> xmlSitemapRecordInfoHelperFactory = null;
+        private Mock<IXmlSitemapPageDataFactory> xmlSitemapPageDataFactory = null;
         private Mock<IXmlSitemapPageInfoFactory> xmlSitemapPageInfoFactory = null;
 
         [SetUp]
@@ -34,8 +33,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap.Paging
             xmlSitemapProvider3 = new Mock<IXmlSitemapProvider>();
             xmlSitemapProvider4 = new Mock<IXmlSitemapProvider>();
             xmlSitemapProvider5 = new Mock<IXmlSitemapProvider>();
-            xmlSitemapRecordInfoHelper = new Mock<IXmlSitemapRecordInfoHelper>();
-            xmlSitemapRecordInfoHelperFactory = new Mock<IXmlSitemapRecordInfoHelperFactory>();
+            xmlSitemapPageDataFactory = new Mock<IXmlSitemapPageDataFactory>();
             xmlSitemapPageInfoFactory = new Mock<IXmlSitemapPageInfoFactory>();
 
             this.pagingInstructionFactory
@@ -60,18 +58,20 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap.Paging
             xmlSitemapProvider3 = null;
             xmlSitemapProvider4 = null;
             xmlSitemapProvider5 = null;
-            xmlSitemapRecordInfoHelper = null;
-            xmlSitemapRecordInfoHelperFactory = null;
+            xmlSitemapPageDataFactory = null;
             xmlSitemapPageInfoFactory = null;
         }
 
 
         private IXmlSitemapPager NewXmlSitemapPager()
         {
-            return new XmlSitemapPager(this.pagingInstructionFactory.Object, this.xmlSitemapPageInfoFactory.Object);
+            return new XmlSitemapPager(
+                this.pagingInstructionFactory.Object, 
+                this.xmlSitemapPageInfoFactory.Object, 
+                this.xmlSitemapPageDataFactory.Object);
         }
 
-        // 3 providers with 100,000 records each, 35,000 maximum per page
+        // 3 providers with 100,000 records each, 40,000 maximum per page
         private IEnumerable<IXmlSitemapProvider> GetProviders_TestCase1()
         {
             xmlSitemapProvider1.Setup(x => x.GetTotalRecordCount(It.IsAny<string>())).Returns(100000);
@@ -90,7 +90,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap.Paging
             };
         }
 
-        // 5 providers with 25,000 records each, 35,000 maximum per page
+        // 5 providers with 25,000 records each, 40,000 maximum per page
         private IEnumerable<IXmlSitemapProvider> GetProviders_TestCase2()
         {
             xmlSitemapProvider1.Setup(x => x.GetTotalRecordCount(It.IsAny<string>())).Returns(25000);
@@ -122,7 +122,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap.Paging
         #region Tests
 
         [Test]
-        public void GetPagingInstructions_WithPage3AndTestCase1_ShouldReturn2InstructionWith_Skip70000AndTake30000_Skip0AndTake5000()
+        public void GetPagingInstructions_WithPage3AndTestCase1_ShouldReturn2InstructionWith_Skip80000AndTake20000_Skip0AndTake20000()
         {
             // arrange
             var providers = this.GetProviders_TestCase1();
@@ -137,11 +137,11 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap.Paging
             Assert.AreEqual(expectedCount, actualCount);
 
             var actualSkip1 = result.ElementAt(0).Skip;
-            var expectedSkip1 = 70000;
+            var expectedSkip1 = 80000;
             Assert.AreEqual(expectedSkip1, actualSkip1);
 
             var actualTake1 = result.ElementAt(0).Take;
-            var expectedTake1 = 30000;
+            var expectedTake1 = 20000;
             Assert.AreEqual(expectedTake1, actualTake1);
 
             var actualSkip2 = result.ElementAt(1).Skip;
@@ -149,12 +149,12 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap.Paging
             Assert.AreEqual(expectedSkip2, actualSkip2);
 
             var actualTake2 = result.ElementAt(1).Take;
-            var expectedTake2 = 5000;
+            var expectedTake2 = 20000;
             Assert.AreEqual(expectedTake2, actualTake2);
         }
 
         [Test]
-        public void GetPagingInstructions_WithPage4AndTestCase1_ShouldReturn1InstructionsWith_Skip5000AndTake35000()
+        public void GetPagingInstructions_WithPage4AndTestCase1_ShouldReturn1InstructionsWith_Skip20000AndTake40000()
         {
             // arrange
             var providers = this.GetProviders_TestCase1();
@@ -169,16 +169,16 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap.Paging
             Assert.AreEqual(expectedCount, actualCount);
 
             var actualSkip1 = result.ElementAt(0).Skip;
-            var expectedSkip1 = 5000;
+            var expectedSkip1 = 20000;
             Assert.AreEqual(expectedSkip1, actualSkip1);
 
             var actualTake1 = result.ElementAt(0).Take;
-            var expectedTake1 = 35000;
+            var expectedTake1 = 40000;
             Assert.AreEqual(expectedTake1, actualTake1);
         }
 
         [Test]
-        public void GetPagingInstructions_WithPage2AndTestCase2_ShouldReturn2InstructionsWith_Skip10000AndTake15000_Skip0AndTake20000()
+        public void GetPagingInstructions_WithPage2AndTestCase2_ShouldReturn2InstructionsWith_Skip15000AndTake10000_Skip0AndTake25000_Skip0AndTake5000()
         {
             // arrange
             var providers = this.GetProviders_TestCase2();
@@ -189,47 +189,15 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap.Paging
 
             // assert
             var actualCount = result.Count();
-            var expectedCount = 2;
-            Assert.AreEqual(expectedCount, actualCount);
-
-            var actualSkip1 = result.ElementAt(0).Skip;
-            var expectedSkip1 = 10000;
-            Assert.AreEqual(expectedSkip1, actualSkip1);
-
-            var actualTake1 = result.ElementAt(0).Take;
-            var expectedTake1 = 15000;
-            Assert.AreEqual(expectedTake1, actualTake1);
-
-            var actualSkip2 = result.ElementAt(1).Skip;
-            var expectedSkip2 = 0;
-            Assert.AreEqual(expectedSkip2, actualSkip2);
-
-            var actualTake2 = result.ElementAt(1).Take;
-            var expectedTake2 = 20000;
-            Assert.AreEqual(expectedTake2, actualTake2);
-        }
-
-        [Test]
-        public void GetPagingInstructions_WithPage3AndTestCase2_ShouldReturn3InstructionsWith_Skip20000AndTake5000_Skip0AndTake25000_Skip0AndTake5000()
-        {
-            // arrange
-            var providers = this.GetProviders_TestCase2();
-            var target = this.NewXmlSitemapPager();
-
-            // act
-            var result = target.GetPagingInstructions(providers, "default", 3);
-
-            // assert
-            var actualCount = result.Count();
             var expectedCount = 3;
             Assert.AreEqual(expectedCount, actualCount);
 
             var actualSkip1 = result.ElementAt(0).Skip;
-            var expectedSkip1 = 20000;
+            var expectedSkip1 = 15000;
             Assert.AreEqual(expectedSkip1, actualSkip1);
 
             var actualTake1 = result.ElementAt(0).Take;
-            var expectedTake1 = 5000;
+            var expectedTake1 = 10000;
             Assert.AreEqual(expectedTake1, actualTake1);
 
             var actualSkip2 = result.ElementAt(1).Skip;
@@ -247,6 +215,38 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap.Paging
             var actualTake3 = result.ElementAt(2).Take;
             var expectedTake3 = 5000;
             Assert.AreEqual(expectedTake3, actualTake3);
+        }
+
+        [Test]
+        public void GetPagingInstructions_WithPage3AndTestCase2_ShouldReturn3InstructionsWith_Skip5000AndTake20000_Skip0AndTake20000()
+        {
+            // arrange
+            var providers = this.GetProviders_TestCase2();
+            var target = this.NewXmlSitemapPager();
+
+            // act
+            var result = target.GetPagingInstructions(providers, "default", 3);
+
+            // assert
+            var actualCount = result.Count();
+            var expectedCount = 2;
+            Assert.AreEqual(expectedCount, actualCount);
+
+            var actualSkip1 = result.ElementAt(0).Skip;
+            var expectedSkip1 = 5000;
+            Assert.AreEqual(expectedSkip1, actualSkip1);
+
+            var actualTake1 = result.ElementAt(0).Take;
+            var expectedTake1 = 20000;
+            Assert.AreEqual(expectedTake1, actualTake1);
+
+            var actualSkip2 = result.ElementAt(1).Skip;
+            var expectedSkip2 = 0;
+            Assert.AreEqual(expectedSkip2, actualSkip2);
+
+            var actualTake2 = result.ElementAt(1).Take;
+            var expectedTake2 = 20000;
+            Assert.AreEqual(expectedTake2, actualTake2);
         }
 
         #endregion

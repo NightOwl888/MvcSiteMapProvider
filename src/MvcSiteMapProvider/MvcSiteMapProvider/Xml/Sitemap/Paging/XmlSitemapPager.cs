@@ -10,28 +10,33 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Paging
     {
         public XmlSitemapPager(
             IPagingInstructionFactory pagingInstructionFactory,
-            IXmlSitemapPageInfoFactory xmlSitemapPageInfoFactory
+            IXmlSitemapPageInfoFactory xmlSitemapPageInfoFactory,
+            IXmlSitemapPageDataFactory xmlSitemapPageDataFactory
             )
         {
             if (pagingInstructionFactory == null)
                 throw new ArgumentNullException("pagingInstructionFactory");
             if (xmlSitemapPageInfoFactory == null)
                 throw new ArgumentNullException("xmlSitemapPageInfoFactory");
+            if (xmlSitemapPageDataFactory == null)
+                throw new ArgumentNullException("xmlSitemapPageDataFactory");
 
             this.pagingInstructionFactory = pagingInstructionFactory;
             this.xmlSitemapPageInfoFactory = xmlSitemapPageInfoFactory;
+            this.xmlSitemapPageDataFactory = xmlSitemapPageDataFactory;
 
             // This number should be 50,000 in theory, however because the Sitemap protocol
             // states that the maximum file size is 50 MB and there is no reasonable way to
-            // calculate the size during streaming, an average cap of 35,000 has been chosen.
-            this.MaximumPageSize = 35000;
+            // calculate the size during streaming, an average cap of 40,000 has been chosen.
+            this.MaximumPageSize = 40000;
         }
         private readonly IPagingInstructionFactory pagingInstructionFactory;
         private readonly IXmlSitemapPageInfoFactory xmlSitemapPageInfoFactory;
+        private readonly IXmlSitemapPageDataFactory xmlSitemapPageDataFactory;
 
         public int MaximumPageSize { get; set; }
 
-        public IEnumerable<IXmlSitemapPageInfo> GetPageInfo(IEnumerable<IXmlSitemapProvider> providers, string feedName)
+        public IXmlSitemapPageData GetPageData(IEnumerable<IXmlSitemapProvider> providers, string feedName)
         {
             int totalRecordCount = 0;
 
@@ -45,13 +50,15 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Paging
             // Create an array from 1 to x
             var pageNumbers = Enumerable.Range(1, pageCount);
 
-            var result = new List<IXmlSitemapPageInfo>();
+            var pages = new List<IXmlSitemapPageInfo>();
 
             foreach (var page in pageNumbers)
             {
                 var lastModifiedDate = this.GetLastModifiedDate(providers, feedName, page);
-                result.Add(this.xmlSitemapPageInfoFactory.Create(page, lastModifiedDate));
+                pages.Add(this.xmlSitemapPageInfoFactory.Create(page, lastModifiedDate));
             }
+
+            var result = this.xmlSitemapPageDataFactory.Create(totalRecordCount, pages);
 
             return result;
         }

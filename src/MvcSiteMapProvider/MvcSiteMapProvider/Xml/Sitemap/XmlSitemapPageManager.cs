@@ -39,14 +39,13 @@ namespace MvcSiteMapProvider.Xml.Sitemap
 
         // TODO: We should request cache the page counts so this doesn't 
         // result in multiple database calls, multiple times per request.
-        public IEnumerable<int> GetPageNumbers(string feedName)
+        public IXmlSitemapPageData GetPageData(string feedName)
         {
-            IEnumerable<int> result = new List<int>();
+            IXmlSitemapPageData result = null;
             var providers = this.xmlSitemapProviderStrategy.GetProviders(feedName);
             try
             {
-                result = this.xmlSitemapPager.GetPageInfo(providers, feedName)
-                    .Select(x => x.Page);
+                result = this.xmlSitemapPager.GetPageData(providers, feedName);
             }
             finally
             {
@@ -71,21 +70,26 @@ namespace MvcSiteMapProvider.Xml.Sitemap
             var providers = this.xmlSitemapProviderStrategy.GetProviders(feedName);
             try
             {
-                // TODO: Need to check total page count for all providers
-                // if it is 0, need to return false here (or throw an exception).
+                var pageData = this.xmlSitemapPager.GetPageData(providers, feedName);
 
-                var pageInfo = this.xmlSitemapPager.GetPageInfo(providers, feedName);
-                bool isIndexPageRequest = page == 0 && pageInfo.Count() > 1;
+                // Check total page count for all providers
+                // if it is 0, return false.
+                if (pageData.TotalRecordCount == 0)
+                {
+                    return false;
+                }
+
+                bool isIndexPageRequest = page == 0 && pageData.Pages.Count() > 1;
 
                 if (isIndexPageRequest)
                 {
-                    this.xmlSitemapIndexPageWriter.WritePage(writer, feedName, pageInfo);
+                    this.xmlSitemapIndexPageWriter.WritePage(writer, feedName, pageData.Pages);
                 }
                 else
                 {
                     var indexCorrectedPage = (page == 0) ? 1 : page;
 
-                    if (!pageInfo.Select(x => x.Page).Contains(indexCorrectedPage))
+                    if (!pageData.Pages.Select(x => x.Page).Contains(indexCorrectedPage))
                     {
                         // Request was for an invalid page.
                         // We return false so it can be processed as a 404 not found as appropriate.

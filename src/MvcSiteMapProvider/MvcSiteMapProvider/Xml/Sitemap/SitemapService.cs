@@ -63,22 +63,22 @@ namespace MvcSiteMapProvider.Xml.Sitemap
             var feedName = "default";
             var rootPageTemplate = Path.Combine(this.BaseDirectory, this.xmlSitemapPageNameProvider.DefaultFeedRootPageName);
             var pageNameTemplate = Path.Combine(this.BaseDirectory, this.xmlSitemapPageNameProvider.DefaultFeedPageName);
-            var pageNumbers = this.xmlSitemapPageManager.GetPageNumbers(feedName);
+            var pageData = this.xmlSitemapPageManager.GetPageData(feedName);
 
-            if (pageNumbers.Count() > 1)
+            if (pageData.Pages.Count() > 1)
             {
                 // TODO: Create factory to inject file stream
 
                 // write the index
                 this.GenerateFirstPageFile(rootPageTemplate.Replace("{page}", "0"), feedName);
 
-                foreach (var page in pageNumbers)
+                foreach (var info in pageData.Pages)
                 {
-                    using (var stream = new FileStream(pageNameTemplate.Replace("{page}", page.ToString()), FileMode.Create))
+                    using (var stream = new FileStream(pageNameTemplate.Replace("{page}", info.Page.ToString()), FileMode.Create))
                     {
                         using (var writer = XmlWriter.Create(stream))
                         {
-                            this.xmlSitemapPageManager.WritePage(writer, feedName, page);
+                            this.xmlSitemapPageManager.WritePage(writer, feedName, info.Page);
                             writer.Flush();
                         }
                     }
