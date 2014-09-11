@@ -268,6 +268,7 @@
     <Compile Include="Xml\Sitemap\IXmlSitemapFeedPageNameProvider.cs" />
     <Compile Include="Xml\Sitemap\IXmlSitemapPageWriter.cs" />
     <Compile Include="Xml\Sitemap\IXmlSitemapProviderFactory.cs" />
+    <Compile Include="Xml\Sitemap\IXmlSitemapProviderTypeStrategy.cs" />
     <Compile Include="Xml\Sitemap\IXmlSitemapRecordInfo.cs" />
     <Compile Include="Xml\Sitemap\IXmlSitemapRecordInfoFactory.cs" />
     <Compile Include="Xml\Sitemap\IXmlSitemapRecordInfoHelper.cs" />
@@ -306,6 +307,7 @@
     <Compile Include="Xml\Sitemap\XmlSitemapPageWriter.cs" />
     <Compile Include="Xml\Sitemap\SitemapService.cs" />
     <Compile Include="Xml\Sitemap\XmlSitemapProviderFactory.cs" />
+    <Compile Include="Xml\Sitemap\XmlSitemapProviderTypeStrategy.cs" />
     <Compile Include="Xml\Sitemap\XmlSitemapRecordInfo.cs" />
     <Compile Include="Xml\Sitemap\XmlSitemapRecordInfoFactory.cs" />
     <Compile Include="Xml\Sitemap\XmlSitemapRecordInfoHelper.cs" />

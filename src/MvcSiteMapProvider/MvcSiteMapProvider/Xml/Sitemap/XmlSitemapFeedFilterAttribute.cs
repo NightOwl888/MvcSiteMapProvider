@@ -5,6 +5,7 @@ using System.Text;
 
 namespace MvcSiteMapProvider.Xml.Sitemap
 {
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class XmlSitemapFeedFilterAttribute
         : Attribute
     {
@@ -16,6 +17,6 @@ namespace MvcSiteMapProvider.Xml.Sitemap
         }
         private readonly string feedName;
 
-        public string FilterString { get { return this.feedName; } }
+        public string FeedName { get { return this.feedName; } }
     }
 }
