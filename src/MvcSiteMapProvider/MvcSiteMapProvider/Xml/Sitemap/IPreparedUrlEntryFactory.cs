@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using MvcSiteMapProvider.Globalization;
 
 namespace MvcSiteMapProvider.Xml.Sitemap
 {
     public interface IPreparedUrlEntryFactory
     {
+        IXmlSitemapUrlResolver UrlResolver { get; }
+        ICultureContextFactory CultureContextFactory { get; }
         IPreparedUrlEntry Create(IUrlEntry urlEntry);
     }
 }

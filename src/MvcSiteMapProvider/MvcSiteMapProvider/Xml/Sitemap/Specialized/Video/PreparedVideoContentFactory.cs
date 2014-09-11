@@ -7,13 +7,12 @@ using MvcSiteMapProvider.Globalization;
 namespace MvcSiteMapProvider.Xml.Sitemap.Specialized.Video
 {
     public class PreparedVideoContentFactory
-        : IPreparedSpecializedContentFactory
+        : IPreparedVideoContentFactory
     {
         private const string W3CDateFormat = "yyyy-MM-ddTHH:mm:ss.fffffffzzz";
 
-        public IPreparedSpecializedContent Create(ISpecializedContent specializedContent, IXmlSitemapUrlResolver urlResolver, ICultureContext cultureContext)
+        public IPreparedVideoContent Create(IVideoContent videoContent, IXmlSitemapUrlResolver urlResolver, ICultureContext cultureContext)
         {
-            var videoContent = specializedContent as IVideoContent;
             if (videoContent != null)
             {
                 // Required fields
@@ -163,9 +162,9 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized.Video
             return null;
         }
 
-        public void Release(IPreparedSpecializedContent preparedSpecializedContent)
+        public void Release(IPreparedVideoContent preparedVideoContent)
         {
-            var disposable = preparedSpecializedContent as IDisposable;
+            var disposable = preparedVideoContent as IDisposable;
             if (disposable != null)
             {
                 disposable.Dispose();

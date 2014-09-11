@@ -10,17 +10,24 @@ namespace MvcSiteMapProvider.Xml.Sitemap
         : IXmlSitemapWriterFactory
     {
         public XmlSitemapWriterFactory(
-            ISpecializedContentXmlWriterFactoryStrategy specializedContentXmlWriterFactoryStrategy)
+            ISpecializedContentXmlWriterFactoryStrategy specializedContentXmlWriterFactoryStrategy,
+            IPreparedUrlEntryFactory preparedUrlEntryFactory
+            )
         {
             if (specializedContentXmlWriterFactoryStrategy == null)
                 throw new ArgumentNullException("specializedContentXmlWriterFactoryStrategy");
+            if (preparedUrlEntryFactory == null)
+                throw new ArgumentNullException("preparedUrlEntryFactory");
+
             this.specializedContentXmlWriterFactoryStrategy = specializedContentXmlWriterFactoryStrategy;
+            this.preparedUrlEntryFactory = preparedUrlEntryFactory;
         }
         private readonly ISpecializedContentXmlWriterFactoryStrategy specializedContentXmlWriterFactoryStrategy;
+        private readonly IPreparedUrlEntryFactory preparedUrlEntryFactory;
 
         public IXmlSitemapWriter Create(XmlWriter writer)
         {
-            return new XmlSitemapWriter(writer, this.specializedContentXmlWriterFactoryStrategy);
+            return new XmlSitemapWriter(writer, this.specializedContentXmlWriterFactoryStrategy, this.preparedUrlEntryFactory);
         }
 
         public void Release(IXmlSitemapWriter xmlSitemapWriter)

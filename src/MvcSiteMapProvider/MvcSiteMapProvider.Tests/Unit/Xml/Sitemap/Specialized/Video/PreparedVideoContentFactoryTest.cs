@@ -60,7 +60,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap.Specialized.Video
             this.videoContent.Setup(x => x.Prices).Returns(new List<IVideoContentPrice>());
         }
 
-        private IPreparedSpecializedContentFactory NewPreparedVideoContentFactory()
+        private IPreparedVideoContentFactory NewPreparedVideoContentFactory()
         {
             return new PreparedVideoContentFactory();
         }

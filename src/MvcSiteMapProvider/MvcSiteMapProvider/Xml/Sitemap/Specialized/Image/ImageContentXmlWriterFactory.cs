@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Xml;
 
 namespace MvcSiteMapProvider.Xml.Sitemap.Specialized.Image
@@ -9,15 +6,22 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized.Image
     public class ImageContentXmlWriterFactory
         : ISpecializedContentXmlWriterFactory
     {
-        public ImageContentXmlWriterFactory()
+        public ImageContentXmlWriterFactory(
+            IPreparedImageContentFactory preparedImageContentFactory
+            )
         {
+            if (preparedImageContentFactory == null)
+                throw new ArgumentNullException("preparedImageContentFactory");
+
+            this.preparedImageContentFactory = preparedImageContentFactory;
             this.syncRoot = new object();
         }
+        private readonly IPreparedImageContentFactory preparedImageContentFactory;
         private readonly object syncRoot;
 
         public ISpecializedContentXmlWriter Create(XmlWriter writer)
         {
-            return new ImageContentXmlWriter(writer);
+            return new ImageContentXmlWriter(writer, this.preparedImageContentFactory);
         }
 
         public void Release(ISpecializedContentXmlWriter specializedContentXmlWriter)

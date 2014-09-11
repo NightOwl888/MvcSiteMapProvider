@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Xml;
+using MvcSiteMapProvider.Globalization;
 
 namespace MvcSiteMapProvider.Xml.Sitemap.Specialized.Video
 {
@@ -8,25 +9,36 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized.Video
         : ISpecializedContentXmlWriter
     {
         public VideoContentXmlWriter(
-            XmlWriter writer)
+            XmlWriter writer,
+            IPreparedVideoContentFactory preparedVideoContentFactory
+            )
         {
             if (writer == null)
                 throw new ArgumentNullException("writer");
+            if (preparedVideoContentFactory == null)
+                throw new ArgumentNullException("preparedVideoContentFactory");
+            
             this.writer = writer;
+            this.preparedVideoContentFactory = preparedVideoContentFactory;
         }
         private readonly XmlWriter writer;
+        private readonly IPreparedVideoContentFactory preparedVideoContentFactory;
 
         public void WriteNamespace()
         {
             this.writer.WriteAttributeString("xmlns", "video", null, "http://www.google.com/schemas/sitemap-video/1.1");
         }
 
-        public virtual void WriteContent(IPreparedSpecializedContent content)
+        public virtual void WriteContent(ISpecializedContent content, IXmlSitemapUrlResolver urlResolver, ICultureContext cultureContext)
         {
-            var videoContent = content as IPreparedVideoContent;
+            var videoContent = content as IVideoContent;
             if (videoContent != null)
             {
-                this.WriteVideo(videoContent);
+                var preparedVideoContent = this.preparedVideoContentFactory.Create(videoContent, urlResolver, cultureContext);
+                if (preparedVideoContent != null)
+                {
+                    this.WriteVideo(preparedVideoContent);
+                }
             }
         }
 

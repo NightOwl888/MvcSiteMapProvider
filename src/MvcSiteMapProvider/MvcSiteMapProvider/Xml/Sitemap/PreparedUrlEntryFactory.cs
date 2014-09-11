@@ -11,45 +11,32 @@ namespace MvcSiteMapProvider.Xml.Sitemap
         : IPreparedUrlEntryFactory
     {
         public PreparedUrlEntryFactory(
-            IPreparedSpecializedContentFactoryStrategy preparedSpecializedContentFactoryStrategy,
             IXmlSitemapUrlResolver urlResolver,
             ICultureContextFactory cultureContextFactory
             )
         {
-            if (preparedSpecializedContentFactoryStrategy == null)
-                throw new ArgumentNullException("preparedSpecializedContentFactoryStrategy");
             if (urlResolver == null)
                 throw new ArgumentNullException("urlResolver");
             if (cultureContextFactory == null)
                 throw new ArgumentNullException("cultureContextFactory");
 
-            this.preparedSpecializedContentFactoryStrategy = preparedSpecializedContentFactoryStrategy;
             this.urlResolver = urlResolver;
             this.cultureContextFactory = cultureContextFactory;
         }
-        private readonly IPreparedSpecializedContentFactoryStrategy preparedSpecializedContentFactoryStrategy;
         private readonly IXmlSitemapUrlResolver urlResolver;
         private readonly ICultureContextFactory cultureContextFactory;
 
         private const string W3CDateFormat = "yyyy-MM-ddTHH:mm:ss.fffffffzzz";
+
+        public IXmlSitemapUrlResolver UrlResolver { get { return this.urlResolver; } }
+
+        public ICultureContextFactory CultureContextFactory { get { return this.cultureContextFactory; } }
 
         public IPreparedUrlEntry Create(IUrlEntry urlEntry)
         {
             // Prepare the objects (formatting and URLs) in the invariant culture.
             using (var cultureContext = this.cultureContextFactory.CreateInvariant())
             {
-                var preparedSpecializedContents = new List<IPreparedSpecializedContent>();
-
-                foreach (var content in urlEntry.SpecializedContent)
-                {
-                    var contentFactory = this.preparedSpecializedContentFactoryStrategy.GetFactory(content.GetType());
-                    var preparedContent = contentFactory.Create(content, this.urlResolver, cultureContext);
-                    if (preparedContent != null)
-                    {
-                        preparedSpecializedContents.Add(preparedContent);
-                    }
-                }
-
                 string location = this.urlResolver.ResolveUrlToAbsolute(urlEntry.Url, urlEntry.Protocol, urlEntry.HostName);
                 string lastModified = string.Empty;
                 string changeFrequency = string.Empty;
@@ -70,7 +57,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap
                     priority = string.Format("{0:0.0}", ((double)urlEntry.UpdatePriority / 100));
                 }
 
-                return new PreparedUrlEntry(location, lastModified, changeFrequency, priority, preparedSpecializedContents);
+                return new PreparedUrlEntry(location, lastModified, changeFrequency, priority);
             }
         }
     }

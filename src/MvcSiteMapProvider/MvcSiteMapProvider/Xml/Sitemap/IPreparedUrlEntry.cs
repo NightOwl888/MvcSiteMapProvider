@@ -10,7 +10,5 @@ namespace MvcSiteMapProvider.Xml.Sitemap
         string LastModified { get; }
         string ChangeFrequency { get; }
         string Priority { get; }
-
-        IEnumerable<IPreparedSpecializedContent> SpecializedContents { get; }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml;
+using MvcSiteMapProvider.Globalization;
 
 namespace MvcSiteMapProvider.Xml.Sitemap.Specialized.Image
 {
@@ -10,29 +11,40 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized.Image
         : ISpecializedContentXmlWriter
     {
         public ImageContentXmlWriter(
-            XmlWriter writer)
+            XmlWriter writer,
+            IPreparedImageContentFactory preparedImageContentFactory
+            )
         {
             if (writer == null)
                 throw new ArgumentNullException("writer");
+            if (preparedImageContentFactory == null)
+                throw new ArgumentNullException("preparedImageContentFactory");
+
             this.writer = writer;
+            this.preparedImageContentFactory = preparedImageContentFactory;
         }
         private readonly XmlWriter writer;
+        private readonly IPreparedImageContentFactory preparedImageContentFactory;
 
         public void WriteNamespace()
         {
             this.writer.WriteAttributeString("xmlns", "image", null, "http://www.google.com/schemas/sitemap-image/1.1");
         }
 
-        public void WriteContent(IPreparedSpecializedContent content)
+        public void WriteContent(ISpecializedContent content, IXmlSitemapUrlResolver urlResolver, ICultureContext cultureContext)
         {
-            var imageContent = content as IPreparedImageContent;
+            var imageContent = content as IImageContent;
             if (imageContent != null)
             {
-                this.WriteImage(imageContent);
+                var preparedImageContent = this.preparedImageContentFactory.Create(imageContent, urlResolver, cultureContext);
+                if (preparedImageContent != null)
+                {
+                    this.WriteImage(preparedImageContent);
+                }
             }
         }
 
-        private void WriteImage(IPreparedImageContent content)
+        protected virtual void WriteImage(IPreparedImageContent content)
         {
             string prefix = "image";
             string ns = null;

@@ -6,6 +6,6 @@ namespace MvcSiteMapProvider.Xml.Sitemap
     {
         void WriteStartDocument();
         void WriteEndDocument();
-        void WriteEntry(IPreparedUrlEntry urlEntry);
+        void WriteEntry(IUrlEntry urlEntry);
     }
 }

@@ -11,17 +11,24 @@ namespace MvcSiteMapProvider.Xml.Sitemap
     {
         public XmlSitemapWriter(
             XmlWriter writer,
-            ISpecializedContentXmlWriterFactoryStrategy specializedContentXmlWriterFactoryStrategy)
+            ISpecializedContentXmlWriterFactoryStrategy specializedContentXmlWriterFactoryStrategy,
+            IPreparedUrlEntryFactory preparedUrlEntryFactory
+            )
         {
             if (writer == null)
                 throw new ArgumentNullException("writer");
             if (specializedContentXmlWriterFactoryStrategy == null)
                 throw new ArgumentNullException("specializedContentXmlWriterFactoryStrategy");
+            if (preparedUrlEntryFactory == null)
+                throw new ArgumentNullException("preparedUrlEntryFactory");
+
             this.writer = writer;
             this.specializedContentXmlWriterFactoryStrategy = specializedContentXmlWriterFactoryStrategy;
+            this.preparedUrlEntryFactory = preparedUrlEntryFactory;
         }
         private readonly XmlWriter writer;
         private readonly ISpecializedContentXmlWriterFactoryStrategy specializedContentXmlWriterFactoryStrategy;
+        private readonly IPreparedUrlEntryFactory preparedUrlEntryFactory;
         
         public virtual void WriteStartDocument()
         {
@@ -56,36 +63,40 @@ namespace MvcSiteMapProvider.Xml.Sitemap
             writer.WriteEndDocument();
         }
 
-        public virtual void WriteEntry(IPreparedUrlEntry urlEntry)
+        public virtual void WriteEntry(IUrlEntry urlEntry)
         {
+            // Run any business logic that needs to be executed to prepare
+            // the data for writing.
+            var prepared = this.preparedUrlEntryFactory.Create(urlEntry);
+
             writer.WriteStartElement("url");
 
-            writer.WriteElementString("loc", urlEntry.Location);
+            writer.WriteElementString("loc", prepared.Location);
 
-            if (!string.IsNullOrEmpty(urlEntry.LastModified))
+            if (!string.IsNullOrEmpty(prepared.LastModified))
             {
-                writer.WriteElementString("lastmod", urlEntry.LastModified);
+                writer.WriteElementString("lastmod", prepared.LastModified);
             }
 
-            if (!string.IsNullOrEmpty(urlEntry.ChangeFrequency))
+            if (!string.IsNullOrEmpty(prepared.ChangeFrequency))
             {
-                writer.WriteElementString("changefreq", urlEntry.ChangeFrequency);
+                writer.WriteElementString("changefreq", prepared.ChangeFrequency);
             }
 
-            if (!string.IsNullOrEmpty(urlEntry.Priority))
+            if (!string.IsNullOrEmpty(prepared.Priority))
             {
-                writer.WriteElementString("priority", urlEntry.Priority);
+                writer.WriteElementString("priority", prepared.Priority);
             }
 
-            if (urlEntry.SpecializedContents != null)
+            if (urlEntry.SpecializedContent != null)
             {
-                this.WriteSpecializedContents(urlEntry.SpecializedContents);
+                this.WriteSpecializedContents(urlEntry.SpecializedContent);
             }
 
             writer.WriteEndElement(); // url
         }
 
-        protected virtual void WriteSpecializedContents(IEnumerable<IPreparedSpecializedContent> specializedContents)
+        protected virtual void WriteSpecializedContents(IEnumerable<ISpecializedContent> specializedContents)
         {
             var contentTypes = this.specializedContentXmlWriterFactoryStrategy.GetRegisteredContentTypes();
 
@@ -115,9 +126,13 @@ namespace MvcSiteMapProvider.Xml.Sitemap
                     var xmlWriter = xmlWriterFactory.Create(this.writer);
                     try
                     {
-                        foreach (var content in group.Contents)
+                        // Use the invariant context to write the specialized content.
+                        using (var cultureContext = this.preparedUrlEntryFactory.CultureContextFactory.CreateInvariant())
                         {
-                            xmlWriter.WriteContent(content.Instance);
+                            foreach (var content in group.Contents)
+                            {
+                                xmlWriter.WriteContent(content.Instance, this.preparedUrlEntryFactory.UrlResolver, cultureContext);
+                            }
                         }
                     }
                     finally

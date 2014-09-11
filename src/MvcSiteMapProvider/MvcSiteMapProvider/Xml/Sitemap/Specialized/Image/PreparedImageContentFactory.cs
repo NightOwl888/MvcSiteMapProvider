@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using MvcSiteMapProvider.Globalization;
 
 namespace MvcSiteMapProvider.Xml.Sitemap.Specialized.Image
 {
     public class PreparedImageContentFactory
-        : IPreparedSpecializedContentFactory
+        : IPreparedImageContentFactory
     {
-        public IPreparedSpecializedContent Create(ISpecializedContent specializedContent, IXmlSitemapUrlResolver urlResolver, ICultureContext cultureContext)
+        public IPreparedImageContent Create(IImageContent imageContent, IXmlSitemapUrlResolver urlResolver, ICultureContext cultureContext)
         {
-            var imageContent = specializedContent as IImageContent;
             if (imageContent != null)
             {
                 string location = urlResolver.ResolveUrlToAbsolute(imageContent.Url, imageContent.Protocol, imageContent.HostName);
@@ -26,18 +22,13 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized.Image
             return null;
         }
 
-        public void Release(IPreparedSpecializedContent preparedSpecializedContent)
+        public void Release(IPreparedImageContent preparedImageContent)
         {
-            var disposable = preparedSpecializedContent as IDisposable;
+            var disposable = preparedImageContent as IDisposable;
             if (disposable != null)
             {
                 disposable.Dispose();
             }
-        }
-
-        public Type ContentType
-        {
-            get { return typeof(IImageContent); }
         }
     }
 }

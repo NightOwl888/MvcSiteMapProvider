@@ -13,25 +13,20 @@ namespace MvcSiteMapProvider.Xml.Sitemap
     {
         public XmlSitemapPageWriter(
             IUrlEntryHelperFactory urlEntryHelperFactory,
-            IXmlSitemapWriterFactory xmlSitemapWriterFactory,
-            IPreparedUrlEntryFactory preparedUrlEntryFactory
+            IXmlSitemapWriterFactory xmlSitemapWriterFactory
             )
         {
             if (urlEntryHelperFactory == null)
                 throw new ArgumentNullException("urlEntryHelperFactory");
             if (xmlSitemapWriterFactory == null)
                 throw new ArgumentNullException("xmlSitemapWriterFactory");
-            if (preparedUrlEntryFactory == null)
-                throw new ArgumentNullException("preparedUrlEntryFactory");
-
+            
             this.urlEntryHelperFactory = urlEntryHelperFactory;
             this.xmlSitemapWriterFactory = xmlSitemapWriterFactory;
-            this.preparedUrlEntryFactory = preparedUrlEntryFactory;
         }
         private readonly IUrlEntryHelperFactory urlEntryHelperFactory;
         private readonly IXmlSitemapWriterFactory xmlSitemapWriterFactory;
-        private readonly IPreparedUrlEntryFactory preparedUrlEntryFactory;
-
+        
         public virtual void WritePage(XmlWriter writer, string feedName, IEnumerable<IPagingInstruction> pagingInstructions)
         {
             var xmlSitemapWriter = this.xmlSitemapWriterFactory.Create(writer);
@@ -46,13 +41,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap
 
                         // Wire up an anonymous callback from the helper class to this one
                         // so we can get the entries one by one.
-                        (urlEntry) =>
-                        {
-                            // Run any business logic that needs to be executed to prepare
-                            // the data for writing.
-                            var prepared = this.preparedUrlEntryFactory.Create(urlEntry);
-                            xmlSitemapWriter.WriteEntry(prepared);
-                        })
+                        (urlEntry) => { xmlSitemapWriter.WriteEntry(urlEntry); })
                     );
                 }
 
