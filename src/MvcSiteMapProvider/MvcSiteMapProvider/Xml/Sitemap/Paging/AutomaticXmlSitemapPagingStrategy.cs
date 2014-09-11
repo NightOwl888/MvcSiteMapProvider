@@ -9,23 +9,23 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Paging
         : IXmlSitemapPagingStrategy
     {
         public AutomaticXmlSitemapPagingStrategy(
-            IUrlEntryProvider[] urlEntryProviders,
-            IPagingInstructionFactory urlEntryProviderPagingInstructionFactory,
+            IXmlSitemapProvider[] xmlSitemapProviders,
+            IPagingInstructionFactory pagingInstructionFactory,
             IXmlSitemapRecordInfoHelperFactory xmlSitemapRecordInfoHelperFactory,
             IXmlSitemapPageInfoFactory xmlSitemapPageInfoFactory
             )
         {
-            if (urlEntryProviders == null)
-                throw new ArgumentNullException("urlEntryProviders");
-            if (urlEntryProviderPagingInstructionFactory == null)
-                throw new ArgumentNullException("urlEntryProviderPagingInstructionFactory");
+            if (xmlSitemapProviders == null)
+                throw new ArgumentNullException("xmlSitemapProviders");
+            if (pagingInstructionFactory == null)
+                throw new ArgumentNullException("pagingInstructionFactory");
             if (xmlSitemapRecordInfoHelperFactory == null)
                 throw new ArgumentNullException("xmlSitemapRecordInfoHelperFactory");
             if (xmlSitemapPageInfoFactory == null)
                 throw new ArgumentNullException("xmlSitemapPageInfoFactory");
 
-            this.urlEntryProviders = urlEntryProviders;
-            this.urlEntryProviderPagingInstructionFactory = urlEntryProviderPagingInstructionFactory;
+            this.xmlSitemapProviders = xmlSitemapProviders;
+            this.pagingInstructionFactory = pagingInstructionFactory;
             this.xmlSitemapRecordInfoHelperFactory = xmlSitemapRecordInfoHelperFactory;
             this.xmlSitemapPageInfoFactory = xmlSitemapPageInfoFactory;
 
@@ -34,8 +34,8 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Paging
             // calculate the size during streaming, an average cap of 35,000 has been chosen.
             this.MaximumPageSize = 35000;
         }
-        private readonly IUrlEntryProvider[] urlEntryProviders;
-        private readonly IPagingInstructionFactory urlEntryProviderPagingInstructionFactory;
+        private readonly IXmlSitemapProvider[] xmlSitemapProviders;
+        private readonly IPagingInstructionFactory pagingInstructionFactory;
         private readonly IXmlSitemapRecordInfoHelperFactory xmlSitemapRecordInfoHelperFactory;
         private readonly IXmlSitemapPageInfoFactory xmlSitemapPageInfoFactory;
 
@@ -76,7 +76,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Paging
             // Preview what the record counts will be up to and including the current page
             int totalRecordCount = 0;
             int totalTake = 0;
-            foreach (var provider in this.urlEntryProviders)
+            foreach (var provider in this.xmlSitemapProviders)
             {
                 //var recordInfo = this.xmlSitemapRecordInfoFactory.Create();
                 //provider.GetRecordInfo(feedName, recordInfo);
@@ -98,7 +98,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Paging
                     totalTake += take;
 
                     // Create an instruction to send to the provider
-                    result.Add(this.urlEntryProviderPagingInstructionFactory.Create(skip, take, provider));
+                    result.Add(this.pagingInstructionFactory.Create(skip, take, provider));
                 }
 
                 // Break early if we have reached the maximum number of records needed
@@ -115,7 +115,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Paging
         {
             var result = new List<IXmlSitemapRecordInfo>();
 
-            foreach (var provider in this.urlEntryProviders)
+            foreach (var provider in this.xmlSitemapProviders)
             {
                 //// TODO: Request cache the record info and pass that in instead
                 //var recordInfo = this.xmlSitemapRecordInfoFactory.Create();

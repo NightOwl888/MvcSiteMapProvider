@@ -287,7 +287,7 @@
     <Compile Include="IO\IStreamFactory.cs" />
     <Compile Include="Xml\Sitemap\IUrlEntryHelper.cs" />
     <Compile Include="Xml\Sitemap\IUrlEntryHelperFactory.cs" />
-    <Compile Include="Xml\Sitemap\IUrlEntryProvider.cs" />
+    <Compile Include="Xml\Sitemap\IXmlSitemapProvider.cs" />
     <Compile Include="Xml\Sitemap\Paging\IPagingInstruction.cs" />
     <Compile Include="Xml\Sitemap\Paging\IPagingInstructionFactory.cs" />
     <Compile Include="Xml\Sitemap\Paging\ManualXmlSitemapPagingStrategy.cs" />

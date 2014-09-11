@@ -7,7 +7,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Paging
 {
     public interface IPagingInstructionFactory
     {
-        IPagingInstruction Create(int skip, int take, IUrlEntryProvider urlEntryProvider);
-        IPagingInstruction Create(IUrlEntryProvider urlEntryProvider);
+        IPagingInstruction Create(int skip, int take, IXmlSitemapProvider xmlSitemapProvider);
+        IPagingInstruction Create(IXmlSitemapProvider xmlSitemapProvider);
     }
 }

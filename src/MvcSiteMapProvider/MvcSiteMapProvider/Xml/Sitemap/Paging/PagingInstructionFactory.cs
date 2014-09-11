@@ -8,14 +8,14 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Paging
     public class PagingInstructionFactory
         : IPagingInstructionFactory
     {
-        public IPagingInstruction Create(int skip, int take, IUrlEntryProvider urlEntryProvider)
+        public IPagingInstruction Create(int skip, int take, IXmlSitemapProvider xmlSitemapProvider)
         {
-            return new PagingInstruction(skip, take, urlEntryProvider);
+            return new PagingInstruction(skip, take, xmlSitemapProvider);
         }
 
-        public IPagingInstruction Create(IUrlEntryProvider urlEntryProvider)
+        public IPagingInstruction Create(IXmlSitemapProvider xmlSitemapProvider)
         {
-            return this.Create(0, int.MaxValue, urlEntryProvider);
+            return this.Create(0, int.MaxValue, xmlSitemapProvider);
         }
     }
 }

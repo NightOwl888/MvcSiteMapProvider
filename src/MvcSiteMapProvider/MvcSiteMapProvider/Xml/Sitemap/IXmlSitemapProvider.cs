@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MvcSiteMapProvider.Xml.Sitemap
 {
-    public interface IUrlEntryProvider
+    public interface IXmlSitemapProvider
     {
         // Total record count of all potential pages
         IXmlSitemapRecordInfo GetRecordInfo(IXmlSitemapRecordInfoHelper helper);

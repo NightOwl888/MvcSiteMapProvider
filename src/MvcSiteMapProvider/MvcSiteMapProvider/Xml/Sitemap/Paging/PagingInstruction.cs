@@ -8,19 +8,19 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Paging
         public PagingInstruction(
             int skip,
             int take,
-            IUrlEntryProvider urlEntryProvider
+            IXmlSitemapProvider xmlSitemapProvider
             )
         {
-            if (urlEntryProvider == null)
-                throw new ArgumentNullException("urlEntryProvider");
+            if (xmlSitemapProvider == null)
+                throw new ArgumentNullException("xmlSitemapProvider");
 
             this.skip = skip;
             this.take = take;
-            this.urlEntryProvider = urlEntryProvider;
+            this.xmlSitemapProvider = xmlSitemapProvider;
         }
         private readonly int skip;
         private readonly int take;
-        private readonly IUrlEntryProvider urlEntryProvider;
+        private readonly IXmlSitemapProvider xmlSitemapProvider;
 
         public int Skip
         {
@@ -32,9 +32,9 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Paging
             get { return this.take; }
         }
 
-        public IUrlEntryProvider UrlEntryProvider
+        public IXmlSitemapProvider UrlEntryProvider
         {
-            get { return this.urlEntryProvider; }
+            get { return this.xmlSitemapProvider; }
         }
     }
 }
