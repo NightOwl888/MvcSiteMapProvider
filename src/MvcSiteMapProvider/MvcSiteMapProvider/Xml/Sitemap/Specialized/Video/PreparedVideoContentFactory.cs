@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using MvcSiteMapProvider.Globalization;
 
 namespace MvcSiteMapProvider.Xml.Sitemap.Specialized.Video
@@ -16,7 +15,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized.Video
             if (videoContent != null)
             {
                 // Required fields
-                string thumbnail = urlResolver.ResolveUrlToAbsolute(videoContent.ThumbnailUrl, videoContent.ThumbnailProtocol, videoContent.ThumbnailHostName);
+                string thumbnail = urlResolver.ResolveUrlToAbsolute(videoContent.ThumbnailLocation, videoContent.ThumbnailLocationProtocol, videoContent.ThumbnailLocationHostName);
                 string title = videoContent.Title;
                 string description = videoContent.Description;
                 string contentLocation = string.Empty;
@@ -58,7 +57,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized.Video
                 }
                 if (videoContent.ExpirationDate > DateTime.MinValue)
                 {
-                    expirationDate = videoContent.ExpirationDate.ToUniversalTime().ToString(W3CDateFormat);
+                    expirationDate = videoContent.ExpirationDate.ToString(W3CDateFormat);
                 }
                 if (videoContent.Rating > 0)
                 {
@@ -70,20 +69,20 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized.Video
                 }
                 if (videoContent.PublicationDate > DateTime.MinValue)
                 {
-                    publicationDate = videoContent.PublicationDate.ToUniversalTime().ToString(W3CDateFormat);
+                    publicationDate = videoContent.PublicationDate.ToString(W3CDateFormat);
                 }
                 if (!videoContent.IsFamilyFriendly)
                 {
                     familyFriendly = "No";
                 }
-                if (!string.IsNullOrEmpty(videoContent.CountriesAllowedString))
+                if (videoContent.CountriesAllowed.Any())
                 {
-                    restriction = videoContent.CountriesAllowedString;
+                    restriction = string.Join(" ", videoContent.CountriesAllowed.ToArray());
                     restrictionRelationship = "allow";
                 }
-                else if (!string.IsNullOrEmpty(videoContent.CountriesNotAllowedString))
+                else if (videoContent.CountriesNotAllowed.Any())
                 {
-                    restriction = videoContent.CountriesNotAllowedString;
+                    restriction = string.Join(" ", videoContent.CountriesNotAllowed.ToArray());
                     restrictionRelationship = "deny";
                 }
                 if (!string.IsNullOrEmpty(videoContent.GalleryLocation))
@@ -115,14 +114,14 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized.Video
                 {
                     uploaderInfo = urlResolver.ResolveUrlToAbsolute(videoContent.UploaderInfo, videoContent.UploaderInfoProtocol, videoContent.UploaderInfoHostName);
                 }
-                if (!string.IsNullOrEmpty(videoContent.PlatformsAllowedString))
+                if (videoContent.PlatformsAllowed != VideoPlatform.Undefined)
                 {
-                    platform = videoContent.PlatformsAllowedString;
+                    platform = videoContent.PlatformsAllowed.ToString("F").Replace(", ", " ").ToLower();
                     platformRelationship = "allow";
                 }
-                else if (!string.IsNullOrEmpty(videoContent.PlatformsNotAllowedString))
+                else if (videoContent.PlatformsNotAllowed != VideoPlatform.Undefined)
                 {
-                    platform = videoContent.PlatformsNotAllowedString;
+                    platform = videoContent.PlatformsNotAllowed.ToString("F").Replace(", ", " ").ToLower();
                     platformRelationship = "deny";
                 }
                 if (videoContent.Live)

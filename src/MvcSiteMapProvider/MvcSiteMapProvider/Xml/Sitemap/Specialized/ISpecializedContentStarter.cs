@@ -5,10 +5,8 @@ using System.Text;
 
 namespace MvcSiteMapProvider.Xml.Sitemap.Specialized
 {
+    // All methods are added via extension methods
     public interface ISpecializedContentStarter
     {
-        IImageContentBuilder Image(string url);
-        IImageContentBuilder Image(string url, string protocol);
-        IImageContentBuilder Image(string url, string protocol, string hostName);
     }
 }

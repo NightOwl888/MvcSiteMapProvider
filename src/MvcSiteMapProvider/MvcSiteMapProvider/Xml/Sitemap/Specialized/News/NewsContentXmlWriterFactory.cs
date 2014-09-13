@@ -1,27 +1,27 @@
 ﻿using System;
 using System.Xml;
 
-namespace MvcSiteMapProvider.Xml.Sitemap.Specialized.Video
+namespace MvcSiteMapProvider.Xml.Sitemap.Specialized.News
 {
-    public class VideoContentXmlWriterFactory
+    public class NewsContentXmlWriterFactory
         : ISpecializedContentXmlWriterFactory
     {
-        public VideoContentXmlWriterFactory(
-            IPreparedVideoContentFactory preparedVideoContentFactory
+        public NewsContentXmlWriterFactory(
+            IPreparedNewsContentFactory preparedNewsContentFactory
             )
         {
-            if (preparedVideoContentFactory == null)
-                throw new ArgumentNullException("preparedVideoContentFactory");
+            if (preparedNewsContentFactory == null)
+                throw new ArgumentNullException("preparedNewsContentFactory");
 
-            this.preparedVideoContentFactory = preparedVideoContentFactory;
+            this.preparedNewsContentFactory = preparedNewsContentFactory;
             this.syncRoot = new object();
         }
-        private readonly IPreparedVideoContentFactory preparedVideoContentFactory;
+        private readonly IPreparedNewsContentFactory preparedNewsContentFactory;
         private readonly object syncRoot;
 
         public ISpecializedContentXmlWriter Create(XmlWriter writer)
         {
-            return new VideoContentXmlWriter(writer, this.preparedVideoContentFactory);
+            return new NewsContentXmlWriter(writer, this.preparedNewsContentFactory);
         }
 
         public void Release(ISpecializedContentXmlWriter specializedContentXmlWriter)
@@ -38,7 +38,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized.Video
 
         public Type ContentType
         {
-            get { return typeof(IVideoContent); }
+            get { return typeof(INewsContent); }
         }
     }
 }

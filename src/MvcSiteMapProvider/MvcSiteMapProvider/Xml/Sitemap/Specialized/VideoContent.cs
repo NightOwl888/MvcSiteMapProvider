@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using MvcSiteMapProvider.Xml.Sitemap.Specialized.Video;
 
 namespace MvcSiteMapProvider.Xml.Sitemap.Specialized
@@ -9,14 +8,40 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized
         : IVideoContent
     {
         public VideoContent(
-            string thumbnailUrl,
+            string thumbnailLocation,
             string title,
             string description,
             string contentLocation,
-            string playerLocation)
+            string playerLocation
+            )
+            : this(thumbnailLocation: thumbnailLocation,
+                title: title,
+                description: description,
+                contentLocation: contentLocation,
+                playerLocation: playerLocation, 
+                tags: new List<string>(),
+                categories: new List<string>(), 
+                countriesAllowed: new List<string>(), 
+                countriesNotAllowed: new List<string>(), 
+                prices: new List<IVideoContentPrice>())
         {
-            if (string.IsNullOrEmpty(thumbnailUrl))
-                throw new ArgumentNullException("thumbnailUrl");
+        }
+
+        internal VideoContent(
+            string thumbnailLocation,
+            string title,
+            string description,
+            string contentLocation,
+            string playerLocation,
+            IList<string> tags,
+            IList<string> categories,
+            IList<string> countriesAllowed,
+            IList<string> countriesNotAllowed,
+            IList<IVideoContentPrice> prices
+            )
+        {
+            if (string.IsNullOrEmpty(thumbnailLocation))
+                throw new ArgumentNullException("thumbnailLocation");
             if (string.IsNullOrEmpty(title))
                 throw new ArgumentNullException("title");
             if (string.IsNullOrEmpty(description))
@@ -24,23 +49,24 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized
             if (string.IsNullOrEmpty(contentLocation) && string.IsNullOrEmpty(playerLocation))
                 throw new ArgumentNullException("Either contentLocation or playerLocation must be supplied");
 
-            this.thumbnailUrl = thumbnailUrl;
+            this.thumbnailLocation = thumbnailLocation;
             this.title = title;
             this.description = description;
             this.contentLocation = contentLocation;
             this.playerLocation = playerLocation;
+            this.tags = tags;
+            this.categories = categories;
+            this.countriesAllowed = countriesAllowed;
+            this.countriesNotAllowed = countriesNotAllowed;
+            this.prices = prices;
 
             // set defaults
             this.ExpirationDate = DateTime.MinValue;
             this.PublicationDate = DateTime.MinValue;
             this.IsFamilyFriendly = true;
-            this.tags = new List<string>();
-            this.categories = new List<string>();
-            this.countriesAllowed = new List<string>();
-            this.countriesNotAllowed = new List<string>();
-            this.prices = new List<IVideoContentPrice>();
         }
-        private readonly string thumbnailUrl;
+
+        private readonly string thumbnailLocation;
         private readonly string title;
         private readonly string description;
         private readonly string contentLocation;
@@ -52,19 +78,14 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized
         private readonly IList<string> countriesNotAllowed;
         private readonly IList<IVideoContentPrice> prices;
 
-        private string countriesAllowedString = string.Empty;
-        private string countriesNotAllowedString = string.Empty;
-        private string platformsAllowedString = string.Empty;
-        private string platformsNotAllowedString = string.Empty;
-
-        public string ThumbnailUrl
+        public string ThumbnailLocation
         {
-            get { return this.thumbnailUrl; }
+            get { return this.thumbnailLocation; }
         }
 
-        public string ThumbnailHostName { get; set; }
+        public string ThumbnailLocationProtocol { get; set; }
 
-        public string ThumbnailProtocol { get; set; }
+        public string ThumbnailLocationHostName { get; set; }
 
         public string Title
         {
@@ -125,49 +146,9 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized
             get { return this.countriesAllowed; }
         }
 
-        public string CountriesAllowedString
-        {
-            get 
-            {
-                if (!string.IsNullOrEmpty(this.countriesAllowedString))
-                {
-                    return this.countriesAllowedString; 
-                }
-                if (this.countriesAllowed.Any())
-                {
-                    return string.Join(" ", this.countriesAllowed.ToArray());
-                }
-                return string.Empty;
-            }
-            set
-            { 
-                this.countriesAllowedString = value; 
-            }
-        }
-
         public IList<string> CountriesNotAllowed
         {
             get { return this.countriesNotAllowed; }
-        }
-
-        public string CountriesNotAllowedString
-        {
-            get
-            {
-                if (!string.IsNullOrEmpty(this.countriesNotAllowedString))
-                {
-                    return this.countriesNotAllowedString;
-                }
-                if (this.countriesNotAllowed.Any())
-                {
-                    return string.Join(" ", this.countriesNotAllowed.ToArray());
-                }
-                return string.Empty;
-            }
-            set
-            {
-                this.countriesNotAllowedString = value;
-            }
         }
 
         public string GalleryLocation { get; set; }
@@ -195,45 +176,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized
 
         public VideoPlatform PlatformsAllowed { get; set; }
 
-        public string PlatformsAllowedString
-        {
-            get
-            {
-                if (!string.IsNullOrEmpty(this.platformsAllowedString))
-                {
-                    return this.platformsAllowedString;
-                }
-                else
-                {
-                    return this.PlatformsAllowed.ToString("F").Replace(", ", " ").ToLower();
-                }
-            }
-            set
-            {
-                this.platformsAllowedString = value;
-            }
-        }
-
         public VideoPlatform PlatformsNotAllowed { get; set; }
-
-        public string PlatformsNotAllowedString
-        {
-            get
-            {
-                if (!string.IsNullOrEmpty(this.platformsNotAllowedString))
-                {
-                    return this.platformsNotAllowedString;
-                }
-                else
-                {
-                    return this.PlatformsNotAllowed.ToString("F").Replace(", ", " ").ToLower();
-                }
-            }
-            set
-            {
-                this.platformsNotAllowedString = value;
-            }
-        }
 
         public bool Live { get; set; }
     }

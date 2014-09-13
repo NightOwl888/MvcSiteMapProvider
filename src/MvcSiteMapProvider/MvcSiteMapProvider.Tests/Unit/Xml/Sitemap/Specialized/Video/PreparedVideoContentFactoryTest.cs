@@ -74,7 +74,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap.Specialized.Video
         {
             // arrange
             this.MockAllCollections();
-            this.videoContent.Setup(x => x.ThumbnailUrl).Returns("~/images/thumbnail.png");
+            this.videoContent.Setup(x => x.ThumbnailLocation).Returns("~/images/thumbnail.png");
             var target = this.NewPreparedVideoContentFactory();
 
             // act
@@ -89,7 +89,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap.Specialized.Video
         {
             // arrange
             this.MockAllCollections();
-            this.videoContent.Setup(x => x.ThumbnailUrl).Returns("~/images/thumbnail.png");
+            this.videoContent.Setup(x => x.ThumbnailLocation).Returns("~/images/thumbnail.png");
             var target = this.NewPreparedVideoContentFactory();
             // NOTE: URL resolver setup in initializer
 
@@ -442,11 +442,11 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap.Specialized.Video
         }
 
         [Test]
-        public void Create_VideoWithCountriesAllowedStringUSSpaceUK_ShouldReturnSameValue()
+        public void Create_VideoWithCountriesAllowedUSAndUK_ShouldReturnUSSpaceUK()
         {
             // arrange
             this.MockAllCollections();
-            this.videoContent.Setup(x => x.CountriesAllowedString).Returns("US UK");
+            this.videoContent.Setup(x => x.CountriesAllowed).Returns(new List<string> { "US", "UK" });
 
             var target = this.NewPreparedVideoContentFactory();
 
@@ -460,11 +460,11 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap.Specialized.Video
         }
 
         [Test]
-        public void Create_VideoWithCountriesAllowedStringUSSpaceUK_ShouldReturnRestrictionRelationshipAllow()
+        public void Create_VideoWithCountriesAllowedUSAndUK_ShouldReturnRestrictionRelationshipAllow()
         {
             // arrange
             this.MockAllCollections();
-            this.videoContent.Setup(x => x.CountriesAllowedString).Returns("US UK");
+            this.videoContent.Setup(x => x.CountriesAllowed).Returns(new List<string> { "US", "UK" });
 
             var target = this.NewPreparedVideoContentFactory();
 
@@ -478,11 +478,11 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap.Specialized.Video
         }
 
         [Test]
-        public void Create_VideoWithCountriesNotAllowedStringUSSpaceUKSpaceDE_ShouldReturnSameValue()
+        public void Create_VideoWithCountriesNotAllowedUSAndUKAndDE_ShouldReturnUSSpaceUKSpaceDE()
         {
             // arrange
             this.MockAllCollections();
-            this.videoContent.Setup(x => x.CountriesNotAllowedString).Returns("US UK DE");
+            this.videoContent.Setup(x => x.CountriesNotAllowed).Returns(new List<string> { "US", "UK", "DE" });
 
             var target = this.NewPreparedVideoContentFactory();
 
@@ -496,11 +496,11 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap.Specialized.Video
         }
 
         [Test]
-        public void Create_VideoWithCountriesNotAllowedStringUSSpaceUKSpaceDE_ShouldReturnRestrictionRelationshipDeny()
+        public void Create_VideoWithCountriesNotAllowedUSAndUKAndDE_ShouldReturnRestrictionRelationshipDeny()
         {
             // arrange
             this.MockAllCollections();
-            this.videoContent.Setup(x => x.CountriesNotAllowedString).Returns("US UK DE");
+            this.videoContent.Setup(x => x.CountriesNotAllowed).Returns(new List<string> { "US", "UK", "DE" });
 
             var target = this.NewPreparedVideoContentFactory();
 
@@ -715,11 +715,11 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap.Specialized.Video
         }
 
         [Test]
-        public void Create_VideoWithPlatformsAllowedStringwebSpacetv_ShouldReturnSameValue()
+        public void Create_VideoWithPlatformsAllowedWebAndTV_ShouldReturnwebSpacetv()
         {
             // arrange
             this.MockAllCollections();
-            this.videoContent.Setup(x => x.PlatformsAllowedString).Returns("web tv");
+            this.videoContent.Setup(x => x.PlatformsAllowed).Returns(VideoPlatform.Web | VideoPlatform.TV);
 
             var target = this.NewPreparedVideoContentFactory();
 
@@ -737,7 +737,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap.Specialized.Video
         {
             // arrange
             this.MockAllCollections();
-            this.videoContent.Setup(x => x.PlatformsAllowedString).Returns("web tv");
+            this.videoContent.Setup(x => x.PlatformsAllowed).Returns(VideoPlatform.Web | VideoPlatform.TV);
 
             var target = this.NewPreparedVideoContentFactory();
 
@@ -751,11 +751,11 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap.Specialized.Video
         }
 
         [Test]
-        public void Create_VideoWithPlatformsNotAllowedStringmobile_ShouldReturnSameValue()
+        public void Create_VideoWithPlatformsNotAllowedMobile_ShouldReturnmobile()
         {
             // arrange
             this.MockAllCollections();
-            this.videoContent.Setup(x => x.PlatformsNotAllowedString).Returns("mobile");
+            this.videoContent.Setup(x => x.PlatformsNotAllowed).Returns(VideoPlatform.Mobile);
 
             var target = this.NewPreparedVideoContentFactory();
 
@@ -769,11 +769,11 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap.Specialized.Video
         }
 
         [Test]
-        public void Create_VideoWithPlatformsNotAllowedStringmobile_ShouldReturnRestrictionRelationshipDeny2()
+        public void Create_VideoWithPlatformsNotAllowedMobile_ShouldReturnRestrictionRelationshipDeny()
         {
             // arrange
             this.MockAllCollections();
-            this.videoContent.Setup(x => x.PlatformsNotAllowedString).Returns("mobile");
+            this.videoContent.Setup(x => x.PlatformsNotAllowed).Returns(VideoPlatform.Mobile);
 
             var target = this.NewPreparedVideoContentFactory();
 

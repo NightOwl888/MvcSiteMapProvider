@@ -9,9 +9,9 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized
     public interface IVideoContent
         : ISpecializedContent
     {
-        string ThumbnailUrl { get; } // Required
-        string ThumbnailHostName { get; set; }
-        string ThumbnailProtocol { get; set; }
+        string ThumbnailLocation { get; } // Required
+        string ThumbnailLocationProtocol { get; set; }
+        string ThumbnailLocationHostName { get; set; }
         string Title { get; } // Required
         string Description { get; } // Required
 
@@ -32,9 +32,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized
         IList<string> Tags { get; } // Optional, maximum 32 permitted
         IList<string> Categories { get; } // Optional
         IList<string> CountriesAllowed { get; } // Restriction
-        string CountriesAllowedString { get; set; }
         IList<string> CountriesNotAllowed{ get; }
-        string CountriesNotAllowedString { get; set; }
         string GalleryLocation { get; set; } // Optional
         string GalleryLocationProtocol { get; set; }
         string GalleryLocationHostName { get; set; }
@@ -46,9 +44,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized
         string UploaderInfoProtocol { get; set; }
         string UploaderInfoHostName { get; set; }
         VideoPlatform PlatformsAllowed { get; set; } // Optional (space delimited list)
-        string PlatformsAllowedString { get; set; }
         VideoPlatform PlatformsNotAllowed { get; set; }
-        string PlatformsNotAllowedString { get; set; }
         bool Live { get; set; } // Optional
 
         // Documentation: https://support.google.com/webmasters/answer/80472?hl=en

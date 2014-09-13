@@ -44,7 +44,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized.Image
 
         public Type ContentType
         {
-            get { return typeof(IPreparedImageContent); }
+            get { return typeof(IImageContent); }
         }
     }
 }

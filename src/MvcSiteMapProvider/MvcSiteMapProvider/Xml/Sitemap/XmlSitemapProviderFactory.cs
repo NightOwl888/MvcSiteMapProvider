@@ -10,6 +10,8 @@ namespace MvcSiteMapProvider.Xml.Sitemap
             IXmlSitemapProvider result = null;
             try
             {
+                // TODO: Wrap this provider instance in a class that request caches the
+                // GetTotalRecordCount and GetLastModifiedDate methods.
                 result = (IXmlSitemapProvider)Activator.CreateInstance(providerType);
             }
             catch (Exception ex)
