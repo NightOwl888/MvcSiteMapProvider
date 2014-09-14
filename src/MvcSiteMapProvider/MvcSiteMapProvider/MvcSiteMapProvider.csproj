@@ -261,6 +261,8 @@
     <Compile Include="Xml\Sitemap\IPreparedUrlEntryFactory.cs" />
     <Compile Include="Xml\Sitemap\Index\IXmlSitemapIndexPageWriter.cs" />
     <Compile Include="Xml\Sitemap\Index\XmlSitemapIndexPageWriter.cs" />
+    <Compile Include="Xml\Sitemap\IRequestCachingXmlSitemapProviderDecoratorFactory.cs" />
+    <Compile Include="Xml\Sitemap\IXmlSitemapProviderDecoratorFactory.cs" />
     <Compile Include="Xml\Sitemap\IXmlSitemapFeedUrlResolver.cs" />
     <Compile Include="Xml\Sitemap\Paging\IXmlSitemapPageData.cs" />
     <Compile Include="Xml\Sitemap\Paging\IXmlSitemapPageDataFactory.cs" />
@@ -294,6 +296,9 @@
     <Compile Include="Xml\Sitemap\Paging\XmlSitemapPager.cs" />
     <Compile Include="Xml\Sitemap\PreparedUrlEntry.cs" />
     <Compile Include="Xml\Sitemap\PreparedUrlEntryFactory.cs" />
+    <Compile Include="Xml\Sitemap\RequestCachingXmlSitemapProviderDecorator.cs" />
+    <Compile Include="Xml\Sitemap\RequestCachingXmlSitemapProviderDecoratorFactory.cs" />
+    <Compile Include="Xml\Sitemap\XmlSitemapProviderFactoryDecorator.cs" />
     <Compile Include="Xml\Sitemap\Specialized\Image\IPreparedImageContentFactory.cs" />
     <Compile Include="Xml\Sitemap\Specialized\IMobileContent.cs" />
     <Compile Include="Xml\Sitemap\Specialized\IMobileContentBuilder.cs" />
@@ -356,6 +361,7 @@
     <Compile Include="Xml\Sitemap\XmlSitemapFeedPageNameProvider.cs" />
     <Compile Include="Xml\Sitemap\XmlSitemapPageWriter.cs" />
     <Compile Include="Xml\Sitemap\SitemapService.cs" />
+    <Compile Include="Xml\Sitemap\XmlSitemapProviderBase.cs" />
     <Compile Include="Xml\Sitemap\XmlSitemapProviderFactory.cs" />
     <Compile Include="Xml\Sitemap\XmlSitemapProviderStrategy.cs" />
     <Compile Include="Xml\Sitemap\XmlSitemapProviderTypeStrategy.cs" />

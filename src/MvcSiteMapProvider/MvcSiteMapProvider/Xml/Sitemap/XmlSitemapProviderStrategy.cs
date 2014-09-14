@@ -31,7 +31,11 @@ namespace MvcSiteMapProvider.Xml.Sitemap
             var providerTypes = this.typeStrategy.GetTypes(feedName);
             foreach (var providerType in providerTypes)
             {
-                result.Add(this.xmlSitemapProviderFactory.Create(providerType));
+                var provider = this.xmlSitemapProviderFactory.Create(providerType);
+                if (provider != null)
+                {
+                    result.Add(provider);
+                }
             }
 
             return result;

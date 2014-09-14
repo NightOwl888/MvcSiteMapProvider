@@ -36,9 +36,6 @@ namespace MvcSiteMapProvider.Xml.Sitemap
         private readonly IXmlSitemapPageWriter xmlSitemapPageWriter;
         private readonly IXmlSitemapIndexPageWriter xmlSitemapIndexPageWriter; 
 
-
-        // TODO: We should request cache the page counts so this doesn't 
-        // result in multiple database calls, multiple times per request.
         public IXmlSitemapPageData GetPageData(string feedName)
         {
             IXmlSitemapPageData result = null;

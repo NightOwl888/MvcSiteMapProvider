@@ -5,13 +5,17 @@ namespace MvcSiteMapProvider.Xml.Sitemap
     public class XmlSitemapProviderFactory
         : IXmlSitemapProviderFactory
     {
+        public XmlSitemapProviderFactory()
+        {
+            this.syncLock = new object();
+        }
+        private readonly object syncLock;
+
         public IXmlSitemapProvider Create(Type providerType)
         {
             IXmlSitemapProvider result = null;
             try
             {
-                // TODO: Wrap this provider instance in a class that request caches the
-                // GetTotalRecordCount and GetLastModifiedDate methods.
                 result = (IXmlSitemapProvider)Activator.CreateInstance(providerType);
             }
             catch (Exception ex)
@@ -35,7 +39,10 @@ namespace MvcSiteMapProvider.Xml.Sitemap
             var disposable = xmlSitemapProvider as IDisposable;
             if (disposable != null)
             {
-                disposable.Dispose();
+                lock (syncLock)
+                {
+                    disposable.Dispose();
+                }
             }
         }
     }

@@ -45,7 +45,6 @@ namespace MvcSiteMapProvider.Xml.Sitemap
             //var stream = this.streamFactory.Create();
             //try
             //{
-            //    // TODO: make XmlWriterFactory to inject here instead of the static method
             //    using (var writer = XmlWriter.Create(stream))
             //    {
             //        this.xmlSitemapPageManager.WritePage(page, writer);
