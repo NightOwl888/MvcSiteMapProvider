@@ -8,12 +8,14 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
     {
         public XmlSitemapWriterFactoryBuilder()
             : this(
+                omitUrlsWithoutMatchingContent: false,
                 specializedContentXmlWriterFactoryStrategy: new SpecializedContentXmlWriterFactoryStrategyBuilder().Create(), 
                 preparedUrlEntryFactory: new PreparedUrlEntryFactoryBuilder().Create())
         {
         }
 
         private XmlSitemapWriterFactoryBuilder(
+            bool omitUrlsWithoutMatchingContent,
             ISpecializedContentXmlWriterFactoryStrategy specializedContentXmlWriterFactoryStrategy,
             IPreparedUrlEntryFactory preparedUrlEntryFactory
             )
@@ -23,25 +25,33 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
             if (preparedUrlEntryFactory == null)
                 throw new ArgumentNullException("preparedUrlEntryFactory");
 
+            this.omitUrlsWithoutMatchingContent = omitUrlsWithoutMatchingContent;
             this.specializedContentXmlWriterFactoryStrategy = specializedContentXmlWriterFactoryStrategy;
             this.preparedUrlEntryFactory = preparedUrlEntryFactory;
         }
+        private readonly bool omitUrlsWithoutMatchingContent;
         private readonly ISpecializedContentXmlWriterFactoryStrategy specializedContentXmlWriterFactoryStrategy;
         private readonly IPreparedUrlEntryFactory preparedUrlEntryFactory;
 
+        public IXmlSitemapWriterFactoryBuilder OmitUrlsWithoutMatchingContent()
+        {
+            var omitUrlsWithoutMatchingContent = true;
+            return new XmlSitemapWriterFactoryBuilder(omitUrlsWithoutMatchingContent, this.specializedContentXmlWriterFactoryStrategy, this.preparedUrlEntryFactory);
+        }
+
         public IXmlSitemapWriterFactoryBuilder WithSpecializedContentXmlWriterFactoryStrategy(ISpecializedContentXmlWriterFactoryStrategy specializedContentXmlWriterFactoryStrategy)
         {
-            return new XmlSitemapWriterFactoryBuilder(specializedContentXmlWriterFactoryStrategy, this.preparedUrlEntryFactory);
+            return new XmlSitemapWriterFactoryBuilder(this.omitUrlsWithoutMatchingContent, specializedContentXmlWriterFactoryStrategy, this.preparedUrlEntryFactory);
         }
 
         public IXmlSitemapWriterFactoryBuilder WithPreparedUrlEntryFactory(IPreparedUrlEntryFactory preparedUrlEntryFactory)
         {
-            return new XmlSitemapWriterFactoryBuilder(this.specializedContentXmlWriterFactoryStrategy, preparedUrlEntryFactory);
+            return new XmlSitemapWriterFactoryBuilder(this.omitUrlsWithoutMatchingContent, this.specializedContentXmlWriterFactoryStrategy, preparedUrlEntryFactory);
         }
 
         public IXmlSitemapWriterFactory Create()
         {
-            return new XmlSitemapWriterFactory(this.specializedContentXmlWriterFactoryStrategy, this.preparedUrlEntryFactory);
+            return new XmlSitemapWriterFactory(this.omitUrlsWithoutMatchingContent, this.specializedContentXmlWriterFactoryStrategy, this.preparedUrlEntryFactory);
         }
     }
 }

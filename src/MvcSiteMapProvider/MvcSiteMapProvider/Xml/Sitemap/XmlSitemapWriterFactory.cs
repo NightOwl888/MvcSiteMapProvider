@@ -10,6 +10,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap
         : IXmlSitemapWriterFactory
     {
         public XmlSitemapWriterFactory(
+            bool omitUrlEntriesWithoutMatchingContent,
             ISpecializedContentXmlWriterFactoryStrategy specializedContentXmlWriterFactoryStrategy,
             IPreparedUrlEntryFactory preparedUrlEntryFactory
             )
@@ -19,15 +20,21 @@ namespace MvcSiteMapProvider.Xml.Sitemap
             if (preparedUrlEntryFactory == null)
                 throw new ArgumentNullException("preparedUrlEntryFactory");
 
+            this.omitUrlEntriesWithoutMatchingContent = omitUrlEntriesWithoutMatchingContent;
             this.specializedContentXmlWriterFactoryStrategy = specializedContentXmlWriterFactoryStrategy;
             this.preparedUrlEntryFactory = preparedUrlEntryFactory;
         }
+        private readonly bool omitUrlEntriesWithoutMatchingContent;
         private readonly ISpecializedContentXmlWriterFactoryStrategy specializedContentXmlWriterFactoryStrategy;
         private readonly IPreparedUrlEntryFactory preparedUrlEntryFactory;
 
         public IXmlSitemapWriter Create(XmlWriter writer)
         {
-            return new XmlSitemapWriter(writer, this.specializedContentXmlWriterFactoryStrategy, this.preparedUrlEntryFactory);
+            return new XmlSitemapWriter(
+                this.omitUrlEntriesWithoutMatchingContent, 
+                writer, 
+                this.specializedContentXmlWriterFactoryStrategy, 
+                this.preparedUrlEntryFactory);
         }
 
         public void Release(IXmlSitemapWriter xmlSitemapWriter)

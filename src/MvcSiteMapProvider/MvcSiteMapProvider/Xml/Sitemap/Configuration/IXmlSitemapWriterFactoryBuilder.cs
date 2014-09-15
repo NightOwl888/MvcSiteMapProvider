@@ -7,6 +7,8 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
     public interface IXmlSitemapWriterFactoryBuilder
         : IFluentInterface
     {
+        IXmlSitemapWriterFactoryBuilder OmitUrlsWithoutMatchingContent();
+
         IXmlSitemapWriterFactoryBuilder WithSpecializedContentXmlWriterFactoryStrategy(ISpecializedContentXmlWriterFactoryStrategy specializedContentXmlWriterFactoryStrategy);
 
         IXmlSitemapWriterFactoryBuilder WithPreparedUrlEntryFactory(IPreparedUrlEntryFactory preparedUrlEntryFactory);

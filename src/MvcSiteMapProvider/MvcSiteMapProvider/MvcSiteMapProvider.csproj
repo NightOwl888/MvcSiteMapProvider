@@ -258,6 +258,8 @@
     <Compile Include="Xml\Sitemap\Configuration\AttributeAssemblyProviderBuilder.cs" />
     <Compile Include="Xml\Sitemap\Configuration\IAttributeAssemblyProviderBuilder.cs" />
     <Compile Include="Xml\Sitemap\Configuration\IPreparedUrlEntryFactoryBuilder.cs" />
+    <Compile Include="Xml\Sitemap\Configuration\IRequestCacheBuilder.cs" />
+    <Compile Include="Xml\Sitemap\Configuration\IRequestCachingXmlSitemapProviderDecoratorFactoryBuilder.cs" />
     <Compile Include="Xml\Sitemap\Configuration\ISpecializedContentXmlWriterFactoryStrategyBuilder.cs" />
     <Compile Include="Xml\Sitemap\Configuration\IUrlPathBuilder.cs" />
     <Compile Include="Xml\Sitemap\Configuration\IXmlSitemapFeedStrategyStarter.cs" />
@@ -270,11 +272,14 @@
     <Compile Include="Xml\Sitemap\Configuration\IXmlSitemapFeedStrategyBuilder.cs" />
     <Compile Include="Xml\Sitemap\Configuration\IXmlSitemapPagerBuilder.cs" />
     <Compile Include="Xml\Sitemap\Configuration\IXmlSitemapPageWriterBuilder.cs" />
+    <Compile Include="Xml\Sitemap\Configuration\IXmlSitemapProviderFactoryDecoratorBuilder.cs" />
     <Compile Include="Xml\Sitemap\Configuration\IXmlSitemapProviderStrategyBuilder.cs" />
     <Compile Include="Xml\Sitemap\Configuration\IXmlSitemapProviderTypeStrategyBuilder.cs" />
     <Compile Include="Xml\Sitemap\Configuration\IXmlSitemapUrlResolverBuilder.cs" />
     <Compile Include="Xml\Sitemap\Configuration\IXmlSitemapWriterFactoryBuilder.cs" />
     <Compile Include="Xml\Sitemap\Configuration\PreparedUrlEntryFactoryBuilder.cs" />
+    <Compile Include="Xml\Sitemap\Configuration\RequestCacheBuilder.cs" />
+    <Compile Include="Xml\Sitemap\Configuration\RequestCachingXmlSitemapProviderDecoratorFactoryBuilder.cs" />
     <Compile Include="Xml\Sitemap\Configuration\SpecializedContentXmlWriterFactoryStrategyBuilder.cs" />
     <Compile Include="Xml\Sitemap\Configuration\UrlPathBuilder.cs" />
     <Compile Include="Xml\Sitemap\Configuration\XmlSitemapFeedBuilder.cs" />
@@ -285,6 +290,7 @@
     <Compile Include="Xml\Sitemap\Configuration\XmlSitemapPageManagerBuilder.cs" />
     <Compile Include="Xml\Sitemap\Configuration\XmlSitemapPagerBuilder.cs" />
     <Compile Include="Xml\Sitemap\Configuration\XmlSitemapPageWriterBuilder.cs" />
+    <Compile Include="Xml\Sitemap\Configuration\XmlSitemapProviderFactoryDecoratorBuilder.cs" />
     <Compile Include="Xml\Sitemap\Configuration\XmlSitemapProviderStrategyBuilder.cs" />
     <Compile Include="Xml\Sitemap\Configuration\XmlSitemapProviderTypeStrategyBuilder.cs" />
     <Compile Include="Xml\Sitemap\Configuration\XmlSitemapUrlResolverBuilder.cs" />

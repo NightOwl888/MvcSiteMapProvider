@@ -18,7 +18,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
 
         IXmlSitemapFeedBuilderFacade WithIndentation();
 
-        IXmlSitemapFeedBuilderFacade OmitIndentation();
+        //IXmlSitemapFeedBuilderFacade OmitIndentation(); // No point
 
         IXmlSitemapFeedBuilderFacade WithIndentationCharacters(string indentChars); 
 
@@ -26,7 +26,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
 
         IXmlSitemapFeedBuilderFacade WithNewLineCharacters(string newLineChars);
 
-        IXmlSitemapFeedBuilderFacade WithXmlDeclaration();
+        //IXmlSitemapFeedBuilderFacade WithXmlDeclaration(); // No point
 
         IXmlSitemapFeedBuilderFacade OmitXmlDeclaration();
 
@@ -37,6 +37,10 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
         // From XmlSitemapPager
 
         IXmlSitemapFeedBuilderFacade WithMaximumPageSize(int maximumPageSize);
+
+        IXmlSitemapFeedBuilderFacade OmitRequestCaching();
+
+        IXmlSitemapFeedBuilderFacade OmitUrlsWithoutMatchingContent();
 
         // From XmlSitemapProviderStrategy
 
@@ -51,27 +55,27 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
         //IEnumerable<string> AssembliesToScanForXmlSitemapProvider { get; }
 
         // From ISpecializedContentXmlWriterFactoryStrategy
-        IXmlSitemapFeedBuilderFacade AddNewsContent();
+        IXmlSitemapFeedBuilderFacade WithNewsContent();
 
-        IXmlSitemapFeedBuilderFacade AddMobileContent();
+        IXmlSitemapFeedBuilderFacade WithMobileContent();
 
-        IXmlSitemapFeedBuilderFacade AddImageContent();
+        IXmlSitemapFeedBuilderFacade WithImageContent();
 
-        IXmlSitemapFeedBuilderFacade AddVideoContent();
+        IXmlSitemapFeedBuilderFacade WithVideoContent();
 
-        IXmlSitemapFeedBuilderFacade AddSpecializedContentXmlWriterFactory(ISpecializedContentXmlWriterFactory specializedContentXmlWriterFactory);
+        IXmlSitemapFeedBuilderFacade WithCustomContent(ISpecializedContentXmlWriterFactory specializedContentXmlWriterFactory);
 
-        IXmlSitemapFeedBuilderFacade RemoveNewsContent();
+        //IXmlSitemapFeedBuilderFacade RemoveNewsContent();
 
-        IXmlSitemapFeedBuilderFacade RemoveMobileContent();
+        //IXmlSitemapFeedBuilderFacade RemoveMobileContent();
 
-        IXmlSitemapFeedBuilderFacade RemoveImageContent();
+        //IXmlSitemapFeedBuilderFacade RemoveImageContent();
 
-        IXmlSitemapFeedBuilderFacade RemoveVideoContent();
+        //IXmlSitemapFeedBuilderFacade RemoveVideoContent();
 
-        IXmlSitemapFeedBuilderFacade RemoveSpecializedContentXmlWriterFactory(Type specializedContentType);
+        //IXmlSitemapFeedBuilderFacade RemoveSpecializedContentXmlWriterFactory(Type specializedContentType);
 
-        IXmlSitemapFeedBuilderFacade ClearSpecializedContent();
+        //IXmlSitemapFeedBuilderFacade ClearSpecializedContent();
 
         IEnumerable<ISpecializedContentXmlWriterFactory> SpecializedContentXmlWriterFactories { get; }
 

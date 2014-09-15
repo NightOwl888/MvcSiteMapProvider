@@ -10,6 +10,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap
         : IXmlSitemapWriter
     {
         public XmlSitemapWriter(
+            bool omitUrlEntriesWithoutMatchingContent,
             XmlWriter writer,
             ISpecializedContentXmlWriterFactoryStrategy specializedContentXmlWriterFactoryStrategy,
             IPreparedUrlEntryFactory preparedUrlEntryFactory
@@ -22,14 +23,17 @@ namespace MvcSiteMapProvider.Xml.Sitemap
             if (preparedUrlEntryFactory == null)
                 throw new ArgumentNullException("preparedUrlEntryFactory");
 
+            this.omitUrlEntriesWithoutMatchingContent = omitUrlEntriesWithoutMatchingContent;
             this.writer = writer;
             this.specializedContentXmlWriterFactoryStrategy = specializedContentXmlWriterFactoryStrategy;
             this.preparedUrlEntryFactory = preparedUrlEntryFactory;
         }
+        private readonly bool omitUrlEntriesWithoutMatchingContent;
         private readonly XmlWriter writer;
         private readonly ISpecializedContentXmlWriterFactoryStrategy specializedContentXmlWriterFactoryStrategy;
         private readonly IPreparedUrlEntryFactory preparedUrlEntryFactory;
-        
+
+
         public virtual void WriteStartDocument()
         {
             writer.WriteStartDocument();
@@ -65,6 +69,11 @@ namespace MvcSiteMapProvider.Xml.Sitemap
 
         public virtual void WriteEntry(IUrlEntry urlEntry)
         {
+            if (this.omitUrlEntriesWithoutMatchingContent && !this.ContainsMatchingContentType(urlEntry))
+            {
+                return;
+            }
+
             // Run any business logic that needs to be executed to prepare
             // the data for writing.
             var prepared = this.preparedUrlEntryFactory.Create(urlEntry);
@@ -143,5 +152,19 @@ namespace MvcSiteMapProvider.Xml.Sitemap
                 }
             }
         }
+
+        protected virtual bool ContainsMatchingContentType(IUrlEntry urlEntry)
+        {
+            var contentTypes = this.specializedContentXmlWriterFactoryStrategy.GetRegisteredContentTypes();
+
+            return (from sc in urlEntry.SpecializedContent
+                   let t = sc.GetType()
+                   from i in t.GetInterfaces()
+                   select i)
+                   .Intersect(contentTypes)
+                   .Any();
+        }
+
+        
     }
 }

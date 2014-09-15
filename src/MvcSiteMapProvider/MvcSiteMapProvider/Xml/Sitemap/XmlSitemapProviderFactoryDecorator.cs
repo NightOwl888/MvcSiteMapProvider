@@ -7,24 +7,24 @@ namespace MvcSiteMapProvider.Xml.Sitemap
         : IXmlSitemapProviderFactory
     {
         public XmlSitemapProviderFactoryDecorator(
-            IXmlSitemapProviderFactory xmlSiteMapProviderFactory,
+            IXmlSitemapProviderFactory xmlSitemapProviderFactory,
             IXmlSitemapProviderDecoratorFactory decoratorFactory
             )
         {
-            if (xmlSiteMapProviderFactory == null)
-                throw new ArgumentNullException("xmlSiteMapProviderFactory");
+            if (xmlSitemapProviderFactory == null)
+                throw new ArgumentNullException("xmlSitemapProviderFactory");
             if (decoratorFactory == null)
                 throw new ArgumentNullException("decoratorFactory");
 
-            this.innerXmlSiteMapProviderFactory = xmlSiteMapProviderFactory;
+            this.innerXmlSitemapProviderFactory = xmlSitemapProviderFactory;
             this.decoratorFactory = decoratorFactory;
         }
-        private readonly IXmlSitemapProviderFactory innerXmlSiteMapProviderFactory;
+        private readonly IXmlSitemapProviderFactory innerXmlSitemapProviderFactory;
         private readonly IXmlSitemapProviderDecoratorFactory decoratorFactory;
 
         public IXmlSitemapProvider Create(Type providerType)
         {
-            var provider = this.innerXmlSiteMapProviderFactory.Create(providerType);
+            var provider = this.innerXmlSitemapProviderFactory.Create(providerType);
             if (provider != null)
             {
                 provider = this.decoratorFactory.Create(provider);
@@ -34,7 +34,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap
 
         public void Release(IXmlSitemapProvider xmlSitemapProvider)
         {
-            this.innerXmlSiteMapProviderFactory.Release(xmlSitemapProvider);
+            this.innerXmlSitemapProviderFactory.Release(xmlSitemapProvider);
         }
     }
 }
