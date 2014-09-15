@@ -79,6 +79,10 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
 
         IEnumerable<ISpecializedContentXmlWriterFactory> SpecializedContentXmlWriterFactories { get; }
 
+        IXmlSitemapFeedBuilderFacade WithXmlSitemapProviderFactory(IXmlSitemapProviderFactory xmlSitemapProviderFactory);
+
+        IXmlSitemapProviderFactory XmlSitemapProviderFactory { get; }
+
         IXmlSitemapFeed Create();
     }
 

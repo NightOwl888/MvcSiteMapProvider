@@ -18,6 +18,15 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
     public class XmlSitemapFeedBuilderFacade
         : IXmlSitemapFeedBuilderFacade
     {
+        public XmlSitemapFeedBuilderFacade(string feedName)
+            : this(
+                feedName: feedName, 
+                xmlSitemapProviderFactory: new XmlSitemapProviderFactory(), 
+                assemblyProvider: new AttributeAssemblyProviderBuilder().Create(), 
+                xmlSitemapFeedPageNameProvider: new XmlSitemapFeedPageNameProvider())
+        {
+        }
+
         public XmlSitemapFeedBuilderFacade(
             string feedName, 
             IXmlSitemapProviderFactory xmlSitemapProviderFactory, 
@@ -262,48 +271,46 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
             get { return this.specializedContentDictionary.Values; }
         }
 
+        public IXmlSitemapFeedBuilderFacade WithXmlSitemapProviderFactory(IXmlSitemapProviderFactory xmlSitemapProviderFactory)
+        {
+            return new XmlSitemapFeedBuilderFacade(this.feedName, this.maximumPageSize, this.omitRequestCaching, this.omitUrlsWithoutMatchingContent,
+                this.xmlWriterSettings, xmlSitemapProviderFactory, this.assemblyProvider, this.xmlSitemapFeedPageNameProvider, this.specializedContentDictionary);
+        }
+
+        public IXmlSitemapProviderFactory XmlSitemapProviderFactory
+        {
+            get { return this.xmlSitemapProviderFactory; }
+        }
+
         public IXmlSitemapFeed Create()
         {
             var xmlWriterFactory = new XmlWriterFactory();
 
             // Pager
-            //var pagingInstructionFactory = new PagingInstructionFactory();
-            //var xmlSitemapPageInfoFactory = new XmlSitemapPageInfoFactory();
-            //var xmlSitemapPageDataFactory = new XmlSitemapPageDataFactory();
             var xmlSitemapPager = new XmlSitemapPagerBuilder().WithMaximumPageSize(this.maximumPageSize).Create();
 
-            // XML Sitemap Provider (scan) 
-            //var assemblyProvider = new AttributeAssemblyProvider(this.includeAssembliesForScan, this.excludeAssembliesForScan);
+            // XML Sitemap Providers (scan) 
             var xmlSitemapProviderTypeStrategy = new XmlSitemapProviderTypeStrategy(this.assemblyProvider);
 
             var xmlSitemapProviderFactory = this.xmlSitemapProviderFactory;
-
             if (!this.omitRequestCaching)
             {
                 xmlSitemapProviderFactory = new XmlSitemapProviderFactoryDecoratorBuilder().Create(xmlSitemapProviderFactory);
-
-                //xmlSitemapProviderFactory = new XmlSitemapProviderFactoryDecorator(xmlSitemapProviderFactory, new RequestCachingXmlSitemapProviderDecoratorFactory(new Caching.RequestCache(new Web.Mvc.MvcContextFactory())));
             }
-            
-            //var xmlSitemapProviderFactoryDecorator = new XmlSitemapProviderFactoryDecorator(this.xmlSitemapProviderFactory, new RequestCachingXmlSitemapProviderDecoratorFactory(new Caching.RequestCache(new Web.Mvc.MvcContextFactory())));
+
             var xmlSitemapProviderStrategy = new XmlSitemapProviderStrategy(xmlSitemapProviderFactory, xmlSitemapProviderTypeStrategy);
 
             // URL Resolver
             var xmlSitemapUrlResolver = new XmlSitemapUrlResolverBuilder().Create();
+            var xmlSitemapFeedUrlResolver = new XmlSitemapFeedUrlResolver(xmlSitemapUrlResolver, this.xmlSitemapFeedPageNameProvider);
 
             // Specialized Content
             var specializedContentXmlWriterFactoryStrategy = new SpecializedContentXmlWriterFactoryStrategy(this.specializedContentDictionary.Values.ToArray());
             var preparedUrlEntryFactory = new PreparedUrlEntryFactoryBuilder().WithXmlSitemapUrlResolver(xmlSitemapUrlResolver).Create();
             var xmlSitemapWriterFactory = new XmlSitemapWriterFactory(this.omitUrlsWithoutMatchingContent, specializedContentXmlWriterFactoryStrategy, preparedUrlEntryFactory);
 
-            //var urlEntryHelperFactory = new UrlEntryHelperFactory();
+            // Writers
             var xmlSitemapPageWriter = new XmlSitemapPageWriterBuilder().WithXmlSitemapWriterFactory(xmlSitemapWriterFactory).Create();
-            //var xmlSitemapPageWriter = new XmlSitemapPageWriter(urlEntryHelperFactory, xmlSitemapWriterFactory);
-
-            
-
-            var xmlSitemapFeedUrlResolver = new XmlSitemapFeedUrlResolver(xmlSitemapUrlResolver, this.xmlSitemapFeedPageNameProvider);
-            //var xmlSitemapIndexPageWriter = new XmlSitemapIndexPageWriter(new XmlSitemapIndexWriterFactory(), new XmlSitemapFeedUrlResolver(xmlSitemapUrlResolver, this.xmlSitemapFeedPageNameProvider), new SitemapEntryFactory());
             var xmlSitemapIndexPageWriter = new XmlSitemapIndexPageWriterBuilder().WithXmlSitemapFeedUrlResolver(xmlSitemapFeedUrlResolver).Create();
             
             var xmlSitemapPageManager = new XmlSitemapPageManager(xmlSitemapPager, xmlSitemapProviderStrategy, xmlSitemapPageWriter, xmlSitemapIndexPageWriter);
