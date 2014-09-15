@@ -196,7 +196,7 @@
     <Compile Include="Globalization\CultureContextFactory.cs" />
     <Compile Include="Globalization\ICultureContextFactory.cs" />
     <Compile Include="Globalization\ICultureContext.cs" />
-    <Compile Include="IO\CompressibleHttpResponseStreamFactory.cs" />
+    <Compile Include="IO\FileStreamFactory.cs" />
     <Compile Include="IO\HttpResponseStreamCompressor.cs" />
     <Compile Include="IO\IHttpResponseStreamCompressor.cs" />
     <Compile Include="ISiteMapNodeExtensions.cs" />
@@ -302,6 +302,7 @@
     <Compile Include="Xml\Sitemap\Index\IXmlSitemapIndexPageWriter.cs" />
     <Compile Include="Xml\Sitemap\Index\XmlSitemapIndexPageWriter.cs" />
     <Compile Include="Xml\Sitemap\IRequestCachingXmlSitemapProviderDecoratorFactory.cs" />
+    <Compile Include="Xml\Sitemap\IXmlSitemapFileGenerator.cs" />
     <Compile Include="Xml\Sitemap\IXmlSitemapProviderDecoratorFactory.cs" />
     <Compile Include="Xml\Sitemap\IXmlSitemapFeedUrlResolver.cs" />
     <Compile Include="Xml\Sitemap\Paging\IXmlSitemapPageData.cs" />
@@ -323,7 +324,6 @@
     <Compile Include="Xml\Sitemap\Index\IXmlSitemapIndexWriter.cs" />
     <Compile Include="Xml\Sitemap\Index\IXmlSitemapIndexWriterFactory.cs" />
     <Compile Include="Xml\Sitemap\Paging\IXmlSitemapPager.cs" />
-    <Compile Include="Xml\Sitemap\ISitemapService.cs" />
     <Compile Include="Xml\Sitemap\IXmlSitemapWriterFactory.cs" />
     <Compile Include="IO\IStreamFactory.cs" />
     <Compile Include="Xml\Sitemap\IUrlEntryHelper.cs" />
@@ -338,6 +338,7 @@
     <Compile Include="Xml\Sitemap\PreparedUrlEntryFactory.cs" />
     <Compile Include="Xml\Sitemap\RequestCachingXmlSitemapProviderDecorator.cs" />
     <Compile Include="Xml\Sitemap\RequestCachingXmlSitemapProviderDecoratorFactory.cs" />
+    <Compile Include="Xml\Sitemap\XmlSitemapFileGenerator.cs" />
     <Compile Include="Xml\Sitemap\XmlSitemapProviderFactoryDecorator.cs" />
     <Compile Include="Xml\Sitemap\Specialized\Image\IPreparedImageContentFactory.cs" />
     <Compile Include="Xml\Sitemap\Specialized\IMobileContent.cs" />
@@ -400,7 +401,6 @@
     <Compile Include="Xml\Sitemap\XmlSitemapPageManager.cs" />
     <Compile Include="Xml\Sitemap\XmlSitemapFeedPageNameProvider.cs" />
     <Compile Include="Xml\Sitemap\XmlSitemapPageWriter.cs" />
-    <Compile Include="Xml\Sitemap\SitemapService.cs" />
     <Compile Include="Xml\Sitemap\XmlSitemapProviderBase.cs" />
     <Compile Include="Xml\Sitemap\XmlSitemapProviderFactory.cs" />
     <Compile Include="Xml\Sitemap\XmlSitemapProviderStrategy.cs" />

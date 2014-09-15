@@ -335,7 +335,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap.Specialized.Video
 
             // assert
             var actual = result.ExpirationDate;
-            var expected = "2000-11-13T08:35:12.0000000+07:00";
+            var expected = "2000-11-13T15:35:12.0000000+07:00";
             Assert.AreEqual(expected, actual);
         }
 

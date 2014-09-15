@@ -19,6 +19,8 @@ namespace MvcSiteMapProvider.Xml.Sitemap
         }
         private readonly IXmlSitemapFeed[] xmlSitemapFeeds;
 
+        public IEnumerable<IXmlSitemapFeed> XmlSitemapFeeds { get { return this.xmlSitemapFeeds; } }
+
         public IXmlSitemapFeed GetFeed(string feedName)
         {
             // NOTE: We are intentionally returning null in the case where the name is not valid.

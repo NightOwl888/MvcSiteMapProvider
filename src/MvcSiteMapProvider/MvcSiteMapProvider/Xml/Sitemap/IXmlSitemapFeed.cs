@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.IO;
 using System.Xml;
+using MvcSiteMapProvider.Xml.Sitemap.Paging;
 
 namespace MvcSiteMapProvider.Xml.Sitemap
 {
@@ -10,5 +9,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap
     {
         string Name { get; }
         bool WritePage(int page, Stream output);
+        bool WritePage(int page, Stream output, XmlWriterSettings settings);
+        IXmlSitemapPageData GetPageData();
     }
 }

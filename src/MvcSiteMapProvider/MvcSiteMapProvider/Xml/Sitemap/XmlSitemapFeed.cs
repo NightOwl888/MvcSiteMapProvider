@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.IO;
 using System.Xml;
+using MvcSiteMapProvider.Xml.Sitemap.Paging;
 
 namespace MvcSiteMapProvider.Xml.Sitemap
 {
@@ -36,17 +35,28 @@ namespace MvcSiteMapProvider.Xml.Sitemap
         private readonly IXmlWriterFactory xmlWriterFactory;
         private readonly IXmlSitemapPageManager siteMapPageManager;
 
-        public string Name
+        public virtual string Name
         {
             get { return this.name; }
         }
 
-        public bool WritePage(int page, Stream output)
+        public virtual bool WritePage(int page, Stream output)
         {
-            using (var writer = this.xmlWriterFactory.Create(output, this.settings))
+            return this.WritePage(page, output, this.settings);
+        }
+
+        public virtual bool WritePage(int page, Stream output, XmlWriterSettings settings)
+        {
+            var xmlWriterSettings = (settings != null) ? settings : this.settings;
+            using (var writer = this.xmlWriterFactory.Create(output, xmlWriterSettings))
             {
                 return this.siteMapPageManager.WritePage(writer, this.Name, page);
             }
+        }
+
+        public virtual IXmlSitemapPageData GetPageData()
+        {
+            return this.siteMapPageManager.GetPageData(this.name);
         }
     }
 }

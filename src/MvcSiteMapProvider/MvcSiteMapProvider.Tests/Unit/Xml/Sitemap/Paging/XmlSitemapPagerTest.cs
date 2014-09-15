@@ -66,9 +66,12 @@ namespace MvcSiteMapProvider.Tests.Unit.Xml.Sitemap.Paging
         private IXmlSitemapPager NewXmlSitemapPager()
         {
             return new XmlSitemapPager(
-                this.pagingInstructionFactory.Object, 
-                this.xmlSitemapPageInfoFactory.Object, 
-                this.xmlSitemapPageDataFactory.Object);
+                this.pagingInstructionFactory.Object,
+                this.xmlSitemapPageInfoFactory.Object,
+                this.xmlSitemapPageDataFactory.Object) 
+                { 
+                    MaximumPageSize = 40000 
+                };
         }
 
         // 3 providers with 100,000 records each, 40,000 maximum per page
