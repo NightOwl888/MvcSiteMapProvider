@@ -26,5 +26,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized
         INewsOptionalValueBuilder WithStockTickers(string stockTickers);
 
         INewsOptionalValueBuilder WithStockTickers(IEnumerable<string> stockTickers);
+
+        // TODO: Make a way to omit stock tickers and keywords
     }
 }

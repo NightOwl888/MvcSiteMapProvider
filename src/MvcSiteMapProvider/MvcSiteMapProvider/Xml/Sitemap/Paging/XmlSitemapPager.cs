@@ -25,10 +25,8 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Paging
             this.xmlSitemapPageInfoFactory = xmlSitemapPageInfoFactory;
             this.xmlSitemapPageDataFactory = xmlSitemapPageDataFactory;
 
-            // This number should be 50,000 in theory, however because the Sitemap protocol
-            // states that the maximum file size is 50 MB and there is no reasonable way to
-            // calculate the size during streaming, an average cap of 40,000 has been chosen.
-            this.MaximumPageSize = 40000;
+            // Set default to 50,000 entries maximum
+            this.MaximumPageSize = 50000;
         }
         private readonly IPagingInstructionFactory pagingInstructionFactory;
         private readonly IXmlSitemapPageInfoFactory xmlSitemapPageInfoFactory;

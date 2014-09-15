@@ -13,28 +13,28 @@ namespace MvcSiteMapProvider.Xml.Sitemap
         public XmlSitemapFeed(
             string name,
             XmlWriterSettings settings,
-            IXmlSitemapPageManager siteMapPageManager,
-            IXmlWriterFactory xmlWriterFactory
+            IXmlWriterFactory xmlWriterFactory,
+            IXmlSitemapPageManager siteMapPageManager
             )
         {
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentNullException("name");
             if (settings == null)
                 throw new ArgumentNullException("settings");
-            if (siteMapPageManager == null)
-                throw new ArgumentNullException("siteMapPageManager");
             if (xmlWriterFactory == null)
                 throw new ArgumentNullException("xmlWriterFactory");
+            if (siteMapPageManager == null)
+                throw new ArgumentNullException("siteMapPageManager");
 
             this.name = name;
             this.settings = settings;
-            this.siteMapPageManager = siteMapPageManager;
             this.xmlWriterFactory = xmlWriterFactory;
+            this.siteMapPageManager = siteMapPageManager;
         }
         private readonly string name;
         private readonly XmlWriterSettings settings;
-        private readonly IXmlSitemapPageManager siteMapPageManager;
         private readonly IXmlWriterFactory xmlWriterFactory;
+        private readonly IXmlSitemapPageManager siteMapPageManager;
 
         public string Name
         {

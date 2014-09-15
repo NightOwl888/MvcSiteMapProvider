@@ -8,9 +8,9 @@ namespace MvcSiteMapProvider.Xml.Sitemap
     public class UrlEntryHelperFactory
         : IUrlEntryHelperFactory
     {
-        public IUrlEntryHelper Create(string feedName, int skip, int take,Action<IUrlEntry> addUrlEntryMethod)
+        public IUrlEntryHelper Create(string feedName, int skip, int take, Action<IUrlEntry> sendUrlEntryMethod)
         {
-            return new UrlEntryHelper(feedName, skip, take, addUrlEntryMethod);
+            return new UrlEntryHelper(feedName, skip, take, sendUrlEntryMethod);
         }
     }
 }
