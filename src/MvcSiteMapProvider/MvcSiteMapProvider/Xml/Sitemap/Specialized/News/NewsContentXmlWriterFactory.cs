@@ -6,6 +6,11 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized.News
     public class NewsContentXmlWriterFactory
         : ISpecializedContentXmlWriterFactory
     {
+        public NewsContentXmlWriterFactory()
+            : this(preparedNewsContentFactory: new PreparedNewsContentFactory())
+        {
+        }
+
         public NewsContentXmlWriterFactory(
             IPreparedNewsContentFactory preparedNewsContentFactory
             )

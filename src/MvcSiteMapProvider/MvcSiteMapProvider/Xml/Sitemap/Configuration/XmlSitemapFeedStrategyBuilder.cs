@@ -16,7 +16,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
             namedFeedPageName: "{feedName}-sitemap-{page}.xml",
             includeAssembliesForScan: new List<string>(),
             excludeAssembliesForScan: new List<string>(),
-            xmlSitemapFeeds: new Dictionary<string, IXmlSitemapFeed>(),
+            xmlSitemapFeeds: new Dictionary<string, XmlSitemapFeedToXmlSitemapFeedBuilderRelation>(),
             xmlSitemapProviderFactory: new XmlSitemapProviderFactory()
             )
         {
@@ -29,7 +29,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
             string namedFeedPageName,
             IList<string> includeAssembliesForScan,
             IList<string> excludeAssembliesForScan,
-            IDictionary<string, IXmlSitemapFeed> xmlSitemapFeeds,
+            IDictionary<string, XmlSitemapFeedToXmlSitemapFeedBuilderRelation> xmlSitemapFeeds,
             IXmlSitemapProviderFactory xmlSitemapProviderFactory
             )
         {
@@ -65,7 +65,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
         private readonly string namedFeedPageName;
         private readonly IList<string> includeAssembliesForScan;
         private readonly IList<string> excludeAssembliesForScan;
-        private readonly IDictionary<string, IXmlSitemapFeed> xmlSitemapFeeds;
+        private readonly IDictionary<string, XmlSitemapFeedToXmlSitemapFeedBuilderRelation> xmlSitemapFeeds;
         private readonly IXmlSitemapProviderFactory xmlSitemapProviderFactory;
         
 
@@ -102,7 +102,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
         }
 
 
-        public IXmlSitemapFeedStrategyStarter AddAssemblyForXmlSitemapProviderScan(string assemblyName)
+        public IXmlSitemapFeedStrategyStarter WithAssemblyForXmlSitemapProviderScan(string assemblyName)
         {
             if (!string.IsNullOrEmpty(assemblyName))
             {
@@ -111,7 +111,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
             return new XmlSitemapFeedStrategyBuilder(this.defaultFeedRootPageName, this.defaultFeedPageName, this.namedFeedRootPageName, this.namedFeedPageName, this.includeAssembliesForScan, this.excludeAssembliesForScan, this.xmlSitemapFeeds, this.xmlSitemapProviderFactory);
         }
 
-        public IXmlSitemapFeedStrategyStarter RemoveAssemblyFromXmlSitemapProviderScan(string assemblyName)
+        public IXmlSitemapFeedStrategyStarter OmitAssemblyFromXmlSitemapProviderScan(string assemblyName)
         {
             if (!string.IsNullOrEmpty(assemblyName))
             {
@@ -144,7 +144,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
             var starter = new XmlSitemapFeedBuilderFacade(feedName, this.xmlSitemapProviderFactory, assemblyProvider, xmlSitemapFeedPageNameProvider);
             var builder = expression(starter);
             var feed = builder.Create();
-            this.xmlSitemapFeeds.Add(feed.Name, feed);
+            this.xmlSitemapFeeds.Add(feed.Name, new XmlSitemapFeedToXmlSitemapFeedBuilderRelation(feed, builder));
 
             return new XmlSitemapFeedStrategyBuilder(this.defaultFeedRootPageName, this.defaultFeedPageName, this.namedFeedRootPageName, this.namedFeedPageName, this.includeAssembliesForScan, this.excludeAssembliesForScan, this.xmlSitemapFeeds, this.xmlSitemapProviderFactory);
         }
@@ -158,7 +158,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
         {
             if (xmlSitemapFeed != null)
             {
-                this.xmlSitemapFeeds.Add(xmlSitemapFeed.Name, xmlSitemapFeed);
+                this.xmlSitemapFeeds.Add(xmlSitemapFeed.Name, new XmlSitemapFeedToXmlSitemapFeedBuilderRelation(xmlSitemapFeed, null));
             }
             return new XmlSitemapFeedStrategyBuilder(this.defaultFeedRootPageName, this.defaultFeedPageName, this.namedFeedRootPageName, this.namedFeedPageName, this.includeAssembliesForScan, this.excludeAssembliesForScan, this.xmlSitemapFeeds, this.xmlSitemapProviderFactory);
         }
@@ -169,7 +169,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
             {
                 if (feed != null)
                 {
-                    this.xmlSitemapFeeds.Add(feed.Name, feed);
+                    this.xmlSitemapFeeds.Add(feed.Name, new XmlSitemapFeedToXmlSitemapFeedBuilderRelation(feed, null));
                 }
             }
             return new XmlSitemapFeedStrategyBuilder(this.defaultFeedRootPageName, this.defaultFeedPageName, this.namedFeedRootPageName, this.namedFeedPageName, this.includeAssembliesForScan, this.excludeAssembliesForScan, this.xmlSitemapFeeds, this.xmlSitemapProviderFactory);
@@ -189,7 +189,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
 
         public IEnumerable<IXmlSitemapFeed> XmlSitemapFeeds
         {
-            get { return this.xmlSitemapFeeds.Values.ToArray(); }
+            get { return this.xmlSitemapFeeds.Values.Select(x => x.XmlSitemapFeed).ToArray(); }
         }
 
         public IXmlSitemapProviderFactory XmlSitemapProviderFactory
@@ -199,7 +199,50 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
 
         public IXmlSitemapFeedStrategy Create()
         {
-            return new XmlSitemapFeedStrategy(this.xmlSitemapFeeds.Values.ToArray());
-        }  
+            var assemblyProvider = new AttributeAssemblyProvider(this.includeAssembliesForScan, this.excludeAssembliesForScan);
+            var xmlSitemapFeedPageNameProvider = new XmlSitemapFeedPageNameProvider(
+                this.DefaultFeedRootPageName, this.DefaultFeedPageName, this.NamedFeedRootPageName, this.NamedFeedPageName);
+
+            // Copy the dictionary
+            var feeds = new Dictionary<string, XmlSitemapFeedToXmlSitemapFeedBuilderRelation>(this.xmlSitemapFeeds);
+
+            // Rebuild the feeds that have a builder using the latest state
+            foreach (var xmlSitemapFeedWrapper in feeds)
+            {
+                if (xmlSitemapFeedWrapper.Value.XmlSitemapFeedBuilderFacade != null)
+                {
+                    var feed = xmlSitemapFeedWrapper.Value.XmlSitemapFeed;
+                    var builder = xmlSitemapFeedWrapper.Value.XmlSitemapFeedBuilderFacade;
+                    builder = builder
+                        .WithXmlSitemapProviderFactory(this.XmlSitemapProviderFactory)
+                        .WithAssemblyProvider(assemblyProvider)
+                        .WithXmlSitemapFeedPageNameProvider(xmlSitemapFeedPageNameProvider);
+
+                    // Reset the dictionary to the latest state.
+                    this.xmlSitemapFeeds[feed.Name] = new XmlSitemapFeedToXmlSitemapFeedBuilderRelation(builder.Create(), builder);
+                }
+            }
+
+            return new XmlSitemapFeedStrategy(this.XmlSitemapFeeds.ToArray());
+        }
+
+        private class XmlSitemapFeedToXmlSitemapFeedBuilderRelation
+        {
+            public XmlSitemapFeedToXmlSitemapFeedBuilderRelation(
+                IXmlSitemapFeed xmlSitemapFeed,
+                IXmlSitemapFeedBuilderFacade xmlSitemapFeedBuilderFacade
+                )
+            {
+                if (xmlSitemapFeed == null)
+                    throw new ArgumentNullException("xmlSitemapFeed");
+
+                this.XmlSitemapFeed = xmlSitemapFeed;
+                this.XmlSitemapFeedBuilderFacade = xmlSitemapFeedBuilderFacade;
+            }
+
+            public IXmlSitemapFeed XmlSitemapFeed { get; private set; }
+
+            public IXmlSitemapFeedBuilderFacade XmlSitemapFeedBuilderFacade { get; private set; }
+        }
     }
 }

@@ -6,6 +6,11 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized.Image
     public class ImageContentXmlWriterFactory
         : ISpecializedContentXmlWriterFactory
     {
+        public ImageContentXmlWriterFactory()
+            : this(preparedImageContentFactory: new PreparedImageContentFactory())
+        {
+        }
+
         public ImageContentXmlWriterFactory(
             IPreparedImageContentFactory preparedImageContentFactory
             )

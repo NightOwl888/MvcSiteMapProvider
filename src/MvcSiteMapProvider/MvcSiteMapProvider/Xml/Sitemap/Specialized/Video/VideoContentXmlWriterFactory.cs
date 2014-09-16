@@ -6,6 +6,11 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized.Video
     public class VideoContentXmlWriterFactory
         : ISpecializedContentXmlWriterFactory
     {
+        public VideoContentXmlWriterFactory()
+            : this(preparedVideoContentFactory: new PreparedVideoContentFactory())
+        {
+        }
+
         public VideoContentXmlWriterFactory(
             IPreparedVideoContentFactory preparedVideoContentFactory
             )

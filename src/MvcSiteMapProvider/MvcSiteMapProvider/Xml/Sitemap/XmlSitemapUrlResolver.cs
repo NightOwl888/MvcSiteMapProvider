@@ -13,21 +13,27 @@ namespace MvcSiteMapProvider.Xml.Sitemap
         : IXmlSitemapUrlResolver
     {
         public XmlSitemapUrlResolver(
+            string defaultProtocol,
+            string defaultHostName,
             IUrlPath urlPath
             )
         {
+            if (string.IsNullOrEmpty(defaultProtocol))
+                throw new ArgumentNullException("defaultProtocol");
             if (urlPath == null)
                 throw new ArgumentNullException("urlPath");
 
+            this.DefaultProtocol = defaultProtocol;
+            this.DefaultHostName = defaultHostName;
             this.urlPath = urlPath;
 
             // Set the default protocol
-            this.DefaultProtocol = Uri.UriSchemeHttp;
+            //this.DefaultProtocol = Uri.UriSchemeHttp;
         }
         private readonly IUrlPath urlPath;
         private string defaultHostName;
 
-        public string DefaultProtocol { get; set; }
+        public string DefaultProtocol { get; private set; }
 
         public string DefaultHostName
         {
@@ -37,7 +43,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap
                     this.urlPath.GetPublicFacingUrl().Host :
                     this.defaultHostName;
             }
-            set
+            private set
             {
                 this.defaultHostName = value;
             }
