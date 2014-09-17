@@ -6,7 +6,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
     public interface IXmlSitemapFeedUrlResolverBuilder
         : IFluentInterface
     {
-        IXmlSitemapFeedUrlResolverBuilder WithXmlSitemapUrlResolver(IXmlSitemapUrlResolver xmlSitemapUrlResolver);
+        IXmlSitemapFeedUrlResolverBuilder WithXmlSitemapUrlResolverFactory(IXmlSitemapUrlResolverFactory xmlSitemapUrlResolverFactory);
 
         IXmlSitemapFeedUrlResolverBuilder WithXmlSitemapFeedPageNameProvider(IXmlSitemapFeedPageNameProvider xmlSitemapFeedPageNameProvider);
 

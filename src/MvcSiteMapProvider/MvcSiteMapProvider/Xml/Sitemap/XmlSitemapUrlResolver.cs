@@ -23,33 +23,17 @@ namespace MvcSiteMapProvider.Xml.Sitemap
             if (urlPath == null)
                 throw new ArgumentNullException("urlPath");
 
-            this.DefaultProtocol = defaultProtocol;
-            this.DefaultHostName = defaultHostName;
+            this.defaultProtocol = defaultProtocol;
+            this.defaultHostName = defaultHostName;
             this.urlPath = urlPath;
 
             // Set the default protocol
             //this.DefaultProtocol = Uri.UriSchemeHttp;
         }
+        private readonly string defaultProtocol;
+        private readonly string defaultHostName;
         private readonly IUrlPath urlPath;
-        private string defaultHostName;
-
-        public string DefaultProtocol { get; private set; }
-
-        public string DefaultHostName
-        {
-            get
-            {
-                return string.IsNullOrEmpty(defaultHostName) ?
-                    this.urlPath.GetPublicFacingUrl().Host :
-                    this.defaultHostName;
-            }
-            private set
-            {
-                this.defaultHostName = value;
-            }
-        }
-
-
+        
         /// <summary>
         /// Resolves a URL, similar to how it would on Control.ResolveUrl() in ASP.NET.
         /// If the URL begins with a "/", it will be resolved to the web root. If the 
@@ -60,7 +44,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap
         /// <returns>The resolved URL.</returns>
         public string ResolveUrlToAbsolute(string url)
         {
-            return this.urlPath.ResolveUrl(url, this.DefaultProtocol, this.DefaultHostName);
+            return this.urlPath.ResolveUrl(url, this.defaultProtocol, this.GetDefaultHostName());
         }
 
         /// <summary>
@@ -75,9 +59,9 @@ namespace MvcSiteMapProvider.Xml.Sitemap
         /// <returns>The resolved URL.</returns>
         public string ResolveUrlToAbsolute(string url, string protocol)
         {
-            protocol = string.IsNullOrEmpty(protocol) ? this.DefaultProtocol : protocol;
+            protocol = string.IsNullOrEmpty(protocol) ? this.defaultProtocol : protocol;
 
-            return this.urlPath.ResolveUrl(url, protocol, this.DefaultHostName);
+            return this.urlPath.ResolveUrl(url, protocol, this.GetDefaultHostName());
         }
 
         /// <summary>
@@ -93,10 +77,17 @@ namespace MvcSiteMapProvider.Xml.Sitemap
         /// <returns>The resolved URL.</returns>
         public string ResolveUrlToAbsolute(string url, string protocol, string hostName)
         {
-            protocol = string.IsNullOrEmpty(protocol) ? this.DefaultProtocol : protocol;
-            hostName = string.IsNullOrEmpty(hostName) ? this.DefaultHostName : hostName;
+            protocol = string.IsNullOrEmpty(protocol) ? this.defaultProtocol : protocol;
+            hostName = string.IsNullOrEmpty(hostName) ? this.GetDefaultHostName() : hostName;
 
             return this.urlPath.ResolveUrl(url, protocol, hostName);
+        }
+
+        private string GetDefaultHostName()
+        {
+            return string.IsNullOrEmpty(defaultHostName) ?
+                this.urlPath.GetPublicFacingUrl().Host :
+                this.defaultHostName;
         }
     }
 }

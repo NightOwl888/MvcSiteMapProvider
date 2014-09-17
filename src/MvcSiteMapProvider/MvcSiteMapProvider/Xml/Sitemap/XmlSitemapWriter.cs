@@ -12,25 +12,25 @@ namespace MvcSiteMapProvider.Xml.Sitemap
         public XmlSitemapWriter(
             bool omitUrlEntriesWithoutMatchingContent,
             XmlWriter writer,
-            ISpecializedContentXmlWriterFactoryStrategy specializedContentXmlWriterFactoryStrategy,
+            ISpecializedContentWriter specializedContentWriter,
             IPreparedUrlEntryFactory preparedUrlEntryFactory
             )
         {
             if (writer == null)
                 throw new ArgumentNullException("writer");
-            if (specializedContentXmlWriterFactoryStrategy == null)
-                throw new ArgumentNullException("specializedContentXmlWriterFactoryStrategy");
+            if (specializedContentWriter == null)
+                throw new ArgumentNullException("specializedContentWriter");
             if (preparedUrlEntryFactory == null)
                 throw new ArgumentNullException("preparedUrlEntryFactory");
 
             this.omitUrlEntriesWithoutMatchingContent = omitUrlEntriesWithoutMatchingContent;
             this.writer = writer;
-            this.specializedContentXmlWriterFactoryStrategy = specializedContentXmlWriterFactoryStrategy;
+            this.specializedContentWriter = specializedContentWriter;
             this.preparedUrlEntryFactory = preparedUrlEntryFactory;
         }
         private readonly bool omitUrlEntriesWithoutMatchingContent;
         private readonly XmlWriter writer;
-        private readonly ISpecializedContentXmlWriterFactoryStrategy specializedContentXmlWriterFactoryStrategy;
+        private readonly ISpecializedContentWriter specializedContentWriter;
         private readonly IPreparedUrlEntryFactory preparedUrlEntryFactory;
 
 
@@ -38,27 +38,9 @@ namespace MvcSiteMapProvider.Xml.Sitemap
         {
             writer.WriteStartDocument();
             writer.WriteStartElement("urlset", "http://www.sitemaps.org/schemas/sitemap/0.9");
- 
-            // call upon registered child services to get namespaces
-            var contentTypes = this.specializedContentXmlWriterFactoryStrategy.GetRegisteredContentTypes();
 
-            foreach (var contentType in contentTypes)
-            {
-                var xmlWriterFactory = this.specializedContentXmlWriterFactoryStrategy.GetFactory(contentType);
-                if (xmlWriterFactory != null)
-                {
-                    var xmlWriter = xmlWriterFactory.Create(this.writer);
-                    try
-                    {
-                        xmlWriter.WriteNamespace();
-                    }
-                    finally
-                    {
-                        // Free up any unmanaged resources
-                        xmlWriterFactory.Release(xmlWriter);
-                    }
-                }
-            }
+            // call upon registered child services to get namespaces
+            this.specializedContentWriter.WriteNamespaces(writer);
         }
 
         public virtual void WriteEndDocument()
@@ -69,7 +51,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap
 
         public virtual void WriteEntry(IUrlEntry urlEntry)
         {
-            if (this.omitUrlEntriesWithoutMatchingContent && !this.ContainsMatchingContentType(urlEntry))
+            if (this.omitUrlEntriesWithoutMatchingContent && !this.specializedContentWriter.ContainsMatchingContentType(urlEntry.SpecializedContent))
             {
                 return;
             }
@@ -99,72 +81,10 @@ namespace MvcSiteMapProvider.Xml.Sitemap
 
             if (urlEntry.SpecializedContent != null)
             {
-                this.WriteSpecializedContents(urlEntry.SpecializedContent);
+                this.specializedContentWriter.WriteSpecializedContent(writer, urlEntry.SpecializedContent);
             }
 
             writer.WriteEndElement(); // url
         }
-
-        protected virtual void WriteSpecializedContents(IEnumerable<ISpecializedContent> specializedContents)
-        {
-            var contentTypes = this.specializedContentXmlWriterFactoryStrategy.GetRegisteredContentTypes();
-
-            // Order and group the content type the same way they are ordered in the SpecializedContentXmlWriterFactoryStrategy
-            var groupedContent = from ct in contentTypes
-                                 join contents in
-                                     (from sc in specializedContents
-                                      let t = sc.GetType()
-                                      from i in t.GetInterfaces()
-                                      select new { Instance = sc, Type = t, Interface = i })
-                                 on ct equals contents.Interface
-                                 group contents by ct into g
-                                 select new
-                                 {
-                                     ContentType = g.Key,
-                                     Contents = g.Where(x => g.Key == x.Interface)
-                                 };
-
-            foreach (var group in groupedContent)
-            {
-                // Strategy pattern to get the correct factory instance based on type.
-                var xmlWriterFactory = this.specializedContentXmlWriterFactoryStrategy.GetFactory(group.ContentType);
-
-                if (xmlWriterFactory != null)
-                {
-                    // Create our specialized writer instance
-                    var xmlWriter = xmlWriterFactory.Create(this.writer);
-                    try
-                    {
-                        // Use the invariant context to write the specialized content.
-                        using (var cultureContext = this.preparedUrlEntryFactory.CultureContextFactory.CreateInvariant())
-                        {
-                            foreach (var content in group.Contents)
-                            {
-                                xmlWriter.WriteContent(content.Instance, this.preparedUrlEntryFactory.UrlResolver, cultureContext);
-                            }
-                        }
-                    }
-                    finally
-                    {
-                        // Free up any unmanaged resources
-                        xmlWriterFactory.Release(xmlWriter);
-                    }
-                }
-            }
-        }
-
-        protected virtual bool ContainsMatchingContentType(IUrlEntry urlEntry)
-        {
-            var contentTypes = this.specializedContentXmlWriterFactoryStrategy.GetRegisteredContentTypes();
-
-            return (from sc in urlEntry.SpecializedContent
-                   let t = sc.GetType()
-                   from i in t.GetInterfaces()
-                   select i)
-                   .Intersect(contentTypes)
-                   .Any();
-        }
-
-        
     }
 }

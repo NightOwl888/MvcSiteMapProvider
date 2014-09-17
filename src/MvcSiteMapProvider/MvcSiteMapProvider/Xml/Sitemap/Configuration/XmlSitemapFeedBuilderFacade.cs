@@ -22,6 +22,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
             : this(
                 feedName: feedName, 
                 xmlSitemapProviderFactory: new XmlSitemapProviderFactory(), 
+                xmlSitemapUrlResolverFactory: new XmlSitemapUrlResolverFactoryBuilder().Create(),
                 assemblyProvider: new AttributeAssemblyProviderBuilder().Create(), 
                 xmlSitemapFeedPageNameProvider: new XmlSitemapFeedPageNameProvider())
         {
@@ -30,6 +31,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
         public XmlSitemapFeedBuilderFacade(
             string feedName, 
             IXmlSitemapProviderFactory xmlSitemapProviderFactory, 
+            IXmlSitemapUrlResolverFactory xmlSitemapUrlResolverFactory,
             IAttributeAssemblyProvider assemblyProvider, 
             IXmlSitemapFeedPageNameProvider xmlSitemapFeedPageNameProvider
             )
@@ -40,7 +42,8 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
                 omitUrlsWithoutMatchingContent: false,
                 // Default encoding to get rid of the BOM
                 xmlWriterSettings: new XmlWriterSettings() { Encoding = new UTF8Encoding(false) }, 
-                xmlSitemapProviderFactory: xmlSitemapProviderFactory, 
+                xmlSitemapProviderFactory: xmlSitemapProviderFactory,
+                xmlSitemapUrlResolverFactory: xmlSitemapUrlResolverFactory,
                 assemblyProvider: assemblyProvider, 
                 xmlSitemapFeedPageNameProvider: xmlSitemapFeedPageNameProvider, 
                 specializedContentDictionary: new Dictionary<Type, ISpecializedContentXmlWriterFactory>()
@@ -55,6 +58,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
             bool omitUrlsWithoutMatchingContent,
             XmlWriterSettings xmlWriterSettings,
             IXmlSitemapProviderFactory xmlSitemapProviderFactory,
+            IXmlSitemapUrlResolverFactory xmlSitemapUrlResolverFactory,
             IAttributeAssemblyProvider assemblyProvider,
             IXmlSitemapFeedPageNameProvider xmlSitemapFeedPageNameProvider,
             IDictionary<Type, ISpecializedContentXmlWriterFactory> specializedContentDictionary
@@ -66,6 +70,8 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
                 throw new ArgumentNullException("xmlWriterSettings");
             if (xmlSitemapProviderFactory == null)
                 throw new ArgumentNullException("xmlSitemapProviderFactory");
+            if (xmlSitemapUrlResolverFactory == null)
+                throw new ArgumentNullException("xmlSitemapUrlResolverFactory");
             if (assemblyProvider == null)
                 throw new ArgumentNullException("assemblyProvider");
             if (xmlSitemapFeedPageNameProvider == null)
@@ -79,6 +85,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
             this.omitUrlsWithoutMatchingContent = omitUrlsWithoutMatchingContent;
             this.xmlWriterSettings = xmlWriterSettings;
             this.xmlSitemapProviderFactory = xmlSitemapProviderFactory;
+            this.xmlSitemapUrlResolverFactory = xmlSitemapUrlResolverFactory;
             this.assemblyProvider = assemblyProvider;
             this.xmlSitemapFeedPageNameProvider = xmlSitemapFeedPageNameProvider;
             this.specializedContentDictionary = specializedContentDictionary;
@@ -90,6 +97,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
         private readonly bool omitUrlsWithoutMatchingContent;
         private readonly XmlWriterSettings xmlWriterSettings;
         private readonly IXmlSitemapProviderFactory xmlSitemapProviderFactory;
+        private readonly IXmlSitemapUrlResolverFactory xmlSitemapUrlResolverFactory;
         private readonly IAttributeAssemblyProvider assemblyProvider;
         private readonly IXmlSitemapFeedPageNameProvider xmlSitemapFeedPageNameProvider;
         private readonly IDictionary<Type, ISpecializedContentXmlWriterFactory> specializedContentDictionary;
@@ -103,62 +111,71 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
                 this.xmlWriterSettings.Encoding = encoding;
             }
             return new XmlSitemapFeedBuilderFacade(this.feedName, this.maximumPageSize, this.omitRequestCaching, this.omitUrlsWithoutMatchingContent, 
-                this.xmlWriterSettings, this.xmlSitemapProviderFactory, this.assemblyProvider, this.xmlSitemapFeedPageNameProvider, this.specializedContentDictionary);
+                this.xmlWriterSettings, this.xmlSitemapProviderFactory, this.xmlSitemapUrlResolverFactory, this.assemblyProvider, 
+                this.xmlSitemapFeedPageNameProvider, this.specializedContentDictionary);
         }
 
         public IXmlSitemapFeedBuilderFacade WithIndentation()
         {
             this.xmlWriterSettings.Indent = true;
-            return new XmlSitemapFeedBuilderFacade(this.feedName, this.maximumPageSize, this.omitRequestCaching, this.omitUrlsWithoutMatchingContent, 
-                this.xmlWriterSettings, this.xmlSitemapProviderFactory, this.assemblyProvider, this.xmlSitemapFeedPageNameProvider, this.specializedContentDictionary);
+            return new XmlSitemapFeedBuilderFacade(this.feedName, this.maximumPageSize, this.omitRequestCaching, this.omitUrlsWithoutMatchingContent,
+                this.xmlWriterSettings, this.xmlSitemapProviderFactory, this.xmlSitemapUrlResolverFactory, this.assemblyProvider,
+                this.xmlSitemapFeedPageNameProvider, this.specializedContentDictionary);
         }
 
         public IXmlSitemapFeedBuilderFacade WithIndentationCharacters(string indentChars)
         {
             this.xmlWriterSettings.IndentChars = indentChars;
-            return new XmlSitemapFeedBuilderFacade(this.feedName, this.maximumPageSize, this.omitRequestCaching, this.omitUrlsWithoutMatchingContent, 
-                this.xmlWriterSettings, this.xmlSitemapProviderFactory, this.assemblyProvider, this.xmlSitemapFeedPageNameProvider, this.specializedContentDictionary);
+            return new XmlSitemapFeedBuilderFacade(this.feedName, this.maximumPageSize, this.omitRequestCaching, this.omitUrlsWithoutMatchingContent,
+                this.xmlWriterSettings, this.xmlSitemapProviderFactory, this.xmlSitemapUrlResolverFactory, this.assemblyProvider,
+                this.xmlSitemapFeedPageNameProvider, this.specializedContentDictionary);
         }
 
         public IXmlSitemapFeedBuilderFacade WithNewLineHandling(NewLineHandling newLineHandling)
         {
             this.xmlWriterSettings.NewLineHandling = newLineHandling;
-            return new XmlSitemapFeedBuilderFacade(this.feedName, this.maximumPageSize, this.omitRequestCaching, this.omitUrlsWithoutMatchingContent, 
-                this.xmlWriterSettings, this.xmlSitemapProviderFactory, this.assemblyProvider, this.xmlSitemapFeedPageNameProvider, this.specializedContentDictionary);
+            return new XmlSitemapFeedBuilderFacade(this.feedName, this.maximumPageSize, this.omitRequestCaching, this.omitUrlsWithoutMatchingContent,
+                this.xmlWriterSettings, this.xmlSitemapProviderFactory, this.xmlSitemapUrlResolverFactory, this.assemblyProvider,
+                this.xmlSitemapFeedPageNameProvider, this.specializedContentDictionary);
         }
 
         public IXmlSitemapFeedBuilderFacade WithNewLineCharacters(string newLineChars)
         {
             this.xmlWriterSettings.NewLineChars = newLineChars;
-            return new XmlSitemapFeedBuilderFacade(this.feedName, this.maximumPageSize, this.omitRequestCaching, this.omitUrlsWithoutMatchingContent, 
-                this.xmlWriterSettings, this.xmlSitemapProviderFactory, this.assemblyProvider, this.xmlSitemapFeedPageNameProvider, this.specializedContentDictionary);
+            return new XmlSitemapFeedBuilderFacade(this.feedName, this.maximumPageSize, this.omitRequestCaching, this.omitUrlsWithoutMatchingContent,
+                this.xmlWriterSettings, this.xmlSitemapProviderFactory, this.xmlSitemapUrlResolverFactory, this.assemblyProvider,
+                this.xmlSitemapFeedPageNameProvider, this.specializedContentDictionary);
         }
 
         public IXmlSitemapFeedBuilderFacade OmitXmlDeclaration()
         {
             this.xmlWriterSettings.OmitXmlDeclaration = true;
-            return new XmlSitemapFeedBuilderFacade(this.feedName, this.maximumPageSize, this.omitRequestCaching, this.omitUrlsWithoutMatchingContent, 
-                this.xmlWriterSettings, this.xmlSitemapProviderFactory, this.assemblyProvider, this.xmlSitemapFeedPageNameProvider, this.specializedContentDictionary);
+            return new XmlSitemapFeedBuilderFacade(this.feedName, this.maximumPageSize, this.omitRequestCaching, this.omitUrlsWithoutMatchingContent,
+                this.xmlWriterSettings, this.xmlSitemapProviderFactory, this.xmlSitemapUrlResolverFactory, this.assemblyProvider,
+                this.xmlSitemapFeedPageNameProvider, this.specializedContentDictionary);
         }
 
         public IXmlSitemapFeedBuilderFacade WithMaximumPageSize(int maximumPageSize)
         {
-            return new XmlSitemapFeedBuilderFacade(this.feedName, maximumPageSize, this.omitRequestCaching, this.omitUrlsWithoutMatchingContent, 
-                this.xmlWriterSettings, this.xmlSitemapProviderFactory, this.assemblyProvider, this.xmlSitemapFeedPageNameProvider, this.specializedContentDictionary);
+            return new XmlSitemapFeedBuilderFacade(this.feedName, maximumPageSize, this.omitRequestCaching, this.omitUrlsWithoutMatchingContent,
+                this.xmlWriterSettings, this.xmlSitemapProviderFactory, this.xmlSitemapUrlResolverFactory, this.assemblyProvider,
+                this.xmlSitemapFeedPageNameProvider, this.specializedContentDictionary);
         }
 
         public IXmlSitemapFeedBuilderFacade OmitRequestCaching()
         {
             var omitRequestCaching = true;
             return new XmlSitemapFeedBuilderFacade(this.feedName, this.maximumPageSize, omitRequestCaching, this.omitUrlsWithoutMatchingContent,
-                this.xmlWriterSettings, this.xmlSitemapProviderFactory, this.assemblyProvider, this.xmlSitemapFeedPageNameProvider, this.specializedContentDictionary);
+                this.xmlWriterSettings, this.xmlSitemapProviderFactory, this.xmlSitemapUrlResolverFactory, this.assemblyProvider,
+                this.xmlSitemapFeedPageNameProvider, this.specializedContentDictionary);
         }
 
         public IXmlSitemapFeedBuilderFacade OmitUrlsWithoutMatchingContent()
         {
             var omitUrlsWithoutMatchingContent = true;
             return new XmlSitemapFeedBuilderFacade(this.feedName, this.maximumPageSize, this.omitRequestCaching, omitUrlsWithoutMatchingContent,
-                this.xmlWriterSettings, this.xmlSitemapProviderFactory, this.assemblyProvider, this.xmlSitemapFeedPageNameProvider, this.specializedContentDictionary);
+                this.xmlWriterSettings, this.xmlSitemapProviderFactory, this.xmlSitemapUrlResolverFactory, this.assemblyProvider,
+                this.xmlSitemapFeedPageNameProvider, this.specializedContentDictionary);
         }
 
         public IXmlSitemapFeedBuilderFacade WithNewsContent()
@@ -168,8 +185,9 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
             {
                 this.specializedContentDictionary.Add(newsContentXmlWriterFactory.ContentType, newsContentXmlWriterFactory);
             }
-            return new XmlSitemapFeedBuilderFacade(this.feedName, this.maximumPageSize, this.omitRequestCaching, this.omitUrlsWithoutMatchingContent, 
-                this.xmlWriterSettings, this.xmlSitemapProviderFactory, this.assemblyProvider, this.xmlSitemapFeedPageNameProvider, this.specializedContentDictionary);
+            return new XmlSitemapFeedBuilderFacade(this.feedName, this.maximumPageSize, this.omitRequestCaching, this.omitUrlsWithoutMatchingContent,
+                this.xmlWriterSettings, this.xmlSitemapProviderFactory, this.xmlSitemapUrlResolverFactory, this.assemblyProvider,
+                this.xmlSitemapFeedPageNameProvider, this.specializedContentDictionary);
         }
 
         public IXmlSitemapFeedBuilderFacade WithMobileContent()
@@ -179,8 +197,9 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
             {
                 this.specializedContentDictionary.Add(mobileContentXmlWriterFactory.ContentType, mobileContentXmlWriterFactory);
             }
-            return new XmlSitemapFeedBuilderFacade(this.feedName, this.maximumPageSize, this.omitRequestCaching, this.omitUrlsWithoutMatchingContent, 
-                this.xmlWriterSettings, this.xmlSitemapProviderFactory, this.assemblyProvider, this.xmlSitemapFeedPageNameProvider, this.specializedContentDictionary);
+            return new XmlSitemapFeedBuilderFacade(this.feedName, this.maximumPageSize, this.omitRequestCaching, this.omitUrlsWithoutMatchingContent,
+                this.xmlWriterSettings, this.xmlSitemapProviderFactory, this.xmlSitemapUrlResolverFactory, this.assemblyProvider,
+                this.xmlSitemapFeedPageNameProvider, this.specializedContentDictionary);
         }
 
         public IXmlSitemapFeedBuilderFacade WithImageContent()
@@ -190,8 +209,9 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
             {
                 this.specializedContentDictionary.Add(imageContentXmlWriterFactory.ContentType, imageContentXmlWriterFactory);
             }
-            return new XmlSitemapFeedBuilderFacade(this.feedName, this.maximumPageSize, this.omitRequestCaching, this.omitUrlsWithoutMatchingContent, 
-                this.xmlWriterSettings, this.xmlSitemapProviderFactory, this.assemblyProvider, this.xmlSitemapFeedPageNameProvider, this.specializedContentDictionary);
+            return new XmlSitemapFeedBuilderFacade(this.feedName, this.maximumPageSize, this.omitRequestCaching, this.omitUrlsWithoutMatchingContent,
+                this.xmlWriterSettings, this.xmlSitemapProviderFactory, this.xmlSitemapUrlResolverFactory, this.assemblyProvider,
+                this.xmlSitemapFeedPageNameProvider, this.specializedContentDictionary);
         }
 
         public IXmlSitemapFeedBuilderFacade WithVideoContent()
@@ -201,8 +221,9 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
             {
                 this.specializedContentDictionary.Add(videoContentXmlWriterFactory.ContentType, videoContentXmlWriterFactory);
             }
-            return new XmlSitemapFeedBuilderFacade(this.feedName, this.maximumPageSize, this.omitRequestCaching, this.omitUrlsWithoutMatchingContent, 
-                this.xmlWriterSettings, this.xmlSitemapProviderFactory, this.assemblyProvider, this.xmlSitemapFeedPageNameProvider, this.specializedContentDictionary);
+            return new XmlSitemapFeedBuilderFacade(this.feedName, this.maximumPageSize, this.omitRequestCaching, this.omitUrlsWithoutMatchingContent,
+                this.xmlWriterSettings, this.xmlSitemapProviderFactory, this.xmlSitemapUrlResolverFactory, this.assemblyProvider,
+                this.xmlSitemapFeedPageNameProvider, this.specializedContentDictionary);
         }
 
         public IXmlSitemapFeedBuilderFacade WithCustomContent(ISpecializedContentXmlWriterFactory specializedContentXmlWriterFactory)
@@ -211,8 +232,9 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
             {
                 this.specializedContentDictionary.Add(specializedContentXmlWriterFactory.ContentType, specializedContentXmlWriterFactory);
             }
-            return new XmlSitemapFeedBuilderFacade(this.feedName, this.maximumPageSize, this.omitRequestCaching, this.omitUrlsWithoutMatchingContent, 
-                this.xmlWriterSettings, this.xmlSitemapProviderFactory, this.assemblyProvider, this.xmlSitemapFeedPageNameProvider, this.specializedContentDictionary);
+            return new XmlSitemapFeedBuilderFacade(this.feedName, this.maximumPageSize, this.omitRequestCaching, this.omitUrlsWithoutMatchingContent,
+                this.xmlWriterSettings, this.xmlSitemapProviderFactory, this.xmlSitemapUrlResolverFactory, this.assemblyProvider,
+                this.xmlSitemapFeedPageNameProvider, this.specializedContentDictionary);
         }
 
         public IEnumerable<ISpecializedContentXmlWriterFactory> SpecializedContentXmlWriterFactories
@@ -223,7 +245,8 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
         public IXmlSitemapFeedBuilderFacade WithXmlSitemapProviderFactory(IXmlSitemapProviderFactory xmlSitemapProviderFactory)
         {
             return new XmlSitemapFeedBuilderFacade(this.feedName, this.maximumPageSize, this.omitRequestCaching, this.omitUrlsWithoutMatchingContent,
-                this.xmlWriterSettings, xmlSitemapProviderFactory, this.assemblyProvider, this.xmlSitemapFeedPageNameProvider, this.specializedContentDictionary);
+                this.xmlWriterSettings, xmlSitemapProviderFactory, this.xmlSitemapUrlResolverFactory, this.assemblyProvider,
+                this.xmlSitemapFeedPageNameProvider, this.specializedContentDictionary);
         }
 
         public IXmlSitemapProviderFactory XmlSitemapProviderFactory
@@ -231,11 +254,24 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
             get { return this.xmlSitemapProviderFactory; }
         }
 
+        public IXmlSitemapFeedBuilderFacade WithXmlSitemapUrlResolverFactory(IXmlSitemapUrlResolverFactory xmlSitemapUrlResolverFactory)
+        {
+            return new XmlSitemapFeedBuilderFacade(this.feedName, this.maximumPageSize, this.omitRequestCaching, this.omitUrlsWithoutMatchingContent,
+                this.xmlWriterSettings, this.xmlSitemapProviderFactory, xmlSitemapUrlResolverFactory, this.assemblyProvider,
+                this.xmlSitemapFeedPageNameProvider, this.specializedContentDictionary);
+        }
+
+        public IXmlSitemapUrlResolverFactory XmlSitemapUrlResolverFactory
+        {
+            get { return this.xmlSitemapUrlResolverFactory; }
+        }
+
         // TODO: turn this into a factory?
         public IXmlSitemapFeedBuilderFacade WithAssemblyProvider(IAttributeAssemblyProvider assemblyProvider)
         {
             return new XmlSitemapFeedBuilderFacade(this.feedName, this.maximumPageSize, this.omitRequestCaching, this.omitUrlsWithoutMatchingContent,
-                this.xmlWriterSettings, this.xmlSitemapProviderFactory, assemblyProvider, this.xmlSitemapFeedPageNameProvider, this.specializedContentDictionary);
+                this.xmlWriterSettings, this.xmlSitemapProviderFactory, this.xmlSitemapUrlResolverFactory, assemblyProvider,
+                this.xmlSitemapFeedPageNameProvider, this.specializedContentDictionary);
         }
 
         public IAttributeAssemblyProvider AssemblyProvider
@@ -247,7 +283,8 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
         public IXmlSitemapFeedBuilderFacade WithXmlSitemapFeedPageNameProvider(IXmlSitemapFeedPageNameProvider xmlSitemapFeedPageNameProvider)
         {
             return new XmlSitemapFeedBuilderFacade(this.feedName, this.maximumPageSize, this.omitRequestCaching, this.omitUrlsWithoutMatchingContent,
-                this.xmlWriterSettings, this.xmlSitemapProviderFactory, this.assemblyProvider, xmlSitemapFeedPageNameProvider, this.specializedContentDictionary);
+                this.xmlWriterSettings, this.xmlSitemapProviderFactory, this.xmlSitemapUrlResolverFactory, this.assemblyProvider,
+                xmlSitemapFeedPageNameProvider, this.specializedContentDictionary);
         }
 
         public IXmlSitemapFeedPageNameProvider XmlSitemapFeedPageNameProvider
@@ -274,13 +311,15 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
             var xmlSitemapProviderStrategy = new XmlSitemapProviderStrategy(xmlSitemapProviderFactory, xmlSitemapProviderTypeStrategy);
 
             // URL Resolver
-            var xmlSitemapUrlResolver = new XmlSitemapUrlResolverBuilder().Create();
-            var xmlSitemapFeedUrlResolver = new XmlSitemapFeedUrlResolver(xmlSitemapUrlResolver, this.xmlSitemapFeedPageNameProvider);
+            var xmlSitemapFeedUrlResolver = new XmlSitemapFeedUrlResolver(this.xmlSitemapUrlResolverFactory, this.xmlSitemapFeedPageNameProvider);
 
             // Specialized Content
             var specializedContentXmlWriterFactoryStrategy = new SpecializedContentXmlWriterFactoryStrategy(this.specializedContentDictionary.Values.ToArray());
-            var preparedUrlEntryFactory = new PreparedUrlEntryFactoryBuilder().WithXmlSitemapUrlResolver(xmlSitemapUrlResolver).Create();
-            var xmlSitemapWriterFactory = new XmlSitemapWriterFactory(this.omitUrlsWithoutMatchingContent, specializedContentXmlWriterFactoryStrategy, preparedUrlEntryFactory);
+            var specializedContentWriter = new SpecializedContentWriterBuilder()
+                .WithSpecializedContentXmlWriterFactoryStrategy(specializedContentXmlWriterFactoryStrategy)
+                .WithXmlSitemapUrlResolverFactory(this.xmlSitemapUrlResolverFactory).Create();
+            var preparedUrlEntryFactory = new PreparedUrlEntryFactoryBuilder().WithXmlSitemapUrlResolverFactory(this.xmlSitemapUrlResolverFactory).Create();
+            var xmlSitemapWriterFactory = new XmlSitemapWriterFactory(this.omitUrlsWithoutMatchingContent, specializedContentWriter, preparedUrlEntryFactory);
 
             // Writers
             var xmlSitemapPageWriter = new XmlSitemapPageWriterBuilder().WithXmlSitemapWriterFactory(xmlSitemapWriterFactory).Create();
@@ -288,9 +327,6 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
             
             var xmlSitemapPageManager = new XmlSitemapPageManager(xmlSitemapPager, xmlSitemapProviderStrategy, xmlSitemapPageWriter, xmlSitemapIndexPageWriter);
             return new XmlSitemapFeed(this.feedName, this.xmlWriterSettings, xmlWriterFactory, xmlSitemapPageManager);
-        }
-
-
-        
+        } 
     }
 }

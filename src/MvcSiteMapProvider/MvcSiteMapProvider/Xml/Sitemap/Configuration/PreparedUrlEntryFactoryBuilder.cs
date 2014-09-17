@@ -9,39 +9,39 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
         : IPreparedUrlEntryFactoryBuilder
     {
         public PreparedUrlEntryFactoryBuilder()
-            : this(xmlSitemapUrlResolver: new XmlSitemapUrlResolverBuilder().Create(), cultureContextFactory: new CultureContextFactory())
+            : this(xmlSitemapUrlResolverFactory: new XmlSitemapUrlResolverFactoryBuilder().Create(), cultureContextFactory: new CultureContextFactory())
         {
         }
 
         private PreparedUrlEntryFactoryBuilder(
-            IXmlSitemapUrlResolver xmlSitemapUrlResolver,
+            IXmlSitemapUrlResolverFactory xmlSitemapUrlResolverFactory,
             ICultureContextFactory cultureContextFactory
             )
         {
-            if (xmlSitemapUrlResolver == null)
-                throw new ArgumentNullException("xmlSitemapUrlResolver");
+            if (xmlSitemapUrlResolverFactory == null)
+                throw new ArgumentNullException("xmlSitemapUrlResolverFactory");
             if (cultureContextFactory == null)
                 throw new ArgumentNullException("cultureContextFactory");
 
-            this.xmlSitemapUrlResolver = xmlSitemapUrlResolver;
+            this.xmlSitemapUrlResolverFactory = xmlSitemapUrlResolverFactory;
             this.cultureContextFactory = cultureContextFactory;
         }
-        private readonly IXmlSitemapUrlResolver xmlSitemapUrlResolver;
+        private readonly IXmlSitemapUrlResolverFactory xmlSitemapUrlResolverFactory;
         private readonly ICultureContextFactory cultureContextFactory;
 
-        public IPreparedUrlEntryFactoryBuilder WithXmlSitemapUrlResolver(IXmlSitemapUrlResolver xmlSitemapUrlResolver)
+        public IPreparedUrlEntryFactoryBuilder WithXmlSitemapUrlResolverFactory(IXmlSitemapUrlResolverFactory xmlSitemapUrlResolverFactory)
         {
-            return new PreparedUrlEntryFactoryBuilder(xmlSitemapUrlResolver, this.cultureContextFactory);
+            return new PreparedUrlEntryFactoryBuilder(xmlSitemapUrlResolverFactory, this.cultureContextFactory);
         }
 
         public IPreparedUrlEntryFactoryBuilder WithCultureContextFactory(ICultureContextFactory cultureContextFactory)
         {
-            return new PreparedUrlEntryFactoryBuilder(this.xmlSitemapUrlResolver, cultureContextFactory);
+            return new PreparedUrlEntryFactoryBuilder(this.xmlSitemapUrlResolverFactory, cultureContextFactory);
         }
 
         public IPreparedUrlEntryFactory Create()
         {
-            return new PreparedUrlEntryFactory(this.xmlSitemapUrlResolver, this.cultureContextFactory);
+            return new PreparedUrlEntryFactory(this.xmlSitemapUrlResolverFactory, this.cultureContextFactory);
         }
     }
 }

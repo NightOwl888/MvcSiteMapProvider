@@ -14,6 +14,8 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
         // ICultureContextFactory
         // IXmlSitemapFeedUrlResolver (and IXmlSitemapFeedPageNameProvider, IXmlSitemapUrlResolver)
 
+        // TODO: Add a way to override default protocol and hostname
+
         IXmlSitemapFeedStrategyStarter WithDefaultFeedPageNameTemplates(string rootPageTemplate, string pageTemplate);
 
         IXmlSitemapFeedStrategyStarter WithNamedFeedPageNameTemplates(string rootPageTemplate, string pageTemplate);
@@ -23,6 +25,8 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
 
         IXmlSitemapFeedStrategyStarter OmitAssemblyFromXmlSitemapProviderScan(string assemblyName);
 
-        IXmlSitemapFeedStrategyBuilder WithXmlSitemapProviderFactory(IXmlSitemapProviderFactory xmlSitemapProviderFactory);
+        IXmlSitemapFeedStrategyStarter WithXmlSitemapProviderFactory(IXmlSitemapProviderFactory xmlSitemapProviderFactory);
+
+        IXmlSitemapFeedStrategyStarter WithXmlSitemapUrlResolverFactory(IXmlSitemapUrlResolverFactory xmlSitemapUrlResolverFactory);
     }
 }

@@ -24,6 +24,8 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
 
         IXmlSitemapProviderFactory XmlSitemapProviderFactory { get; }
 
+        IXmlSitemapUrlResolverFactory XmlSitemapUrlResolverFactory { get; }
+
         string DefaultFeedRootPageName { get; }
 
         string DefaultFeedPageName { get; }

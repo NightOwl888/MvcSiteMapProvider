@@ -11,29 +11,29 @@ namespace MvcSiteMapProvider.Xml.Sitemap
     {
         public XmlSitemapWriterFactory(
             bool omitUrlEntriesWithoutMatchingContent,
-            ISpecializedContentXmlWriterFactoryStrategy specializedContentXmlWriterFactoryStrategy,
+            ISpecializedContentWriter specializedContentWriter,
             IPreparedUrlEntryFactory preparedUrlEntryFactory
             )
         {
-            if (specializedContentXmlWriterFactoryStrategy == null)
-                throw new ArgumentNullException("specializedContentXmlWriterFactoryStrategy");
+            if (specializedContentWriter == null)
+                throw new ArgumentNullException("specializedContentWriter");
             if (preparedUrlEntryFactory == null)
                 throw new ArgumentNullException("preparedUrlEntryFactory");
 
             this.omitUrlEntriesWithoutMatchingContent = omitUrlEntriesWithoutMatchingContent;
-            this.specializedContentXmlWriterFactoryStrategy = specializedContentXmlWriterFactoryStrategy;
+            this.specializedContentWriter = specializedContentWriter;
             this.preparedUrlEntryFactory = preparedUrlEntryFactory;
         }
         private readonly bool omitUrlEntriesWithoutMatchingContent;
-        private readonly ISpecializedContentXmlWriterFactoryStrategy specializedContentXmlWriterFactoryStrategy;
+        private readonly ISpecializedContentWriter specializedContentWriter;
         private readonly IPreparedUrlEntryFactory preparedUrlEntryFactory;
 
         public IXmlSitemapWriter Create(XmlWriter writer)
         {
             return new XmlSitemapWriter(
                 this.omitUrlEntriesWithoutMatchingContent, 
-                writer, 
-                this.specializedContentXmlWriterFactoryStrategy, 
+                writer,
+                this.specializedContentWriter, 
                 this.preparedUrlEntryFactory);
         }
 

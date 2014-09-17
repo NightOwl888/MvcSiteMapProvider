@@ -9,24 +9,32 @@ namespace MvcSiteMapProvider.Xml.Sitemap
         : IXmlSitemapFeedUrlResolver
     {
         public XmlSitemapFeedUrlResolver(
-            IXmlSitemapUrlResolver urlResolver,
+            IXmlSitemapUrlResolverFactory urlResolverFactory,
             IXmlSitemapFeedPageNameProvider pageNameProvider
             )
         {
-            if (urlResolver == null)
-                throw new ArgumentNullException("urlResolver");
+            if (urlResolverFactory == null)
+                throw new ArgumentNullException("urlResolverFactory");
             if (pageNameProvider == null)
                 throw new ArgumentNullException("pageNameProvider");
 
-            this.urlResolver = urlResolver;
+            this.urlResolverFactory = urlResolverFactory;
             this.pageNameProvider = pageNameProvider;
         }
-        private readonly IXmlSitemapUrlResolver urlResolver;
+        private readonly IXmlSitemapUrlResolverFactory urlResolverFactory;
         private readonly IXmlSitemapFeedPageNameProvider pageNameProvider;
 
         public string ResolveFeedUrl(string feedName, int page)
         {
-            return this.urlResolver.ResolveUrlToAbsolute("~/" + this.pageNameProvider.GetPageName(feedName, page));
+            var urlResolver = this.urlResolverFactory.Create();
+            try
+            {
+                return urlResolver.ResolveUrlToAbsolute("~/" + this.pageNameProvider.GetPageName(feedName, page));
+            }
+            finally
+            {
+                this.urlResolverFactory.Release(urlResolver);
+            }
         }
     }
 }

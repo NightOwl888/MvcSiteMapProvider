@@ -9,39 +9,39 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
         : IXmlSitemapFeedUrlResolverBuilder
     {
         public XmlSitemapFeedUrlResolverBuilder()
-            : this(xmlSitemapUrlResolver: new XmlSitemapUrlResolverBuilder().Create(), xmlSitemapFeedPageNameProvider: new XmlSitemapFeedPageNameProvider())
+            : this(xmlSitemapUrlResolverFactory: new XmlSitemapUrlResolverFactoryBuilder().Create(), xmlSitemapFeedPageNameProvider: new XmlSitemapFeedPageNameProvider())
         {
         }
 
         private XmlSitemapFeedUrlResolverBuilder(
-            IXmlSitemapUrlResolver xmlSitemapUrlResolver,
+            IXmlSitemapUrlResolverFactory xmlSitemapUrlResolverFactory,
             IXmlSitemapFeedPageNameProvider xmlSitemapFeedPageNameProvider
             )
         {
-            if (xmlSitemapUrlResolver == null)
-                throw new ArgumentNullException("xmlSitemapUrlResolver");
+            if (xmlSitemapUrlResolverFactory == null)
+                throw new ArgumentNullException("xmlSitemapUrlResolverFactory");
             if (xmlSitemapFeedPageNameProvider == null)
                 throw new ArgumentNullException("xmlSitemapFeedPageNameProvider");
 
-            this.xmlSitemapUrlResolver = xmlSitemapUrlResolver;
+            this.xmlSitemapUrlResolverFactory = xmlSitemapUrlResolverFactory;
             this.xmlSitemapFeedPageNameProvider = xmlSitemapFeedPageNameProvider;
         }
-        private readonly IXmlSitemapUrlResolver xmlSitemapUrlResolver;
+        private readonly IXmlSitemapUrlResolverFactory xmlSitemapUrlResolverFactory;
         private readonly IXmlSitemapFeedPageNameProvider xmlSitemapFeedPageNameProvider;
 
-        public IXmlSitemapFeedUrlResolverBuilder WithXmlSitemapUrlResolver(IXmlSitemapUrlResolver xmlSitemapUrlResolver)
+        public IXmlSitemapFeedUrlResolverBuilder WithXmlSitemapUrlResolverFactory(IXmlSitemapUrlResolverFactory xmlSitemapUrlResolverFactory)
         {
-            return new XmlSitemapFeedUrlResolverBuilder(xmlSitemapUrlResolver, this.xmlSitemapFeedPageNameProvider);
+            return new XmlSitemapFeedUrlResolverBuilder(xmlSitemapUrlResolverFactory, this.xmlSitemapFeedPageNameProvider);
         }
 
         public IXmlSitemapFeedUrlResolverBuilder WithXmlSitemapFeedPageNameProvider(IXmlSitemapFeedPageNameProvider xmlSitemapFeedPageNameProvider)
         {
-            return new XmlSitemapFeedUrlResolverBuilder(this.xmlSitemapUrlResolver, xmlSitemapFeedPageNameProvider);
+            return new XmlSitemapFeedUrlResolverBuilder(this.xmlSitemapUrlResolverFactory, xmlSitemapFeedPageNameProvider);
         }
 
         public IXmlSitemapFeedUrlResolver Create()
         {
-            return new XmlSitemapFeedUrlResolver(this.xmlSitemapUrlResolver, this.xmlSitemapFeedPageNameProvider);
+            return new XmlSitemapFeedUrlResolver(this.xmlSitemapUrlResolverFactory, this.xmlSitemapFeedPageNameProvider);
         }
     }
 }

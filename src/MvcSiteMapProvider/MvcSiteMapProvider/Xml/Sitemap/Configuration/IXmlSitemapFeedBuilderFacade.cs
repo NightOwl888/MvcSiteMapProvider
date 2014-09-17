@@ -49,6 +49,10 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
 
         IEnumerable<ISpecializedContentXmlWriterFactory> SpecializedContentXmlWriterFactories { get; }
 
+        IXmlSitemapFeedBuilderFacade WithXmlSitemapUrlResolverFactory(IXmlSitemapUrlResolverFactory xmlSitemapUrlResolverFactory);
+
+        IXmlSitemapUrlResolverFactory XmlSitemapUrlResolverFactory { get; }
+
         IXmlSitemapFeedBuilderFacade WithXmlSitemapProviderFactory(IXmlSitemapProviderFactory xmlSitemapProviderFactory);
 
         IXmlSitemapProviderFactory XmlSitemapProviderFactory { get; }

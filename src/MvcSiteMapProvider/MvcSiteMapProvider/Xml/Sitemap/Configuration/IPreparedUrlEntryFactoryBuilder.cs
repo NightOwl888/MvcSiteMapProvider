@@ -7,7 +7,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
     public interface IPreparedUrlEntryFactoryBuilder
         : IFluentInterface
     {
-        IPreparedUrlEntryFactoryBuilder WithXmlSitemapUrlResolver(IXmlSitemapUrlResolver xmlSitemapUrlResolver);
+        IPreparedUrlEntryFactoryBuilder WithXmlSitemapUrlResolverFactory(IXmlSitemapUrlResolverFactory xmlSitemapUrlResolverFactory);
 
         IPreparedUrlEntryFactoryBuilder WithCultureContextFactory(ICultureContextFactory cultureContextFactory);
 
