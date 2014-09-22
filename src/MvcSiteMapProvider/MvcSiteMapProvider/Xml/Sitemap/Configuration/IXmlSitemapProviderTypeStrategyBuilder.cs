@@ -7,7 +7,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
     public interface IXmlSitemapProviderTypeStrategyBuilder
         : IFluentInterface
     {
-        IXmlSitemapProviderTypeStrategyBuilder WithAssemblyProvider(IAttributeAssemblyProvider assemblyProvider);
+        IXmlSitemapProviderTypeStrategyBuilder WithAssemblyProviderFactory(IAssemblyProviderFactory assemblyProviderFactory);
 
         IXmlSitemapProviderTypeStrategy Create();
     }

@@ -1,24 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using MvcSiteMapProvider.ComponentModel;
+using MvcSiteMapProvider.Reflection;
 
 namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
 {
-    public interface IXmlSitemapFeedStrategyBuilder
+    
+
+    public interface IXmlSitemap_SetupXmlSitemapProviderScan<TRemainder>
+    {
+        TRemainder SetupXmlSitemapProviderScan(Func<IXmlSitemap_SetupXmlSitemapProviderScan_Starter, IXmlSitemap_SetupXmlSitemapProviderScan_Finalizer> expression);
+    }
+
+    public interface IXmlSitemap_SetupPageNameTemplates<TRemainder>
+    {
+        TRemainder SetupPageNameTempates(Func<IXmlSitemap_SetupPageTemplates_Starter, IXmlSitemap_SetupPageTemplates_Finalizer> expression);
+    }
+
+    public interface IXmlSitemap_SetupUrlResolver<TRemainder>
+    {
+        TRemainder SetupUrlResolver(Func<IXmlSitemap_SetupUrlResolver_Starter, IXmlSitemap_SetupUrlResolver_Finalizer> expression);
+
+        TRemainder SetupUrlResolver(IXmlSitemapUrlResolverFactory xmlSitemapUrlResolverFactory);
+    }
+
+    public interface IXmlSitemapFeedStrategy_Finalizer
         : IFluentInterface
     {
-        IXmlSitemapFeedStrategyBuilder AddFeed(string feedName, Func<IXmlSitemapFeedBuilderFacade, IXmlSitemapFeedBuilderFacade> expression);
+        IXmlSitemapFeedStrategy_Finalizer AddNamedFeed(string feedName, Func<IXmlSitemap_SetupFeed_Starter, IXmlSitemap_SetupFeed_Finalizer> expression);
 
-        IXmlSitemapFeedStrategyBuilder AddFeed(string feedName);
+        IXmlSitemapFeedStrategy_Finalizer AddDefaultFeed();
 
-        IXmlSitemapFeedStrategyBuilder AddFeed(IXmlSitemapFeed xmlSitemapFeed);
+        IXmlSitemapFeedStrategy_Finalizer RemoveNamedFeed(string feedName);
 
-        IXmlSitemapFeedStrategyBuilder AddFeeds(IEnumerable<IXmlSitemapFeed> xmlSitemapFeeds);
+        IXmlSitemapFeedStrategy_Finalizer RemoveDefaultFeed();
 
-        IXmlSitemapFeedStrategyBuilder RemoveFeed(string feedName);
-
-        IXmlSitemapFeedStrategyBuilder ClearFeeds();
+        IXmlSitemapFeedStrategy_Finalizer ClearFeeds();
 
         IEnumerable<IXmlSitemapFeed> XmlSitemapFeeds { get; }
 
@@ -26,16 +45,63 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
 
         IXmlSitemapUrlResolverFactory XmlSitemapUrlResolverFactory { get; }
 
-        string DefaultFeedRootPageName { get; }
+        IXmlSitemapFeedPageNameProvider XmlSitemapFeedPageNameProvider { get; }
 
-        string DefaultFeedPageName { get; }
-
-        string NamedFeedRootPageName { get; }
-
-        string NamedFeedPageName { get; }
-
-        IEnumerable<string> AssembliesToScanForXmlSitemapProvider { get; }
+        IAssemblyProviderFactory AssemblyProviderFactory { get; }
 
         IXmlSitemapFeedStrategy Create();
     }
+
+    public interface IXmlSitemapFeedStrategy_Starter
+        : IXmlSitemap_SetupXmlSitemapProviderScan<IXmlSitemapFeedStrategy_WithXmlSitemapProvider>,
+        IXmlSitemap_SetupPageNameTemplates<IXmlSitemapFeedStrategy_WithXmlSitemapFeedPageNameProvider>,
+        IXmlSitemap_SetupUrlResolver<IXmlSitemapFeedStrategy_WithXmlSitemapUrlResolver>,
+        IXmlSitemapFeedStrategy_Finalizer
+    {
+    }
+
+
+    // 1 item set
+
+    public interface IXmlSitemapFeedStrategy_WithXmlSitemapProvider
+        : IXmlSitemap_SetupPageNameTemplates<IXmlSitemapFeedStrategy_WithXmlSitemapFeedPageNameProvider_WithXmlSitemapProvider>,
+        IXmlSitemap_SetupUrlResolver<IXmlSitemapFeedStrategy_WithXmlSitemapUrlResolver_WithXmlSitemapProvider>,
+        IXmlSitemapFeedStrategy_Finalizer
+    {
+    }
+
+    public interface IXmlSitemapFeedStrategy_WithXmlSitemapFeedPageNameProvider
+        : IXmlSitemap_SetupXmlSitemapProviderScan<IXmlSitemapFeedStrategy_WithXmlSitemapFeedPageNameProvider_WithXmlSitemapProvider>,
+        IXmlSitemap_SetupUrlResolver<IXmlSitemapFeedStrategy_WithXmlSitemapUrlResolver_WithXmlSitemapFeedPageNameProvider>,
+        IXmlSitemapFeedStrategy_Finalizer
+    {
+    }
+
+    public interface IXmlSitemapFeedStrategy_WithXmlSitemapUrlResolver
+        : IXmlSitemap_SetupXmlSitemapProviderScan<IXmlSitemapFeedStrategy_WithXmlSitemapUrlResolver_WithXmlSitemapProvider>,
+        IXmlSitemap_SetupPageNameTemplates<IXmlSitemapFeedStrategy_WithXmlSitemapUrlResolver_WithXmlSitemapFeedPageNameProvider>,
+        IXmlSitemapFeedStrategy_Finalizer
+    {
+    }
+
+    // 2 items set
+
+    public interface IXmlSitemapFeedStrategy_WithXmlSitemapUrlResolver_WithXmlSitemapFeedPageNameProvider
+        : IXmlSitemap_SetupXmlSitemapProviderScan<IXmlSitemapFeedStrategy_Finalizer>,
+        IXmlSitemapFeedStrategy_Finalizer
+    {
+    }
+
+    public interface IXmlSitemapFeedStrategy_WithXmlSitemapUrlResolver_WithXmlSitemapProvider
+        : IXmlSitemap_SetupPageNameTemplates<IXmlSitemapFeedStrategy_Finalizer>,
+        IXmlSitemapFeedStrategy_Finalizer
+    {
+    }
+
+    public interface IXmlSitemapFeedStrategy_WithXmlSitemapFeedPageNameProvider_WithXmlSitemapProvider
+        : IXmlSitemap_SetupUrlResolver<IXmlSitemapFeedStrategy_Finalizer>,
+        IXmlSitemapFeedStrategy_Finalizer
+    {
+    }
+
 }

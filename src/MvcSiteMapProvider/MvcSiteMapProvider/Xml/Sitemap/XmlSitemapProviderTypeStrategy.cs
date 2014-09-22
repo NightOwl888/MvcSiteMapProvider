@@ -14,35 +14,27 @@ namespace MvcSiteMapProvider.Xml.Sitemap
         : IXmlSitemapProviderTypeStrategy
     {
         public XmlSitemapProviderTypeStrategy(
-            IAttributeAssemblyProvider assemblyProvider
+            IAssemblyProviderFactory assemblyProviderFactory
             )
         {
-            if (assemblyProvider == null)
-                throw new ArgumentNullException("assemblyProvider");
+            if (assemblyProviderFactory == null)
+                throw new ArgumentNullException("assemblyProviderFactory");
 
-            this.assemblyProvider = assemblyProvider;
+            this.assemblyProviderFactory = assemblyProviderFactory;
 
             // TODO: Work out how to load the internal providers (including dependencies)
             // and optionally exclude them. They should always be loaded by the XmlSitemapProviderFactory.
 
+
             // Load all of the provider types at startup so 
             // reflection is not used at runtime.
-            this.providerTypes = assemblyProvider.GetAssemblies()
-                .SelectMany(assembly => assembly.GetTypes())
-                .Where(type => typeof(IXmlSitemapProvider).IsAssignableFrom(type) && !type.IsInterface);
+            this.providerTypes = this.GetProviderTypes(assemblyProviderFactory);
         }
-        private readonly IAttributeAssemblyProvider assemblyProvider;
+        private readonly IAssemblyProviderFactory assemblyProviderFactory;
         private readonly IEnumerable<Type> providerTypes;
 
         public virtual IEnumerable<Type> GetTypes(string feedName)
         {
-            //var providerInterfaceType = typeof(IXmlSitemapProvider);
-
-            //return this.assemblyProvider.GetAssemblies()
-            //    .SelectMany(assembly => assembly.GetTypes())
-            //    .Where(type => providerInterfaceType.IsAssignableFrom(type) && !type.IsInterface)
-            //    .Where(type => this.IncludeInFeed(type, feedName));
-
             return this.providerTypes
                 .Where(providerType => this.IncludeInFeed(providerType, feedName));
         }
@@ -61,6 +53,23 @@ namespace MvcSiteMapProvider.Xml.Sitemap
             return Attribute.GetCustomAttributes(providerType, attributeType)
                 .Select(attribute => ((XmlSitemapFeedFilterAttribute)attribute).FeedName.Equals(feedName))
                 .Any();
+        }
+
+        protected virtual IEnumerable<Type> GetProviderTypes(IAssemblyProviderFactory assemblyProviderFactory)
+        {
+            var assemblyProvider = assemblyProviderFactory.Create();
+            try
+            {
+                return assemblyProvider.GetAssemblies()
+                    .SelectMany(assembly => assembly.GetTypes())
+                    .Where(type => type.GetInterfaces().Contains(typeof(IXmlSitemapProvider)))
+                    .Where(type => !type.IsInterface)
+                    .Where(type => !type.IsAbstract);
+            }
+            finally
+            {
+                assemblyProviderFactory.Release(assemblyProvider);
+            }
         }
     }
 }

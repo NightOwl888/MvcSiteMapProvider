@@ -29,7 +29,6 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
 
         IXmlSitemapFeedBuilderFacade WithMaximumPageSize(int maximumPageSize);
 
-        
         IXmlSitemapFeedBuilderFacade OmitRequestCaching();
 
         // From XmlSitemapWriterFactory
@@ -49,7 +48,14 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
 
         IEnumerable<ISpecializedContentXmlWriterFactory> SpecializedContentXmlWriterFactories { get; }
 
+
+        // TODO: Add this
+        //IXmlSitemapFeedBuilderFacade WithContent(Func<IXmlSitemap_SetupContent_Starter, IXmlSitemap_SetupContent_Finalizer> expression);
+
+
+
         IXmlSitemapFeedBuilderFacade WithXmlSitemapUrlResolverFactory(IXmlSitemapUrlResolverFactory xmlSitemapUrlResolverFactory);
+        //IXmlSitemapFeedBuilderFacade SetupXmlSitemapUrlResolverFactory(IXmlSitemapUrlResolverFactory xmlSitemapUrlResolverFactory);
 
         IXmlSitemapUrlResolverFactory XmlSitemapUrlResolverFactory { get; }
 
@@ -57,13 +63,24 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
 
         IXmlSitemapProviderFactory XmlSitemapProviderFactory { get; }
 
-        IXmlSitemapFeedBuilderFacade WithAssemblyProvider(IAttributeAssemblyProvider assemblyProvider);
+        IXmlSitemapFeedBuilderFacade WithAssemblyProviderFactory(IAssemblyProviderFactory assemblyProviderFactory);
 
-        IAttributeAssemblyProvider AssemblyProvider { get; }
+        IAssemblyProviderFactory AssemblyProviderFactory { get; }
 
-        IXmlSitemapFeedBuilderFacade WithXmlSitemapFeedPageNameProvider(IXmlSitemapFeedPageNameProvider xmlSitemapFeedPageNameProvider);
+        //IXmlSitemapFeedBuilderFacade WithXmlSitemapFeedPageNameProvider(IXmlSitemapFeedPageNameProvider xmlSitemapFeedPageNameProvider);
 
         IXmlSitemapFeedPageNameProvider XmlSitemapFeedPageNameProvider { get; }
+
+        string FeedName { get; }
+
+        int MaximumPageSize { get; }
+
+        bool RequestCachingOmitted { get; }
+
+        bool UrlsWithNonMatchingContentOmitted { get; }
+
+        XmlWriterSettings XmlWriterSettings { get; }
+
 
         IXmlSitemapFeed Create();
     }

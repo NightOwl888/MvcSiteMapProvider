@@ -7,29 +7,29 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Configuration
         : IXmlSitemapProviderTypeStrategyBuilder
     {
         public XmlSitemapProviderTypeStrategyBuilder()
-            : this(assemblyProvider: new AttributeAssemblyProviderBuilder().Create())
+            : this(assemblyProviderFactory: new AssemblyProviderFactoryBuilder().Create())
         {
         }
 
         private XmlSitemapProviderTypeStrategyBuilder(
-            IAttributeAssemblyProvider assemblyProvider
+            IAssemblyProviderFactory assemblyProviderFactory
             )
         {
-            if (assemblyProvider == null)
-                throw new ArgumentNullException("assemblyProvider");
+            if (assemblyProviderFactory == null)
+                throw new ArgumentNullException("assemblyProviderFactory");
 
-            this.assemblyProvider = assemblyProvider;
+            this.assemblyProviderFactory = assemblyProviderFactory;
         }
-        private readonly IAttributeAssemblyProvider assemblyProvider;
+        private readonly IAssemblyProviderFactory assemblyProviderFactory;
 
-        public IXmlSitemapProviderTypeStrategyBuilder WithAssemblyProvider(IAttributeAssemblyProvider assemblyProvider)
+        public IXmlSitemapProviderTypeStrategyBuilder WithAssemblyProviderFactory(IAssemblyProviderFactory assemblyProviderFactory)
         {
-            return new XmlSitemapProviderTypeStrategyBuilder(assemblyProvider);
+            return new XmlSitemapProviderTypeStrategyBuilder(assemblyProviderFactory);
         }
 
         public IXmlSitemapProviderTypeStrategy Create()
         {
-            return new XmlSitemapProviderTypeStrategy(this.assemblyProvider);
+            return new XmlSitemapProviderTypeStrategy(this.assemblyProviderFactory);
         }
     }
 }
