@@ -85,10 +85,22 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized
         {
             NewsGenre genres = this.genres;
             NewsGenre parsed = NewsGenre.Undefined;
+#if !NET35
             if (Enum.TryParse<NewsGenre>(genre, true, out parsed))
             {
                 genres |= parsed;
             }
+#else
+            try
+            {
+                parsed = (NewsGenre)Enum.Parse(typeof(NewsGenre), genre, true);
+                genres |= parsed;
+            }
+            catch
+            {
+                // Do nothing
+            }
+#endif
             return new NewsContentBuilder(this.publicationName, this.publicationDate, this.publicationLanguage, this.title, this.access, genres, this.keywords, this.stockTickers);
         }
 
@@ -101,10 +113,22 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized
                 if (!string.IsNullOrEmpty(genre))
                 {
                     NewsGenre parsed = NewsGenre.Undefined;
+#if !NET35
                     if (Enum.TryParse<NewsGenre>(genre, true, out parsed))
                     {
                         g |= parsed;
                     }
+#else
+                    try
+                    {
+                        parsed = (NewsGenre)Enum.Parse(typeof(NewsGenre), genre, true);
+                        g |= parsed;
+                    }
+                    catch
+                    {
+                        // Do nothing
+                    }
+#endif
                 }
             }
             return new NewsContentBuilder(this.publicationName, this.publicationDate, this.publicationLanguage, this.title, this.access, g, this.keywords, this.stockTickers);

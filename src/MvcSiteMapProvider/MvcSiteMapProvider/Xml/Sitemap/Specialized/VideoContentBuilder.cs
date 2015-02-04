@@ -671,10 +671,22 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized
                 if (!string.IsNullOrEmpty(platform))
                 {
                     VideoPlatform parsed = VideoPlatform.Undefined;
+#if !NET35
                     if (Enum.TryParse<VideoPlatform>(platform, true, out parsed))
                     {
                         platformsAllowed |= parsed;
                     }
+#else
+                    try
+                    {
+                        parsed = (VideoPlatform)Enum.Parse(typeof(VideoPlatform), platform, true);
+                        platformsAllowed |= parsed;
+                    }
+                    catch
+                    {
+                        // Do nothing
+                    }
+#endif
                 }
             }
             return new VideoContentBuilder(this.thumbnailLocation, this.thumbnailLocationProtocol, this.thumbnailLocationHostName, this.title, this.description,
@@ -707,10 +719,22 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized
                 if (!string.IsNullOrEmpty(platform))
                 {
                     VideoPlatform parsed = VideoPlatform.Undefined;
+#if !NET35
                     if (Enum.TryParse<VideoPlatform>(platform, true, out parsed))
                     {
                         platformsNotAllowed |= parsed;
                     }
+#else
+                    try
+                    {
+                        parsed = (VideoPlatform)Enum.Parse(typeof(VideoPlatform), platform, true);
+                        platformsNotAllowed |= parsed;
+                    }
+                    catch
+                    {
+                        // Do nothing
+                    }
+#endif
                 }
             }
             return new VideoContentBuilder(this.thumbnailLocation, this.thumbnailLocationProtocol, this.thumbnailLocationHostName, this.title, this.description,

@@ -35,11 +35,11 @@ namespace MvcSiteMapProvider.Xml.Sitemap.Specialized.News
                 }
                 if (newsContent.Keywords.Any())
                 {
-                    keywords = string.Join(", ", newsContent.Keywords);
+                    keywords = string.Join(", ", newsContent.Keywords.ToArray());
                 }
                 if (newsContent.StockTickers.Any())
                 {
-                    stocktickers = string.Join(", ", newsContent.StockTickers);
+                    stocktickers = string.Join(", ", newsContent.StockTickers.ToArray());
                 }
 
                 return new PreparedNewsContent(

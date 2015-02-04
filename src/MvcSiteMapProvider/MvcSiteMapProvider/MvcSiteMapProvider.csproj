@@ -252,6 +252,7 @@
     <Compile Include="Web\Mvc\Filters\GlobalFilterProvider.cs" />
     <Compile Include="Web\Mvc\Filters\IGlobalFilterProvider.cs" />
     <Compile Include="Web\Mvc\Filters\SiteMapCacheReleaseAttribute.cs" />
+    <Compile Include="Web\Mvc\HttpNotFoundResult.cs" />
     <Compile Include="Web\Mvc\IXmlSitemapFeedResultFactory.cs" />
     <Compile Include="Web\Mvc\XmlSitemapFeedController.cs" />
     <Compile Include="Web\Routing\IXmlSitemapFeedRouteRegistrar.cs" />
