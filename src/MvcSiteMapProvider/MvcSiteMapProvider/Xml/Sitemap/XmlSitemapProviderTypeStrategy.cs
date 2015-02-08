@@ -36,12 +36,14 @@ namespace MvcSiteMapProvider.Xml.Sitemap
         public virtual IEnumerable<Type> GetTypes(string feedName)
         {
             return this.providerTypes
-                .Where(providerType => this.IncludeInFeed(providerType, feedName));
+                .Where(providerType => this.IncludeInFeed(providerType, feedName))
+                .OrderByDescending(providerType => this.GetPriority(providerType, feedName))
+                .ThenBy(providerType => providerType.ShortAssemblyQualifiedName());
         }
 
         protected virtual bool IncludeInFeed(Type providerType, string feedName)
         {
-            var attributeType = typeof(XmlSitemapFeedFilterAttribute);
+            var attributeType = typeof(IncludeInFeedAttribute);
 
             // Special case - include in all feeds if no filter attributes
             // are defined on the provider.
@@ -51,8 +53,33 @@ namespace MvcSiteMapProvider.Xml.Sitemap
             }
 
             return Attribute.GetCustomAttributes(providerType, attributeType)
-                .Select(attribute => ((XmlSitemapFeedFilterAttribute)attribute).FeedName.Equals(feedName))
+                .Where(attribute => ((IncludeInFeedAttribute)attribute).FeedName.Equals(feedName))
                 .Any();
+        }
+
+        protected virtual int GetPriority(Type providerType, string feedName)
+        {
+            // Get the attribute that matches the feed (if it exists)
+            FeedPriorityAttribute priorityAttribute = (FeedPriorityAttribute)providerType
+                .GetCustomAttributes(typeof(IncludeInFeedAttribute), false)
+                .Where(attribute => ((IncludeInFeedAttribute)attribute).FeedName.Equals(feedName))
+                .FirstOrDefault();
+
+            if (priorityAttribute == null)
+            {
+                // Try to get the attribute that matches all feeds (if it exists)
+                priorityAttribute = (FeedPriorityAttribute)providerType
+                    .GetCustomAttributes(typeof(FeedPriorityAttribute), false)
+                    .FirstOrDefault();
+            }
+
+            if (priorityAttribute != null)
+            {
+                return priorityAttribute.Priority;
+            }
+
+            // Default priority if no attribute defined
+            return FeedPriorityAttribute.DefaultPriority;
         }
 
         protected virtual IEnumerable<Type> GetProviderTypes(IAssemblyProviderFactory assemblyProviderFactory)

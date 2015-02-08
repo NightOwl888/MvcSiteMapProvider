@@ -381,6 +381,7 @@
     <Compile Include="Xml\Sitemap\RequestCachingXmlSitemapProviderDecoratorFactory.cs" />
     <Compile Include="Xml\Sitemap\Specialized\ISpecializedContentWriter.cs" />
     <Compile Include="Xml\Sitemap\Specialized\SpecializedContentWriter.cs" />
+    <Compile Include="Xml\Sitemap\FeedPriorityAttribute.cs" />
     <Compile Include="Xml\Sitemap\XmlSitemapFeedStrategyFactory.cs" />
     <Compile Include="Xml\Sitemap\XmlSitemapFileGenerator.cs" />
     <Compile Include="Xml\Sitemap\XmlSitemapProviderFactoryDecorator.cs" />
@@ -436,7 +437,7 @@
     <Compile Include="Xml\Sitemap\Specialized\VideoPriceBuilder.cs" />
     <Compile Include="Xml\Sitemap\Specialized\Video\IPreparedVideoContentFactory.cs" />
     <Compile Include="Xml\Sitemap\Specialized\News\PreparedNewsContent.cs" />
-    <Compile Include="Xml\Sitemap\XmlSitemapFeedFilterAttribute.cs" />
+    <Compile Include="Xml\Sitemap\IncludeInFeedAttribute.cs" />
     <Compile Include="Xml\Sitemap\XmlSitemapFeedUrlResolver.cs" />
     <Compile Include="Xml\Sitemap\Paging\XmlSitemapPageData.cs" />
     <Compile Include="Xml\Sitemap\Paging\XmlSitemapPageDataFactory.cs" />
