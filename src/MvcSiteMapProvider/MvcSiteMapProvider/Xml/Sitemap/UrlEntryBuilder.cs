@@ -113,6 +113,15 @@ namespace MvcSiteMapProvider.Xml.Sitemap
             return new UrlEntryBuilder(this.url, this.protocol, this.hostName, this.lastModifiedDate, this.changeFrequency, updatePriority, this.specializedContent);
         }
 
+        public IUrlEntryBuilder AddContent(IEnumerable<ISpecializedContent> content)
+        {
+            foreach (var contentItem in content)
+            {
+                this.specializedContent.Add(contentItem);
+            }
+            return new UrlEntryBuilder(this.url, this.protocol, this.hostName, this.lastModifiedDate, this.changeFrequency, updatePriority, this.specializedContent);
+        }
+
         public IUrlEntry Create()
         {
             return new UrlEntry(this.url, this.specializedContent)

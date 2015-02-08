@@ -18,6 +18,7 @@ namespace MvcSiteMapProvider.Xml.Sitemap
 
         IUrlEntryBuilder AddContent(Func<ISpecializedContentStarter, ISpecializedContentBuilder> expression);
         IUrlEntryBuilder AddContent(ISpecializedContent content);
+        IUrlEntryBuilder AddContent(IEnumerable<ISpecializedContent> content);
 
         IUrlEntry Create();
     }
