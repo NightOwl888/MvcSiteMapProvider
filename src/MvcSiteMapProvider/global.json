@@ -1,0 +1,6 @@
+﻿{
+  "projects": [ "MvcSiteMapProvider.MVC6", "MvcSiteMapProvider.Sample.Mvc6" ],
+  "sdk": {
+    "version": "1.0.0-beta7"
+  }
+}
