@@ -1,4 +1,5 @@
-﻿#if !MVC2
+﻿#if !MVC6
+#if !MVC2
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,4 +58,5 @@ namespace MvcSiteMapProvider.DI
         #endregion
     }
 }
+#endif
 #endif

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Xml.Linq;
-using System.Web.Hosting;
 using System.IO;
 
 namespace MvcSiteMapProvider.Xml

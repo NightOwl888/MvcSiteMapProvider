@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !MVC6
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using MvcSiteMapProvider.Visitor;
@@ -55,3 +56,4 @@ namespace MvcSiteMapProvider.Builder
         #endregion
     }
 }
+#endif

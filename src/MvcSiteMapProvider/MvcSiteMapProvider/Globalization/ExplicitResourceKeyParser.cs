@@ -1,6 +1,9 @@
 ﻿using System;
+#if MVC6
+using MvcSiteMapProvider.Collections.Specialized;
+#else
 using System.Collections.Specialized;
-using System.Globalization;
+#endif
 
 namespace MvcSiteMapProvider.Globalization
 {
@@ -20,7 +23,7 @@ namespace MvcSiteMapProvider.Globalization
             {
                 string resourceString;
                 var trimmedText = value.TrimStart(new[] { ' ' });
-                if (((trimmedText.Length > 10)) && trimmedText.ToLower(CultureInfo.InvariantCulture).StartsWith("$resources:", StringComparison.Ordinal))
+                if (((trimmedText.Length > 10)) && trimmedText.ToLowerInvariant().StartsWith("$resources:", StringComparison.Ordinal))
                 {
                     resourceString = trimmedText.Substring(11);
                     var index = resourceString.IndexOf(',');
@@ -41,13 +44,15 @@ namespace MvcSiteMapProvider.Globalization
                     if (explicitResourceKeys == null)
                     {
                         explicitResourceKeys = new NameValueCollection();
+
+                        explicitResourceKeys.Add(attributeName, resourceLocation.Trim());
+                        explicitResourceKeys.Add(attributeName, resourceName.Trim());
                     }
-                    explicitResourceKeys.Add(attributeName, resourceLocation.Trim());
-                    explicitResourceKeys.Add(attributeName, resourceName.Trim());
+
                 }
             }
         }
 
-        #endregion
+#endregion
     }
 }

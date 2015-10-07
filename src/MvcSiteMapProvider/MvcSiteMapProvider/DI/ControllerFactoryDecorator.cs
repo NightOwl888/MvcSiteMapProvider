@@ -1,7 +1,12 @@
-﻿using System;
+﻿#if !MVC6
+using System;
 using System.Collections.Generic;
 using System.Linq;
+#if MVC6
+using Microsoft.AspNet.Mvc;
+#else
 using System.Web.Mvc;
+#endif
 using System.Web.Routing;
 using System.Web.SessionState;
 using MvcSiteMapProvider.Web.Mvc;
@@ -76,3 +81,4 @@ namespace MvcSiteMapProvider.DI
         #endregion
     }
 }
+#endif

@@ -1,5 +1,9 @@
 ﻿using System;
+#if MVC6
+using MvcSiteMapProvider.Collections.Specialized;
+#else
 using System.Collections.Specialized;
+#endif
 using MvcSiteMapProvider.Web.Mvc;
 
 namespace MvcSiteMapProvider.Globalization
@@ -20,7 +24,7 @@ namespace MvcSiteMapProvider.Globalization
         }
 
         protected readonly IMvcContextFactory mvcContextFactory;
-        
+
         /// <summary>
         /// Gets the localized text for the supplied attributeName.
         /// </summary>

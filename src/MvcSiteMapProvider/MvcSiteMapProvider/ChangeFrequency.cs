@@ -5,7 +5,9 @@ namespace MvcSiteMapProvider
     /// <summary>
     /// Change frequency for the node
     /// </summary>
+#if !MVC6
     [Serializable]
+#endif
     public enum ChangeFrequency
     {
         /// <summary>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !MVC6
+using System;
 using System.Collections;
 using System.Web.Compilation;
 
@@ -22,3 +23,4 @@ namespace MvcSiteMapProvider.Web.Compilation
         #endregion
     }
 }
+#endif

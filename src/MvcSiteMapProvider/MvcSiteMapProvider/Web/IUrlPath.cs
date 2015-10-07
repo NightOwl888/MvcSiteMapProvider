@@ -1,5 +1,9 @@
 ﻿using System;
+#if MVC6
+using MvcSiteMapProvider.Web;
+#else
 using System.Web;
+#endif
 
 namespace MvcSiteMapProvider.Web
 {
@@ -185,8 +189,8 @@ namespace MvcSiteMapProvider.Web
         /// <param name="httpContext">The HTTP context representing the context of the request.</param>
         /// <returns>The URI that the outside world used to create this request.</returns>
         /// <remarks>Source: http://stackoverflow.com/questions/7795910/how-do-i-get-url-action-to-use-the-right-port-number#11888846 </remarks>
-        Uri GetPublicFacingUrl(HttpContextBase httpContext);
-
+        System.Uri GetPublicFacingUrl(HttpContextBase httpContext);
+#if !MVC6
         [Obsolete(@"Use MakeUrlAbsolute(string) instead. Example: This method will be removed in version 5.")]
         string MakeRelativeUrlAbsolute(string url);
 
@@ -195,5 +199,6 @@ namespace MvcSiteMapProvider.Web
 
         [Obsolete(@"Use MakeUrlAbsolute(string) instead. Example: This method will be removed in version 5.")]
         string ResolveServerUrl(string serverUrl);
+#endif
     }
 }

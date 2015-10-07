@@ -1,5 +1,10 @@
-﻿using System;
+﻿#if !MVC6
+using System;
+#if MVC6
+using Microsoft.AspNet.Mvc;
+#else
 using System.Web.Mvc;
+#endif
 using MvcSiteMapProvider.Caching;
 using MvcSiteMapProvider.Collections;
 using MvcSiteMapProvider.Collections.Specialized;
@@ -89,3 +94,4 @@ namespace MvcSiteMapProvider.DI
         }
     }
 }
+#endif

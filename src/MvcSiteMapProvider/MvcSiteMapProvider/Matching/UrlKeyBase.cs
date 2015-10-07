@@ -35,7 +35,7 @@ namespace MvcSiteMapProvider.Matching
             }
             else if (this.urlPath.IsAbsoluteUrl(relativeOrAbsoluteUrl))
             {
-                var absoluteUri = new Uri(relativeOrAbsoluteUrl, UriKind.Absolute);
+                var absoluteUri = new System.Uri(relativeOrAbsoluteUrl, UriKind.Absolute);
 
                 // NOTE: this will cut off any fragments, but since they are not passed
                 // to the server, this is desired.

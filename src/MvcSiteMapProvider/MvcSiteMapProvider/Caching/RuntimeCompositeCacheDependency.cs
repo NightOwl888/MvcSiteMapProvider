@@ -1,4 +1,5 @@
-﻿#if !NET35
+﻿#if !MVC6
+#if !NET35
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,4 +54,5 @@ namespace MvcSiteMapProvider.Caching
         #endregion
     }
 }
+#endif
 #endif

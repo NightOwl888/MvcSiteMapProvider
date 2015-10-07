@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !MVC6
+using System;
 using System.Web.Mvc;
 using System.Web.Hosting;
 using System.Web.Routing;
@@ -70,3 +71,4 @@ namespace MvcSiteMapProvider.DI
         }
     }
 }
+#endif

@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !MVC6
+using System;
 using MvcSiteMapProvider.Globalization;
 using MvcSiteMapProvider.Loader;
 using MvcSiteMapProvider.Web;
@@ -39,3 +40,4 @@ namespace MvcSiteMapProvider.DI
         }
     }
 }
+#endif

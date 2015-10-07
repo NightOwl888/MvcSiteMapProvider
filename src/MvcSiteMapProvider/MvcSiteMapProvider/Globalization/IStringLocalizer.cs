@@ -1,5 +1,8 @@
-﻿using System;
+﻿#if MVC6
+using MvcSiteMapProvider.Collections.Specialized;
+#else
 using System.Collections.Specialized;
+#endif
 
 namespace MvcSiteMapProvider.Globalization
 {

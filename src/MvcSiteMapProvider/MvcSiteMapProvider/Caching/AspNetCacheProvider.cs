@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !MVC6
+using System;
 using System.Web;
 using System.Web.Caching;
 using MvcSiteMapProvider.Web.Mvc;
@@ -105,3 +106,4 @@ namespace MvcSiteMapProvider.Caching
         }
     }
 }
+#endif

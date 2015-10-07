@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !MVC6
+using System;
 using System.Web.Mvc;
 using System.Web.Mvc.Async;
 
@@ -31,3 +32,4 @@ namespace MvcSiteMapProvider.Web.Mvc
         #endregion
     }
 }
+#endif

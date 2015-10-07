@@ -1,7 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+#if MVC6
+using Microsoft.AspNet.Mvc;
+using Microsoft.AspNet.Routing;
+#else
 using System.Web.Mvc;
 using System.Web.Routing;
+#endif
 using System.Text;
 using MvcSiteMapProvider.Caching;
 using MvcSiteMapProvider.Web;

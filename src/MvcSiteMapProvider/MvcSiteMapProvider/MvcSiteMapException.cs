@@ -1,11 +1,16 @@
 ﻿using System;
+#if MVC6
+using Microsoft.AspNet.Mvc;
+#endif
 
 namespace MvcSiteMapProvider
 {
     /// <summary>
     /// MvcSiteMapException
     /// </summary>
+#if !MVC6
     [Serializable]
+#endif
     public class MvcSiteMapException : Exception
     {
         /// <summary>

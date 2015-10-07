@@ -1,4 +1,8 @@
-﻿using System;
+﻿
+// TODO: Reimplement
+#if !MVC6
+
+using System;
 using System.Web.Mvc;
 
 namespace MvcSiteMapProvider.Web.Mvc.Filters
@@ -27,3 +31,4 @@ namespace MvcSiteMapProvider.Web.Mvc.Filters
         }
     }
 }
+#endif

@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
-using System.Web;
+#if MVC6
+using Microsoft.AspNet.Mvc;
+using Microsoft.AspNet.Routing;
+using MvcSiteMapProvider.Web.Routing;
+#else
 using System.Web.Mvc;
 using System.Web.Routing;
+#endif
 using MvcSiteMapProvider.Globalization;
 using MvcSiteMapProvider.Web;
 using MvcSiteMapProvider.Web.Mvc;
@@ -78,7 +82,7 @@ namespace MvcSiteMapProvider
         protected readonly ISiteMap siteMap;
         protected readonly string key;
         protected readonly bool isDynamic;
-        protected string httpMethod = HttpVerbs.Get.ToString().ToUpperInvariant();
+        protected string httpMethod = "GET";
         protected string title = string.Empty;
         protected string description = string.Empty;
         protected string imageUrl = string.Empty;
@@ -530,6 +534,8 @@ namespace MvcSiteMapProvider
             var url = this.canonicalUrl;
             if (!string.IsNullOrEmpty(url))
             {
+                
+
                 // Use HTTP if not provided to force an absolute URL to be built.
                 var protocol = string.IsNullOrEmpty(this.CanonicalUrlProtocol) ? Uri.UriSchemeHttp : this.CanonicalUrlProtocol;
                 return this.urlPath.ResolveUrl(url, protocol, this.CanonicalUrlHostName);
@@ -658,8 +664,8 @@ namespace MvcSiteMapProvider
             // Note: we must use the configured route values, rather than the RouteValue property to avoid an
             // infinite loop.
             var routeKeys = this.routeValues.Keys.ToArray();
-            var caseInsensitiveRouteKeys = new HashSet<string>(routeKeys, StringComparer.InvariantCultureIgnoreCase);
-            var caseInsensitivePreservedRouteParameters = new HashSet<string>(this.PreservedRouteParameters, StringComparer.InvariantCultureIgnoreCase);
+            var caseInsensitiveRouteKeys = new HashSet<string>(routeKeys, StringComparer.OrdinalIgnoreCase);
+            var caseInsensitivePreservedRouteParameters = new HashSet<string>(this.PreservedRouteParameters, StringComparer.OrdinalIgnoreCase);
             var result = new NameValueCollection(queryStringValues.Count);
 
             foreach (var key in queryStringValues.AllKeys)
@@ -708,7 +714,19 @@ namespace MvcSiteMapProvider
             RouteData routeData;
             if (!string.IsNullOrEmpty(this.Route))
             {
+#if MVC6
+                for (int i = 0; i < routes.Count; i++)
+                {
+                    var named = routes[i] as INamedRouter;
+                    if (named != null && named.Name.Equals(this.Route))
+                    {
+                        // TODO: Need to call routeasync on the right named route
+                        //routeData.RouteAsync()
+                    }
+                }
+#else
                 routeData = routes[this.Route].GetRouteData(httpContext);
+#endif
             }
             else
             {
@@ -780,9 +798,9 @@ namespace MvcSiteMapProvider
             return result;
         }
 
-        #endregion
+#endregion
 
-        #region MVC
+#region MVC
 
         /// <summary>
         /// Gets or sets the area.
@@ -814,9 +832,9 @@ namespace MvcSiteMapProvider
             set { RouteValues["action"] = value; }
         }
 
-        #endregion
+#endregion
 
-        #region CopyTo
+#region CopyTo
 
         public override void CopyTo(ISiteMapNode node)
         {
@@ -856,9 +874,9 @@ namespace MvcSiteMapProvider
             // NOTE: Area, Controller, and Action are covered under RouteValues.
         }
 
-        #endregion
+#endregion
 
-        #region IEquatable<ISiteMapNode> Members
+#region IEquatable<ISiteMapNode> Members
 
         public override bool Equals(ISiteMapNode node)
         {
@@ -875,9 +893,9 @@ namespace MvcSiteMapProvider
             return this.Key.Equals(node.Key);
         }
 
-        #endregion
+#endregion
 
-        #region System.Object Overrides
+#region System.Object Overrides
 
         public override bool Equals(object obj)
         {
@@ -922,6 +940,14 @@ namespace MvcSiteMapProvider
             return this.Key;
         }
 
-        #endregion
+#endregion
     }
+
+#if MVC6
+    internal class Uri
+    {
+        public const string SchemeDelimiter = "://";
+        public const string UriSchemeHttp = "http";
+    }
+#endif
 }

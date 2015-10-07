@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !MVC6
+using System;
 using System.Web.Script.Serialization;
 
 namespace MvcSiteMapProvider.Web.Script.Serialization
@@ -11,3 +12,4 @@ namespace MvcSiteMapProvider.Web.Script.Serialization
     {
     }
 }
+#endif

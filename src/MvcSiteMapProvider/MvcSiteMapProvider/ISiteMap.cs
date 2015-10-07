@@ -1,7 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+#if MVC6
+using Microsoft.AspNet.Mvc;
+using MvcSiteMapProvider.Web;
+using MvcSiteMapProvider.Web.Mvc;
+#else
 using System.Web.Mvc;
+#endif
 using MvcSiteMapProvider.Collections.Specialized;
 
 namespace MvcSiteMapProvider
@@ -47,8 +53,26 @@ namespace MvcSiteMapProvider
         bool UseTitleIfDescriptionNotProvided { get; }
         bool VisibilityAffectsDescendants { get; }
         Type ResolveControllerType(string areaName, string controllerName);
-
+#if !MVC6
         [Obsolete("ResolveActionMethodParameters is deprecated and will be removed in version 5.")]
         IEnumerable<string> ResolveActionMethodParameters(string areaName, string controllerName, string actionMethodName);
+#endif
     }
+
+#if MVC6
+    public static class SiteMapExtensions
+    {
+        /// <summary>
+        /// Finds the site map node.
+        /// </summary>
+        /// <param name="context">The controller context.</param>
+        /// <returns></returns>
+        public static ISiteMapNode FindSiteMapNode(this ISiteMap siteMap, ActionContext context)
+        {
+            var controllerContext = new ControllerContext(new MvcContextFactory().CreateRequestContext(new HttpContextWrapper(context.HttpContext)), null);
+            return siteMap.FindSiteMapNode(controllerContext);
+        }
+    }
+#endif
+
 }

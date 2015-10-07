@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Specialized;
 
 namespace MvcSiteMapProvider.Collections.Specialized
 {
@@ -23,3 +22,4 @@ namespace MvcSiteMapProvider.Collections.Specialized
         }
     }
 }
+

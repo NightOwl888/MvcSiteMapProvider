@@ -67,7 +67,7 @@ namespace MvcSiteMapProvider.Collections.Specialized
         /// <param name="xmlNode">The <see cref="System.Xml.Linq.XElement"/> that represents the siteMapNode element in XML.</param>
         /// <param name="throwIfReservedKey"><c>true</c> to throw an exception if one of the keys being added is a reserved key name; otherwise, <c>false</c>.</param>
         void AddRange(XElement xmlNode, bool throwIfReservedKey);
-
+#if !MVC6
         /// <summary>
         /// Adds the elements from a given <see cref="System.Collections.Specialized.NameValueCollection"/>. If the key exists, the value will be overwritten.
         /// </summary>
@@ -80,15 +80,15 @@ namespace MvcSiteMapProvider.Collections.Specialized
         /// <param name="nameValueCollection">The <see cref="System.Collections.Specialized.NameValueCollection"/> to retrieve the values from.</param>
         /// <param name="throwIfReservedKey"><c>true</c> to throw an exception if one of the keys being added is a reserved key name; otherwise, <c>false</c>.</param>
         void AddRange(NameValueCollection nameValueCollection, bool throwIfReservedKey);
-
+#endif
         /// <summary>
         /// <b>True</b> if the dictionary contains keys other than "area", "controller", and "action"; otherwise <b>false</b>.
         /// </summary>
         bool ContainsCustomKeys { get; }
-
+#if !MVC6
         [Obsolete("Use the overload MatchesRoute(IDictionary<string, object>) instead. This overload will be removed in version 5.")]
         bool MatchesRoute(IEnumerable<string> actionParameters, IDictionary<string, object> routeValues);
-
+#endif
         /// <summary>
         /// Compares whether the current dictionary the same as the passed in dictionary, accounting for empty optional values.
         /// </summary>

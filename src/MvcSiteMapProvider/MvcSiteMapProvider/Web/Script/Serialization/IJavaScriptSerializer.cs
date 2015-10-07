@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !MVC6
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Web.Script.Serialization;
@@ -21,3 +22,4 @@ namespace MvcSiteMapProvider.Web.Script.Serialization
         void Serialize(object obj, StringBuilder output);
     }
 }
+#endif

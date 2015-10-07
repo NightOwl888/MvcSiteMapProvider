@@ -5,7 +5,9 @@ namespace MvcSiteMapProvider
     /// <summary>
     /// Sitemap update priority
     /// </summary>
+#if !MVC6
     [Serializable]
+#endif
     public enum UpdatePriority
     {
         /// <summary>

@@ -44,7 +44,7 @@ namespace MvcSiteMapProvider
 
         public bool AppliesTo(string providerName)
         {
-            return this.instanceName.Equals(providerName, StringComparison.InvariantCulture);
+            return this.instanceName.Equals(providerName, StringComparison.Ordinal);
         }
 
         #endregion

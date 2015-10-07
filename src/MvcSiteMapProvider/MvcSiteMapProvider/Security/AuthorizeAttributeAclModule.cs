@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !MVC6
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -115,7 +116,7 @@ namespace MvcSiteMapProvider.Security
 
             // Create a Uri for the current node. If we have an absolute URL,
             // it will be used instead of the baseUri.
-            var nodeUri = new Uri(httpContext.Request.Url, node.Url);
+            var nodeUri = new System.Uri(httpContext.Request.Url, node.Url);
 
             // Create a TextWriter with null stream as a backing stream 
             // which doesn't consume resources
@@ -291,3 +292,4 @@ namespace MvcSiteMapProvider.Security
         }
     }
 }
+#endif

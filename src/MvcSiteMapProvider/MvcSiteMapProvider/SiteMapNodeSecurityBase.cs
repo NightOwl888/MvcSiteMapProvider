@@ -1,7 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+#if MVC6
+using Microsoft.AspNet.Routing;
+using MvcSiteMapProvider.Web;
+#else
 using System.Web;
 using System.Web.Routing;
+#endif
 using MvcSiteMapProvider.Collections.Specialized;
 
 namespace MvcSiteMapProvider
@@ -12,7 +17,7 @@ namespace MvcSiteMapProvider
     public abstract class SiteMapNodeSecurityBase
         : ISiteMapNode
     {
-        #region Security
+#region Security
 
         /// <summary>
         /// Determines whether the current node is accessible to the current user based on context.
@@ -25,10 +30,10 @@ namespace MvcSiteMapProvider
             return this.SiteMap.IsAccessibleToUser(this);
         }
 
-        #endregion
+#endregion
 
 
-        #region Abstract Members
+#region Abstract Members
 
         public abstract string Key { get; }
         public abstract bool IsDynamic { get; }
@@ -94,6 +99,6 @@ namespace MvcSiteMapProvider
         public abstract void CopyTo(ISiteMapNode node);
         public abstract bool Equals(ISiteMapNode node);
 
-        #endregion
+#endregion
     }
 }

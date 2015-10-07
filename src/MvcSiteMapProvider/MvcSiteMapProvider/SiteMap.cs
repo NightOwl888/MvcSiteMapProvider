@@ -2,10 +2,15 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+#if MVC6
+using Microsoft.AspNet.Mvc;
+using Microsoft.AspNet.Routing;
+#else
 using System.Web;
 using System.Web.UI;
 using System.Web.Mvc;
 using System.Web.Routing;
+#endif
 using MvcSiteMapProvider.Collections.Specialized;
 using MvcSiteMapProvider.DI;
 using MvcSiteMapProvider.Matching;
@@ -303,7 +308,7 @@ namespace MvcSiteMapProvider
             // NOTE: If the URL passed is absolute, the public facing URL will be ignored
             // and the current URL will be the absolute URL that is passed.
             var publicFacingUrl = this.urlPath.GetPublicFacingUrl(this.HttpContext);
-            var currentUrl = new Uri(publicFacingUrl, rawUrl);
+            var currentUrl = new System.Uri(publicFacingUrl, rawUrl);
 
             // Search the internal dictionary for the URL that is registered manually.
             var node = this.FindSiteMapNodeFromUrl(currentUrl.PathAndQuery, currentUrl.AbsolutePath, currentUrl.Host, HttpContext.CurrentHandler);
@@ -657,6 +662,7 @@ namespace MvcSiteMapProvider
             return pluginProvider.MvcResolver.ResolveControllerType(areaName, controllerName);
         }
 
+#if !MVC6
         /// <summary>
         /// Resolves the action method parameters based on the current SiteMap instance.
         /// </summary>
@@ -666,10 +672,11 @@ namespace MvcSiteMapProvider
         {
             return pluginProvider.MvcResolver.ResolveActionMethodParameters(areaName, controllerName, actionMethodName);
         }
+#endif
 
-        #endregion
+#endregion
 
-        #region Protected Members
+#region Protected Members
 
         /// <summary>
         /// Gets the current HTTP context.
@@ -737,7 +744,7 @@ namespace MvcSiteMapProvider
                 var relativeMatch = this.siteMapChildStateFactory.CreateUrlKey(relativeUrl, string.Empty);
                 node = this.FindSiteMapNodeFromUrlMatch(relativeMatch);
             }
-
+#if !MVC6
             // Try relative match with ASP.NET handler querystring
             if (node == null)
             {
@@ -752,7 +759,7 @@ namespace MvcSiteMapProvider
                     }
                 }
             }
-
+#endif
             // Try relative match without querystring
             if (node == null && !string.IsNullOrEmpty(relativePath))
             {
@@ -778,7 +785,11 @@ namespace MvcSiteMapProvider
             var routeData = this.GetMvcRouteData(httpContext);
             if (routeData != null)
             {
+#if MVC6
+                return FindSiteMapNodeFromMvcRoute(routeData.Values, routeData.Routers);
+#else
                 return FindSiteMapNodeFromMvcRoute(routeData.Values, routeData.Route);
+#endif
             }
             return null;
         }
@@ -791,7 +802,11 @@ namespace MvcSiteMapProvider
         /// <returns>
         /// A controller action node represented as a <see cref="SiteMapNode"/> instance
         /// </returns>
+#if MVC6
+        protected virtual ISiteMapNode FindSiteMapNodeFromMvcRoute(IDictionary<string, object> values, IList<IRouter> routesInPath)
+#else
         protected virtual ISiteMapNode FindSiteMapNodeFromMvcRoute(IDictionary<string, object> values, RouteBase route)
+#endif
         {
             var routes = mvcContextFactory.GetRoutes();
 
@@ -801,12 +816,27 @@ namespace MvcSiteMapProvider
                 // Look at the route property
                 if (!string.IsNullOrEmpty(node.Route))
                 {
+#if MVC6
+                    // TODO: Test this
+                    foreach(var routeInPath in routesInPath)
+                    {
+                        var namedRoute = routeInPath as INamedRouter;
+                        if (namedRoute != null)
+                        {
+                            if (namedRoute.Name == node.Route && node.MatchesRoute(values))
+                            {
+                                return node;
+                            }
+                        }
+                    }
+#else
                     // This looks a bit weird, but if I set up a node to a general route i.e. /Controller/Action/ID
                     // I need to check that the values are the same so that it doesn't swallow all of the nodes that also use that same general route
                     if (routes[node.Route] == route && node.MatchesRoute(values))
                     {
                         return node;
                     }
+#endif
                 }
                 else if (node.MatchesRoute(values))
                 {
@@ -900,7 +930,7 @@ namespace MvcSiteMapProvider
             if (string.IsNullOrEmpty(node.HttpMethod) || 
                 (!EnumHelper.TryParse<HttpVerbs>(node.HttpMethod, true, out verbs) && 
                 !node.HttpMethod.Equals("*") && 
-                !node.HttpMethod.Equals("Request", StringComparison.InvariantCultureIgnoreCase)))
+                !node.HttpMethod.Equals("Request", StringComparison.OrdinalIgnoreCase)))
             {
                 var allowedVerbs = string.Join(Environment.NewLine, Enum.GetNames(typeof(HttpVerbs))) + Environment.NewLine + "Request" + Environment.NewLine + "*";
                 throw new MvcSiteMapException(string.Format(Resources.Messages.SiteMapNodeHttpMethodInvalid, node.Key, node.Title, node.HttpMethod, allowedVerbs));
@@ -953,6 +983,6 @@ namespace MvcSiteMapProvider
             }
         }
 
-        #endregion
+#endregion
     }
 }

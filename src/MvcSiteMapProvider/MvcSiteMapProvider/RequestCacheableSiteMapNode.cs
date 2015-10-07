@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Text;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
-using System.Web;
 using MvcSiteMapProvider.Caching;
+#if MVC6
+using MvcSiteMapProvider.Collections.Specialized;
+#endif
 using MvcSiteMapProvider.Globalization;
 using MvcSiteMapProvider.Web.Mvc;
 using MvcSiteMapProvider.Web;

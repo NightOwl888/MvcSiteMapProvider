@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !MVC6
+using System;
 using System.Web.Mvc;
 
 namespace MvcSiteMapProvider.Web
@@ -27,3 +28,4 @@ namespace MvcSiteMapProvider.Web
         public ViewDataDictionary ViewData { get; set; }
     }
 }
+#endif

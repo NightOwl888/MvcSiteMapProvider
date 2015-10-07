@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !MVC6
+using System;
 using System.Web.Mvc;
 using System.Collections.Generic;
 using MvcSiteMapProvider.Globalization;
@@ -35,7 +36,7 @@ namespace MvcSiteMapProvider.Web.Mvc
         protected readonly IUrlPath urlPath;
         protected readonly ICultureContextFactory cultureContextFactory;
 
-        #region IXmlSiteMapResultFactory Members
+#region IXmlSiteMapResultFactory Members
 
         public virtual ActionResult Create(int page)
         {
@@ -141,6 +142,7 @@ namespace MvcSiteMapProvider.Web.Mvc
                 this.cultureContextFactory);
         }
 
+
         [Obsolete("Overload is invalid for sitemaps with over 35,000 links. Use Create(int page) instead. This overload will be removed in version 5.")]
         public virtual ActionResult Create()
         {
@@ -211,7 +213,7 @@ namespace MvcSiteMapProvider.Web.Mvc
                 this.cultureContextFactory);
         }
 
-        #endregion
+#endregion
 
         protected virtual int DefaultPage
         {
@@ -239,3 +241,4 @@ namespace MvcSiteMapProvider.Web.Mvc
         }
     }
 }
+#endif

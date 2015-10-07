@@ -1,4 +1,7 @@
-﻿using System;
+﻿// TODO: Reimplement
+#if !MVC6
+
+using System;
 using System.Linq.Expressions;
 using System.Web.Mvc;
 
@@ -100,3 +103,4 @@ namespace MvcSiteMapProvider.Web.Mvc.Filters
     }
 
 }
+#endif

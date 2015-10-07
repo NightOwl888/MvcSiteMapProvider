@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+#if MVC6
+using Microsoft.AspNet.Routing;
+#else
 using System.Web.Routing;
+#endif
 
 namespace MvcSiteMapProvider.Web.Routing
 {

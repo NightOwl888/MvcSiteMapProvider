@@ -10,13 +10,17 @@ namespace MvcSiteMapProvider.Collections
     /// </summary>
     /// <typeparam name="TKey">The type of the key.</typeparam>
     /// <typeparam name="TValue">The type of the value.</typeparam>
+#if !MVC6
     [Serializable]
+#endif
     public class ThreadSafeDictionary<TKey, TValue> : IThreadSafeDictionary<TKey, TValue>
     {
         // This is the internal dictionary that we are wrapping
         readonly IDictionary<TKey, TValue> dict = new Dictionary<TKey, TValue>();
 
+#if !MVC6
         [NonSerialized]
+#endif
         readonly ReaderWriterLockSlim dictionaryLock = Locks.GetLockInstance(LockRecursionPolicy.NoRecursion); //setup the lock;
 
         /// <summary>

@@ -51,7 +51,11 @@ namespace MvcSiteMapProvider.Reflection
         protected virtual IEnumerable<IMvcSiteMapNodeAttributeDefinition> GetAttributeDefinitionsForControllers(Type type)
         {
             var result = new List<IMvcSiteMapNodeAttributeDefinition>();
+#if MVC6
+            var attributes = type.GetTypeInfo().GetCustomAttributes(typeof(IMvcSiteMapNodeAttribute), true) as IMvcSiteMapNodeAttribute[];
+#else
             var attributes = type.GetCustomAttributes(typeof(IMvcSiteMapNodeAttribute), true) as IMvcSiteMapNodeAttribute[];
+#endif
             foreach (var attribute in attributes)
             {
                 result.Add(new MvcSiteMapNodeAttributeDefinitionForController

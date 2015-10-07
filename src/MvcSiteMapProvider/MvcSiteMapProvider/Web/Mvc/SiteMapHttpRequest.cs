@@ -1,6 +1,10 @@
 ﻿using System;
+#if MVC6
+using Microsoft.AspNet.Http;
+#else
 using System.Web;
 using System.Web.Mvc;
+#endif
 
 namespace MvcSiteMapProvider.Web.Mvc
 {
@@ -25,7 +29,7 @@ namespace MvcSiteMapProvider.Web.Mvc
         {
             this.node = node;
         }
-
+#if !MVC6
         /// <summary>
         /// Gets the virtual path of the application root and makes it relative by using the tilde (~) notation for the application root (as in "~/page.aspx").
         /// </summary>
@@ -40,6 +44,7 @@ namespace MvcSiteMapProvider.Web.Mvc
                 return VirtualPathUtility.ToAppRelative(this.CurrentExecutionFilePath);
             }
         }
+#endif
 
         /// <summary>
         /// Gets the virtual path of the current request.
@@ -65,7 +70,7 @@ namespace MvcSiteMapProvider.Web.Mvc
             {
                 bool useRequest = this.node == null || 
                     string.Equals(this.node.HttpMethod, "*") || 
-                    string.Equals(this.node.HttpMethod, "request", StringComparison.InvariantCultureIgnoreCase);
+                    string.Equals(this.node.HttpMethod, "request", StringComparison.OrdinalIgnoreCase);
                 if (!useRequest)
                 {
                     return string.IsNullOrEmpty(this.node.HttpMethod)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !MVC6
+using System;
 using System.Web.Mvc;
 using System.Collections.Generic;
 
@@ -12,3 +13,4 @@ namespace MvcSiteMapProvider.Web.Mvc
         void SetControllerFactory(IControllerFactory controllerFactory);
     }
 }
+#endif

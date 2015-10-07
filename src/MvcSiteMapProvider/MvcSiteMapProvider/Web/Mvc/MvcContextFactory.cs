@@ -1,9 +1,15 @@
 ﻿using System;
 using System.IO;
+#if MVC6
+using Microsoft.AspNet.Mvc;
+using Microsoft.AspNet.Routing;
+using MvcSiteMapProvider.Web.Routing;
+#else
 using System.Web;
 using System.Web.UI;
 using System.Web.Mvc;
 using System.Web.Routing;
+#endif
 using MvcSiteMapProvider.Caching;
 
 namespace MvcSiteMapProvider.Web.Mvc
@@ -15,7 +21,74 @@ namespace MvcSiteMapProvider.Web.Mvc
     public class MvcContextFactory
         : IMvcContextFactory
     {
+#if MVC6
+        private readonly Func<ActionContext> getActionContextMethod;
+
+        public MvcContextFactory(Func<ActionContext> getActionContextMethod)
+        {
+            if (getActionContextMethod == null)
+                throw new ArgumentNullException("getActionContextMethod");
+
+            this.getActionContextMethod = getActionContextMethod;
+        }
+#endif
+
         #region IMvcContextFactory Members
+
+#if MVC6
+
+        public HttpContextBase CreateHttpContext()
+        {
+            var actionContext = getActionContextMethod();
+            return new SiteMapHttpContext(actionContext, null);
+        }
+
+        public HttpContextBase CreateHttpContext(ISiteMapNode node, System.Uri uri, TextWriter writer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public RequestContext CreateRequestContext()
+        {
+            throw new NotImplementedException();
+        }
+
+        public RequestContext CreateRequestContext(HttpContextBase httpContext)
+        {
+            throw new NotImplementedException();
+        }
+
+        public RequestContext CreateRequestContext(HttpContextBase httpContext, RouteData routeData)
+        {
+            throw new NotImplementedException();
+        }
+
+        public RequestContext CreateRequestContext(ISiteMapNode node, RouteData routeData)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IUrlHelper CreateUrlHelper()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IUrlHelper CreateUrlHelper(RequestContext requestContext)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IRequestCache GetRequestCache()
+        {
+            throw new NotImplementedException();
+        }
+
+        public RouteCollection GetRoutes()
+        {
+            throw new NotImplementedException();
+        }
+
+#else
 
         public virtual HttpContextBase CreateHttpContext()
         {
@@ -27,7 +100,7 @@ namespace MvcSiteMapProvider.Web.Mvc
             return new SiteMapHttpContext(HttpContext.Current, node);
         }
 
-        public virtual HttpContextBase CreateHttpContext(ISiteMapNode node, Uri uri, TextWriter writer)
+        public virtual HttpContextBase CreateHttpContext(ISiteMapNode node, System.Uri uri, TextWriter writer)
         {
             if (uri == null)
                 throw new ArgumentNullException("uri");
@@ -114,6 +187,7 @@ namespace MvcSiteMapProvider.Web.Mvc
 
             return new AuthorizationContext(controllerContext, actionDescriptor);
         }
+#endif
 
         #endregion
     }

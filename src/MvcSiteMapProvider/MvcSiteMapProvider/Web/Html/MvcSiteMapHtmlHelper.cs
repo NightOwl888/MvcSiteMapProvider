@@ -1,6 +1,11 @@
-﻿using System;
-using System.Web;
+﻿#if !MVC6
+
+using System;
+#if MVC6
+using Microsoft.AspNet.Mvc;
+#else
 using System.Web.Mvc;
+#endif
 using MvcSiteMapProvider.Web.Mvc;
 
 namespace MvcSiteMapProvider.Web.Html
@@ -64,3 +69,6 @@ namespace MvcSiteMapProvider.Web.Html
         }
     }
 }
+
+
+#endif

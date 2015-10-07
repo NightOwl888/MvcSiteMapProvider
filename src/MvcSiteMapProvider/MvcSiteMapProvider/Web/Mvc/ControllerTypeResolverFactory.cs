@@ -1,7 +1,14 @@
-﻿using System;
-using System.Web.Mvc;
+﻿#if !MVC6
+
+using System;
 using System.Collections.Generic;
+#if MVC6
+using Microsoft.AspNet.Mvc;
+using Microsoft.AspNet.Routing;
+#else
+using System.Web.Mvc;
 using System.Web.Routing;
+#endif
 using MvcSiteMapProvider.DI;
 using MvcSiteMapProvider.Web.Compilation;
 
@@ -37,13 +44,14 @@ namespace MvcSiteMapProvider.Web.Mvc
         protected readonly IControllerBuilder controllerBuilder;
         protected readonly IBuildManager buildManager;
 
-        #region IControllerTypeResolverFactory Members
+#region IControllerTypeResolverFactory Members
 
         public IControllerTypeResolver Create(RouteCollection routes)
         {
             return new ControllerTypeResolver(areaNamespacesToIgnore, routes, controllerBuilder, buildManager);
         }
 
-        #endregion
+#endregion
     }
 }
+#endif

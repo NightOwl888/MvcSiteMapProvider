@@ -2,11 +2,23 @@
 using System.Collections;
 using System.Collections.Specialized;
 using System.Globalization;
+using System.Net;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Web;
+
 using MvcSiteMapProvider.Web.Mvc;
+#if MVC6
+using Microsoft.AspNet.Localization;
+using Microsoft.AspNet.Http;
+using Microsoft.Net.Http;
+using Microsoft.Framework.WebEncoders;
+using Microsoft.AspNet.Mvc;
+using Microsoft.AspNet.Mvc.Rendering;
+using MvcSiteMapProvider.Web;
+#else
+using System.Web;
+#endif
 
 namespace MvcSiteMapProvider.Web
 {
@@ -221,7 +233,7 @@ namespace MvcSiteMapProvider.Web
         {
             if (IsAbsolutePhysicalPath(path))
             {
-                throw new HttpException(string.Format(Resources.Messages.PhysicalPathNotAllowed, path));
+                throw new Exception(string.Format(Resources.Messages.PhysicalPathNotAllowed, path));
             }
             int index = path.IndexOf('?');
             if (index >= 0)
@@ -230,7 +242,7 @@ namespace MvcSiteMapProvider.Web
             }
             if (HasScheme(path))
             {
-                throw new HttpException(string.Format(Resources.Messages.InvalidVirtualPath, path));
+                throw new Exception(string.Format(Resources.Messages.InvalidVirtualPath, path));
             }
         }
 
@@ -304,7 +316,7 @@ namespace MvcSiteMapProvider.Web
                     {
                         if (list.Count == 0)
                         {
-                            throw new HttpException(Resources.Messages.CannotExitUpTopDirectory);
+                            throw new Exception(Resources.Messages.CannotExitUpTopDirectory);
                         }
                         if ((list.Count == 1) && IsAppRelativePath(path))
                         {
@@ -349,12 +361,12 @@ namespace MvcSiteMapProvider.Web
 
         public string UrlEncode(string url)
         {
-            return HttpUtility.UrlEncode(url);
+            return WebUtility.UrlEncode(url);
         }
 
         public string UrlDecode(string url)
         {
-            return HttpUtility.UrlDecode(url);
+            return WebUtility.UrlDecode(url);
         }
 
         /// <summary>
@@ -385,12 +397,12 @@ namespace MvcSiteMapProvider.Web
             if (!this.IsAbsoluteUrl(url))
                 return false;
 
-            Uri uri = null;
-            if (Uri.TryCreate(url, UriKind.Absolute, out uri))
+            System.Uri uri = null;
+            if (System.Uri.TryCreate(url, UriKind.Absolute, out uri))
             {
                 var publicFacingUrl = this.GetPublicFacingUrl(httpContext);
                 var isDifferentHost = !uri.Host.ToLowerInvariant().Equals(publicFacingUrl.Host.ToLowerInvariant());
-                var isDifferentVirtualApplication = !uri.AbsolutePath.StartsWith(httpContext.Request.ApplicationPath, StringComparison.InvariantCultureIgnoreCase);
+                var isDifferentVirtualApplication = !uri.AbsolutePath.StartsWith(httpContext.Request.ApplicationPath, StringComparison.OrdinalIgnoreCase);
 
                 return (isDifferentHost || isDifferentVirtualApplication);
             }
@@ -612,7 +624,7 @@ namespace MvcSiteMapProvider.Web
 
                 if (!string.IsNullOrEmpty(protocol) || !string.IsNullOrEmpty(hostName))
                 {
-                    Uri requestUrl = this.GetPublicFacingUrl(httpContext);
+                    System.Uri requestUrl = this.GetPublicFacingUrl(httpContext);
                     bool isWildcardProtocol = (protocol == "*");
                     string defaultProtocol = (isWildcardProtocol || !defaultToHttp) ? requestUrl.Scheme : Uri.UriSchemeHttp;
 
@@ -630,7 +642,7 @@ namespace MvcSiteMapProvider.Web
             return url;
         }
 
-        protected virtual string GetPortString(string protocol, string hostName, Uri requestUrl)
+        protected virtual string GetPortString(string protocol, string hostName, System.Uri requestUrl)
         {
             int port = 80;
             bool isProtocolMatch = string.Equals(protocol, requestUrl.Scheme, StringComparison.OrdinalIgnoreCase);
@@ -679,13 +691,13 @@ namespace MvcSiteMapProvider.Web
 
         protected virtual bool IsDefaultPort(int port, string protocol)
         {
-            return new Uri(protocol + Uri.SchemeDelimiter + "unknownhost:" + 
+            return new System.Uri(protocol + Uri.SchemeDelimiter + "unknownhost:" + 
                 Convert.ToString(port, CultureInfo.InvariantCulture) + "/").IsDefaultPort;
         }
 
         protected virtual bool IsVisualStudioDevelopmentServer
         {
-            get { return string.IsNullOrEmpty(this.HttpContext.Request.ServerVariables["SERVER_SOFTWARE"]); }
+            get { return string.IsNullOrEmpty(this.HttpContext.Request.Headers["SERVER_SOFTWARE"]); }
         }
 
         /// <summary>
@@ -694,7 +706,7 @@ namespace MvcSiteMapProvider.Web
         /// <param name="httpContext">The HTTP context representing the context of the request.</param>
         /// <returns>The URI that the outside world used to create this request.</returns>
         /// <remarks>Source: http://stackoverflow.com/questions/7795910/how-do-i-get-url-action-to-use-the-right-port-number#11888846 </remarks>
-        public Uri GetPublicFacingUrl(HttpContextBase httpContext)
+        public System.Uri GetPublicFacingUrl(HttpContextBase httpContext)
         {
             var serverVariables = httpContext.Request.ServerVariables;
             var request = httpContext.Request;
@@ -709,7 +721,7 @@ namespace MvcSiteMapProvider.Web
             if (serverVariables["HTTP_HOST"] != null)
             {
                 string scheme = serverVariables["HTTP_X_FORWARDED_PROTO"] ?? request.Url.Scheme;
-                Uri hostAndPort = new Uri(scheme + Uri.SchemeDelimiter + serverVariables["HTTP_HOST"]);
+                System.Uri hostAndPort = new System.Uri(scheme + Uri.SchemeDelimiter + serverVariables["HTTP_HOST"]);
                 UriBuilder publicRequestUri = new UriBuilder(request.Url);
                 publicRequestUri.Scheme = scheme;
                 publicRequestUri.Host = hostAndPort.Host;
@@ -724,9 +736,9 @@ namespace MvcSiteMapProvider.Web
             // the return_to parameter in some cases.
             // Response.ApplyAppPathModifier(builder.Path) would have worked for the cookieless
             // session, but not the URL rewriting problem.
-            return new Uri(request.Url, request.RawUrl);
+            return new System.Uri(request.Url, request.RawUrl);
         }
-
+#if !MVC6
         [Obsolete(@"Use MakeUrlAbsolute(string) instead. Example: This method will be removed in version 5.")]
         public string MakeRelativeUrlAbsolute(string url)
         {
@@ -765,14 +777,14 @@ namespace MvcSiteMapProvider.Web
             // HttpRequest.Url gives us the internal URL in a cloud environment,	
             // So we use a variable that (at least from what I can tell) gives us	
             // the public URL:
-            Uri originalUri = null;
+            System.Uri originalUri = null;
             var httpContext = mvcContextFactory.CreateHttpContext();
 
             if (httpContext.Request.Headers["Host"] != null)
             {
                 string scheme = httpContext.Request.Headers["HTTP_X_FORWARDED_PROTO"]
                     ?? httpContext.Request.Url.Scheme;
-                originalUri = new Uri(scheme + Uri.SchemeDelimiter + httpContext.Request.Headers["Host"]);
+                originalUri = new System.Uri(scheme + Uri.SchemeDelimiter + httpContext.Request.Headers["Host"]);
             }
             else
             {
@@ -788,7 +800,7 @@ namespace MvcSiteMapProvider.Web
             }
 
             // Strip off the application root
-            newUrl = new Uri(newUrl).GetLeftPart(UriPartial.Authority);
+            newUrl = new System.Uri(newUrl).GetLeftPart(UriPartial.Authority);
 
             return newUrl;
         }
@@ -807,5 +819,12 @@ namespace MvcSiteMapProvider.Web
         {
             return ResolveServerUrl(serverUrl, false);
         }
+#else
+        internal class Uri
+        {
+            public const string SchemeDelimiter = "://";
+            public const string UriSchemeHttp = "http";
+        }
+#endif
     }
 }

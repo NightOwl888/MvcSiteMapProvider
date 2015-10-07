@@ -1,6 +1,10 @@
-﻿using System;
+﻿
+#if MVC6
+using Microsoft.AspNet.Mvc;
+#else
 using System.Web;
 using System.Web.Mvc;
+#endif
 
 namespace MvcSiteMapProvider.Web.Mvc
 {
@@ -14,7 +18,11 @@ namespace MvcSiteMapProvider.Web.Mvc
         /// </summary>
         /// <param name="controller">The controller.</param>
         /// <returns></returns>
+#if MVC6
+        public static ISiteMapNode GetCurrentSiteMapNode(this Controller controller)
+#else
         public static ISiteMapNode GetCurrentSiteMapNode(this ControllerBase controller)
+#endif
         {
             return GetCurrentSiteMapNode(controller, SiteMaps.Current);
         }
@@ -25,7 +33,11 @@ namespace MvcSiteMapProvider.Web.Mvc
         /// <param name="controller">The controller.</param>
         /// <param name="siteMap">The site map.</param>
         /// <returns></returns>
+#if MVC6
+        public static ISiteMapNode GetCurrentSiteMapNode(this Controller controller, ISiteMap siteMap)
+#else
         public static ISiteMapNode GetCurrentSiteMapNode(this ControllerBase controller, ISiteMap siteMap)
+#endif
         {
             return siteMap.CurrentNode;
         }
@@ -35,7 +47,11 @@ namespace MvcSiteMapProvider.Web.Mvc
         /// </summary>
         /// <param name="controller">The controller.</param>
         /// <returns></returns>
+#if MVC6
+        public static ISiteMapNode GetCurrentSiteMapNodeForChildAction(this Controller controller)
+#else
         public static ISiteMapNode GetCurrentSiteMapNodeForChildAction(this ControllerBase controller)
+#endif
         {
             return GetCurrentSiteMapNodeForChildAction(controller, SiteMaps.Current);
         }
@@ -46,9 +62,17 @@ namespace MvcSiteMapProvider.Web.Mvc
         /// <param name="controller">The controller.</param>
         /// <param name="siteMap">The SiteMap.</param>
         /// <returns></returns>
+#if MVC6
+        public static ISiteMapNode GetCurrentSiteMapNodeForChildAction(this Controller controller, ISiteMap siteMap)
+        {
+            return siteMap.FindSiteMapNode(controller.ActionContext);
+        }
+#else
         public static ISiteMapNode GetCurrentSiteMapNodeForChildAction(this ControllerBase controller, ISiteMap siteMap)
         {
             return siteMap.FindSiteMapNode(controller.ControllerContext);
         }
+#endif
+
     }
 }

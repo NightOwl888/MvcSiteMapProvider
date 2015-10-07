@@ -2,7 +2,11 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+#if MVC6
+using Microsoft.AspNet.Mvc;
+#else
 using System.Web.Mvc;
+#endif
 using System.Xml.Linq;
 using MvcSiteMapProvider.Builder;
 using MvcSiteMapProvider.Caching;
@@ -171,7 +175,7 @@ namespace MvcSiteMapProvider.Collections.Specialized
                 this.Add(attribute.Name.ToString(), attribute.Value, throwIfReservedKey);
             }
         }
-
+#if !MVC6
         /// <summary>
         /// Adds the elements from a given <see cref="System.Collections.Specialized.NameValueCollection"/>. If the key exists, the value will be overwritten.
         /// </summary>
@@ -193,6 +197,7 @@ namespace MvcSiteMapProvider.Collections.Specialized
                 this.Add(key, nameValueCollection[key], throwIfReservedKey);
             }
         }
+#endif
 
         protected override void Insert(string key, object value, bool add)
         {
@@ -255,11 +260,13 @@ namespace MvcSiteMapProvider.Collections.Specialized
             return string.IsNullOrEmpty(key) || (key != "area" && key != "controller" && key != "action");
         }
 
+#if !MVC6
         [Obsolete("Use the overload MatchesRoute(IDictionary<string, object>) instead. This overload will be removed in version 5.")]
         public virtual bool MatchesRoute(IEnumerable<string> actionParameters, IDictionary<string, object> routeValues)
         {
             return this.MatchesRoute(routeValues);
         }
+#endif
 
         public virtual bool MatchesRoute(IDictionary<string, object> routeValues)
         {
@@ -306,7 +313,7 @@ namespace MvcSiteMapProvider.Collections.Specialized
 
         protected virtual bool MatchesValue(string key, object value)
         {
-            return this[key].ToString().Equals(value.ToString(), StringComparison.InvariantCultureIgnoreCase);
+            return this[key].ToString().Equals(value.ToString(), StringComparison.OrdinalIgnoreCase);
         }
 
         protected virtual bool IsEmptyValue(object value)

@@ -4,8 +4,13 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+#if MVC6
+using Microsoft.AspNet.Mvc;
+#else
 using System.Web.Mvc;
+using System.Text.RegularExpressions;
 using System.Web.Script.Serialization;
+#endif
 using MvcSiteMapProvider.Reflection;
 using MvcSiteMapProvider.Xml;
 using MvcSiteMapProvider.Collections.Specialized;
@@ -168,8 +173,12 @@ namespace MvcSiteMapProvider.Builder
 
             if (methodInfo == null) // try to find Index action
             {
+#if MVC6
+                var ms = type.GetMethods(BindingFlags.Instance | BindingFlags.Public).Where(x => x.Name.Equals("Index"));
+#else
                 var ms = type.FindMembers(MemberTypes.Method, BindingFlags.Instance | BindingFlags.Public,
                                           (mi, o) => mi != null && string.Equals(mi.Name, "Index"), null);
+#endif
                 foreach (MethodInfo m in ms.OfType<MethodInfo>())
                 {
                     var pars = m.GetParameters();
@@ -180,12 +189,13 @@ namespace MvcSiteMapProvider.Builder
                     }
                 }
             }
-
             string area = "";
+#if !MVC6
             if (!string.IsNullOrEmpty(attribute.AreaName))
             {
                 area = attribute.AreaName;
             }
+#endif
             if (string.IsNullOrEmpty(area) && !string.IsNullOrEmpty(attribute.Area))
             {
                 area = attribute.Area;
@@ -214,7 +224,7 @@ namespace MvcSiteMapProvider.Builder
                 }
             }
 
-            string httpMethod = (string.IsNullOrEmpty(attribute.HttpMethod) ? HttpVerbs.Get.ToString() : attribute.HttpMethod).ToUpper();
+            string httpMethod = (string.IsNullOrEmpty(attribute.HttpMethod) ? "GET" : attribute.HttpMethod).ToUpperInvariant();
 
             // Handle title
             var title = attribute.Title;

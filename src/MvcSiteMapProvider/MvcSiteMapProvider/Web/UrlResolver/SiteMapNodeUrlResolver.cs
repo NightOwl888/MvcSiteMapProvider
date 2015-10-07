@@ -2,8 +2,14 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+#if MVC6
+using Microsoft.AspNet.Http;
+using Microsoft.AspNet.Routing;
+using MvcSiteMapProvider.Web.Routing;
+#else
 using System.Web;
 using System.Web.Routing;
+#endif
 using MvcSiteMapProvider.Web.Mvc;
 
 namespace MvcSiteMapProvider.Web.UrlResolver
@@ -31,7 +37,7 @@ namespace MvcSiteMapProvider.Web.UrlResolver
         protected readonly IMvcContextFactory mvcContextFactory;
         protected readonly IUrlPath urlPath;
 
-        #region ISiteMapNodeUrlResolver Members
+#region ISiteMapNodeUrlResolver Members
 
         /// <summary>
         /// Resolves the URL.
@@ -51,7 +57,7 @@ namespace MvcSiteMapProvider.Web.UrlResolver
             return this.ResolveRouteUrl(node, area, controller, action, routeValues);
         }
 
-        #endregion
+#endregion
 
         protected virtual string ResolveVirtualPath(ISiteMapNode node)
         {
@@ -111,7 +117,7 @@ namespace MvcSiteMapProvider.Web.UrlResolver
             var currentHttpContext = this.mvcContextFactory.CreateHttpContext();
 
             // Create a URI with the home page and no query string values.
-            var uri = new Uri(currentHttpContext.Request.Url, "/");
+            var uri = new System.Uri(currentHttpContext.Request.Url, "/");
             return this.mvcContextFactory.CreateHttpContext(node, uri, writer);
         }
 

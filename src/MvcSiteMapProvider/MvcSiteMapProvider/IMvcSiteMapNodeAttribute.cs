@@ -208,12 +208,14 @@ namespace MvcSiteMapProvider
         /// <value>The name of the area.</value>
         string Area { get; set; }
 
+#if !MVC6
         /// <summary>
         /// Gets or sets the name of the area.
         /// </summary>
         /// <value>The name of the area.</value>
         [Obsolete("AreaName is deprecated and will be removed in version 5. Use Area instead.")]
         string AreaName { get; set; }
+#endif
 
         /// <summary>
         /// Gets or sets the name of the cache key this node is associated with.

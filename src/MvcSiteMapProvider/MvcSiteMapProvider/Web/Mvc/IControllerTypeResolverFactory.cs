@@ -1,5 +1,8 @@
-﻿using System;
+﻿#if MVC6
+using Microsoft.AspNet.Routing;
+#else
 using System.Web.Routing;
+#endif
 
 namespace MvcSiteMapProvider.Web.Mvc
 {

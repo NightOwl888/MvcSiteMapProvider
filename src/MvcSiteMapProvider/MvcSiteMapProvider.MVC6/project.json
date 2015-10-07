@@ -7,6 +7,12 @@
   "licenseUrl": "https://github.com/maartenba/MvcSiteMapProvider/blob/master/LICENSE.md",
   "iconUrl": "https://raw.githubusercontent.com/maartenba/MvcSiteMapProvider/master/map-icon.gif",
 
+  "dependencies": {
+    "Microsoft.AspNet.Mvc": "6.0.0-beta7",
+    "Microsoft.AspNet.Mvc.TagHelpers": "6.0.0-beta7",
+    "Microsoft.AspNet.Routing": "1.0.0-beta7"
+  },
+
   "compile": "../MvcSiteMapProvider/**/*.cs",
 
   "compilationOptions": {

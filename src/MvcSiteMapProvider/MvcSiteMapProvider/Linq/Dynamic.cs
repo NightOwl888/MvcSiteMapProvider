@@ -1,4 +1,5 @@
-﻿//Copyright (C) Microsoft Corporation.  All rights reserved.
+﻿#if !MVC6
+//Copyright (C) Microsoft Corporation.  All rights reserved.
 
 using System;
 using System.Collections.Generic;
@@ -2288,3 +2289,4 @@ namespace MvcSiteMapProvider.Linq
         public const string IdentifierExpected = "Identifier expected";
     }
 }
+#endif

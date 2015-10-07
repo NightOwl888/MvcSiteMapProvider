@@ -40,11 +40,37 @@ namespace MvcSiteMapProvider.Collections.Specialized
         {
             if (values != null)
             {
+#if MVC6
+                var type = values.GetType();
+                var allProperties = type.GetRuntimeProperties();
+
+                // This is done to support 'new' properties that hide a property on a base class
+                var orderedByDeclaringType = allProperties.OrderBy(p => p.DeclaringType == type ? 0 : 1);
+                foreach (var property in orderedByDeclaringType)
+                {
+                    if (property.GetMethod != null &&
+                        property.GetMethod.IsPublic &&
+                        !property.GetMethod.IsStatic &&
+                        property.GetIndexParameters().Length == 0)
+                    {
+                        var value = property.GetValue(values);
+                        if (ContainsKey(property.Name) && property.DeclaringType != type)
+                        {
+                            // This is a hidden property, ignore it.
+                        }
+                        else
+                        {
+                            Add(property.Name, value);
+                        }
+                    }
+                }
+#else
                 foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(values))
                 {
                     object value = descriptor.GetValue(values);
                     this.Add(descriptor.Name, value);
                 }
+#endif
             }
         }
 

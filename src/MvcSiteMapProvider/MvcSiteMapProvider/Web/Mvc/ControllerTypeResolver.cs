@@ -1,10 +1,18 @@
-﻿using System;
+﻿// TODO: Reimplement
+#if !MVC6
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+#if MVC6
+using Microsoft.AspNet.Mvc;
+using Microsoft.AspNet.Routing;
+#else
 using System.Web.Mvc;
 using System.Web.Routing;
+#endif
 using MvcSiteMapProvider.Collections;
 using MvcSiteMapProvider.DI;
 using MvcSiteMapProvider.Web.Compilation;
@@ -63,7 +71,7 @@ namespace MvcSiteMapProvider.Web.Mvc
 		protected Dictionary<string, ILookup<string, Type>> AssemblyCache { get; private set; }
 
 
-		#region IControllerTypeResolver Members
+#region IControllerTypeResolver Members
 
 		/// <summary>
 		/// Resolves the type of the controller.
@@ -117,7 +125,7 @@ namespace MvcSiteMapProvider.Web.Mvc
 			return controllerType;
 		}
 
-		#endregion
+#endregion
 
 		/// <summary>
 		/// Finds the namespaces for area.
@@ -315,3 +323,4 @@ namespace MvcSiteMapProvider.Web.Mvc
 		}
 	}
 }
+#endif

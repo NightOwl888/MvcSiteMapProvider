@@ -8,7 +8,9 @@ namespace MvcSiteMapProvider.Collections.Specialized
     /// <summary>
     /// ReservedKeyException
     /// </summary>
+#if !MVC6
     [Serializable]
+#endif
     public class ReservedKeyException : MvcSiteMapException
     {
         /// <summary>

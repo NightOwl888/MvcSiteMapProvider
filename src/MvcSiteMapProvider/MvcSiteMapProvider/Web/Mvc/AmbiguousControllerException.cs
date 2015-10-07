@@ -5,7 +5,9 @@ namespace MvcSiteMapProvider.Web.Mvc
     /// <summary>
     /// AmbiguousControllerException
     /// </summary>
+#if !MVC6
     [Serializable]
+#endif
     public class AmbiguousControllerException : Exception
     {
         /// <summary>

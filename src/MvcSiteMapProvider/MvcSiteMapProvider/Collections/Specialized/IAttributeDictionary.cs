@@ -67,6 +67,7 @@ namespace MvcSiteMapProvider.Collections.Specialized
         /// <param name="throwIfReservedKey"><c>true</c> to throw an exception if one of the keys being added is a reserved key name; otherwise, <c>false</c>.</param>
         void AddRange(XElement xmlNode, bool throwIfReservedKey);
 
+#if !MVC6
         /// <summary>
         /// Adds the elements from a given <see cref="System.Collections.Specialized.NameValueCollection"/>. If the key exists, the value will be overwritten.
         /// </summary>
@@ -79,6 +80,7 @@ namespace MvcSiteMapProvider.Collections.Specialized
         /// <param name="nameValueCollection">The <see cref="System.Collections.Specialized.NameValueCollection"/> to retrieve the values from.</param>
         /// <param name="throwIfReservedKey"><c>true</c> to throw an exception if one of the keys being added is a reserved key name; otherwise, <c>false</c>.</param>
         void AddRange(NameValueCollection nameValueCollection, bool throwIfReservedKey);
+#endif
 
         void CopyTo(IDictionary<string, object> destination);
     }

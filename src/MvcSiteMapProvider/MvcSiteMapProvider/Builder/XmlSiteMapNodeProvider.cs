@@ -2,7 +2,12 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+#if MVC6
+using Microsoft.AspNet.Mvc;
+using MvcSiteMapProvider.Web.Mvc;
+#else
 using System.Web.Mvc;
+#endif
 using System.Xml.Linq;
 using MvcSiteMapProvider.Xml;
 using MvcSiteMapProvider.Collections.Specialized;

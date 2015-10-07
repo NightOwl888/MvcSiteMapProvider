@@ -43,7 +43,11 @@ namespace MvcSiteMapProvider.Reflection
             while (fi == null && t != null)
             {
                 fi = t.GetField(fieldName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+#if MVC6
+                t = t.GetTypeInfo().BaseType;
+#else
                 t = t.BaseType;
+#endif
             }
             if (fi == null) throw new ArgumentOutOfRangeException("fieldName", string.Format(Resources.Messages.ObjectFieldNotFound, fieldName, obj.GetType().FullName));
             return (T)fi.GetValue(obj);

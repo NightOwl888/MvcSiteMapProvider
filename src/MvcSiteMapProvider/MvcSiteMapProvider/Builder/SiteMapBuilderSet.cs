@@ -35,6 +35,7 @@ namespace MvcSiteMapProvider.Builder
             this.cacheDetails = cacheDetails;
         }
 
+#if !MVC6
         /// <summary>
         /// ctor for backward compatibility, 
         /// visibilityAffectsDescendants parameter defaults to true
@@ -59,6 +60,7 @@ namespace MvcSiteMapProvider.Builder
             ) 
         { 
         }
+#endif
 
         protected readonly string instanceName;
         protected readonly bool securityTrimmingEnabled;
@@ -104,7 +106,7 @@ namespace MvcSiteMapProvider.Builder
 
         public virtual bool AppliesTo(string builderSetName)
         {
-            return this.instanceName.Equals(builderSetName, StringComparison.InvariantCulture);
+            return this.instanceName.Equals(builderSetName, StringComparison.Ordinal);
         }
 
         #endregion

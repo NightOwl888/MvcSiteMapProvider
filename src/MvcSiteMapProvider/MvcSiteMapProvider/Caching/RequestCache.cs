@@ -1,5 +1,10 @@
 ﻿using System;
-using System.Web;
+#if MVC6
+using Microsoft.AspNet.Mvc;
+using MvcSiteMapProvider.Web;
+#else
+using System.Web.Mvc;
+#endif
 using MvcSiteMapProvider.Web.Mvc;
 
 namespace MvcSiteMapProvider.Caching
@@ -32,7 +37,11 @@ namespace MvcSiteMapProvider.Caching
 
         public virtual T GetValue<T>(string key)
         {
+#if MVC6
+            if (this.Context.Items.ContainsKey(key))
+#else
             if (this.Context.Items.Contains(key))
+#endif
             {
                 return (T)this.Context.Items[key];
             }

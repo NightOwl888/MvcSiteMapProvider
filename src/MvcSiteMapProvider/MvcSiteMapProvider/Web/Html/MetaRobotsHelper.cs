@@ -1,8 +1,14 @@
-﻿using System;
+﻿#if !MVC6
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+#if MVC6
+using Microsoft.AspNet.Mvc;
+#else
 using System.Web.Mvc;
+#endif
 using System.Web.Mvc.Html;
 using MvcSiteMapProvider.Web.Html.Models;
 using MvcSiteMapProvider.Collections.Specialized;
@@ -119,3 +125,5 @@ namespace MvcSiteMapProvider.Web.Html
         }
     }
 }
+
+#endif

@@ -2,6 +2,12 @@
 using System.Collections.Generic;
 using MvcSiteMapProvider.Caching;
 using MvcSiteMapProvider.Web.Mvc;
+#if MVC6
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+#endif
+
+// TODO: Test
 
 namespace MvcSiteMapProvider.Web.Script.Serialization
 {
@@ -11,6 +17,17 @@ namespace MvcSiteMapProvider.Web.Script.Serialization
     /// </summary>
     public class JsonToDictionaryDeserializer : MvcSiteMapProvider.Web.Script.Serialization.IJsonToDictionaryDeserializer
     {
+#if MVC6
+        public JsonToDictionaryDeserializer(
+            IMvcContextFactory mvcContextFactory
+            )
+        {
+            if (mvcContextFactory == null)
+                throw new ArgumentNullException("mvcContextFactory");
+
+            this.requestCache = mvcContextFactory.GetRequestCache();
+        }
+#else
         public JsonToDictionaryDeserializer(
             IJavaScriptSerializer javaScriptSerializer,
             IMvcContextFactory mvcContextFactory
@@ -26,6 +43,7 @@ namespace MvcSiteMapProvider.Web.Script.Serialization
         }
 
         protected readonly IJavaScriptSerializer javaScriptSerializer;
+#endif
         protected readonly IRequestCache requestCache;
 
         public virtual IDictionary<string, object> Deserialize(string json)
@@ -46,11 +64,16 @@ namespace MvcSiteMapProvider.Web.Script.Serialization
             return result;
         }
 
+
         protected virtual IDictionary<string, object> DeserializeJson(string json)
         {
             try
             {
+#if MVC6
+                return JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
+#else
                 return this.javaScriptSerializer.Deserialize<Dictionary<string, object>>(json);
+#endif
             }
             catch (Exception ex)
             {

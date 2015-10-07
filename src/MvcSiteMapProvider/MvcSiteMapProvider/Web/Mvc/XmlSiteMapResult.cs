@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !MVC6
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -351,7 +352,7 @@ namespace MvcSiteMapProvider.Web.Mvc
                 var protocol = string.IsNullOrEmpty(node.Protocol) ? Uri.UriSchemeHttp : node.Protocol;
 
                 // Create a URI with the home page and no query string values.
-                var uri = new Uri(context.Request.Url, "/");
+                var uri = new System.Uri(context.Request.Url, "/");
 
                 // Create a TextWriter with null stream as a backing stream 
                 // which doesn't consume resources
@@ -411,3 +412,4 @@ namespace MvcSiteMapProvider.Web.Mvc
         }
     }
 }
+#endif

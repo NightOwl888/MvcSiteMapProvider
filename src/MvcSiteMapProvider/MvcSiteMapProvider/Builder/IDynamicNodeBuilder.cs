@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !MVC6
+using System;
 using System.Collections.Generic;
 
 namespace MvcSiteMapProvider.Builder
@@ -12,3 +13,4 @@ namespace MvcSiteMapProvider.Builder
         IEnumerable<ISiteMapNode> BuildDynamicNodesFor(ISiteMap siteMap, ISiteMapNode node, ISiteMapNode parentNode);
     }
 }
+#endif

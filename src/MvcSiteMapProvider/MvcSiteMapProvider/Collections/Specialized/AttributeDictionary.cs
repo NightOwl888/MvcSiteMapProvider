@@ -177,6 +177,7 @@ namespace MvcSiteMapProvider.Collections.Specialized
             }
         }
 
+#if !MVC6
         /// <summary>
         /// Adds the elements from a given <see cref="System.Collections.Specialized.NameValueCollection"/>. If the key exists, the value will be overwritten.
         /// </summary>
@@ -198,6 +199,7 @@ namespace MvcSiteMapProvider.Collections.Specialized
                 this.Add(key, nameValueCollection[key], throwIfReservedKey);
             }
         }
+#endif
 
         public override void Clear()
         {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !MVC6
+using System;
 using MvcSiteMapProvider.Builder;
 
 namespace MvcSiteMapProvider.Xml
@@ -12,3 +13,4 @@ namespace MvcSiteMapProvider.Xml
     {
     }
 }
+#endif

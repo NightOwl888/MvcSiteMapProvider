@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !MVC6
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -482,3 +483,4 @@ namespace MvcSiteMapProvider.Builder
         }
     }
 }
+#endif

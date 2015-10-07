@@ -1,4 +1,9 @@
-﻿using System.Web;
+﻿#if MVC6
+using Microsoft.AspNet.Http;
+using Microsoft.AspNet.Mvc;
+#else
+using System.Web;
+#endif
 
 namespace MvcSiteMapProvider.Web.Mvc
 {
@@ -19,10 +24,17 @@ namespace MvcSiteMapProvider.Web.Mvc
         /// <exception cref="T:System.ArgumentNullException">
         ///     <paramref name="httpContext"/> is null.
         /// </exception>
+#if MVC6
+        public SiteMapHttpContext(ActionContext actionContext, ISiteMapNode node)
+            : base(actionContext)
+        {
+            this.httpContext = actionContext.HttpContext;
+#else
         public SiteMapHttpContext(HttpContext httpContext, ISiteMapNode node)
             : base(httpContext)
         {
             this.httpContext = httpContext;
+#endif
             this.node = node;
         }
 
