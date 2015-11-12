@@ -30,5 +30,8 @@
 			</group>
 		</dependencies>
 	</metadata>
+	<files>
+		<file src="**\*.*" exclude="*.nuspec" />
+	</files>
 </package>
 

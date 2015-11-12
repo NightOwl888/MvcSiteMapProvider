@@ -29,5 +29,8 @@
 			<frameworkAssembly assemblyName="System.Runtime.Caching" targetFramework="net45" />
 		</frameworkAssemblies>
 	</metadata>
+	<files>
+		<file src="**\*.*" exclude="*.nuspec" />
+	</files>
 </package>
 

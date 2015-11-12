@@ -292,7 +292,7 @@ function Create-MvcSiteMapProvider-Web-Package {
 	Copy-Item $source_directory\MvcSiteMapProvider\Web\Html\DisplayTemplates\* $display_templates_output -Recurse
 	
 	exec { 
-		&"$tools_directory\nuget\NuGet.exe" pack $build_directory\mvcsitemapprovider.web\mvcsitemapprovider.web.nuspec -Symbols -Version $packageVersion -OutputDirectory $output_directory
+		&"$tools_directory\nuget\NuGet.exe" pack $build_directory\mvcsitemapprovider.web\mvcsitemapprovider.web.nuspec -Version $packageVersion -OutputDirectory $output_directory
 	}
 }
 
